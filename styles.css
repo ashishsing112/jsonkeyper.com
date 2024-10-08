@@ -1,0 +1,238 @@
+header, footer {
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+    margin: 0 auto; /* Centers the header and footer horizontally */
+    background-color: #3498db;
+    color: #f0f0f0;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allows elements to wrap on smaller screens */
+}
+
+footer {
+    text-align: center; /* Centers the content in the footer */
+    padding: 15px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #45a049;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.section {
+    margin-bottom: 30px;
+}
+textarea {
+    padding: 15px;
+    margin: 15px 0;
+    width: calc(100% - 40px);
+    max-width: 500px;
+    box-sizing: border-box;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100px;
+    text-align: left;
+    vertical-align: top;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: vertical;
+}
+button {
+    padding: 15px 25px;
+    margin: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.extract-button {
+    display: block;
+    background-color: #4CAF50; /* green */
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 40px);
+    max-width: 500px;
+}
+.extract-button:hover {
+    background-color: #2c3e50;
+}
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+.button-row button {
+    flex: 1;
+    max-width: 15.3em;
+    margin: 10px 5px;
+    width: auto;
+    padding: 15px 25px;
+    font-size: 16px; 
+}
+.copy-button {
+    background-color: #4CAF50; /* green */
+}
+.copy-button:hover {
+    background-color: #45a049; /* slightly darker green */
+}
+.clear-button {
+    background-color: #e74c3c; /* red */
+}
+.clear-button:hover {
+    background-color: #c0392b; /* slightly darker red */
+}
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px #2980b9;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0 10px;
+    }
+	header, footer {
+        max-width: 100%;
+        padding: 15px;
+    }
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    header h1 {
+        font-size: 20px;
+    }
+    nav a {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+    textarea {
+        width: calc(100% - 20px);
+        max-width: none;
+        font-size: 14px;
+    }
+    button {
+        width: calc(100% - 20px);
+        max-width: none;
+        font-size: 16px; /* Adjusted font size for mobile */
+    }
+    .button-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .button-row button {
+        margin: 10px 0;
+        width: calc(100% - 40px);
+        max-width: 500px;
+        padding: 15px 25px;
+    }
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    top: 20px;
+    right: 20px;
+    font-size: 17px;
+}
+.toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 20px; opacity: 1;}
+}
+@keyframes fadeout {
+    from {top: 20px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
