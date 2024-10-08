@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Keyper</title>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+</head>
+<body>
+
+<header>
+    <h1 style="margin: 0; font-size: 24px;">JSON Keyper</h1>
+    <nav>
+        <a href="#" onclick="openContactModal()" style="background-color: #4CAF50; color: white; border: none; border-radius: 5px; padding: 8px 16px; cursor: pointer; font-size: 14px; text-decoration: none;">Feedback</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <div class="section" id="request">
+        <h2>JSON Key Mapper</h2>
+		<p>JSON Keyper allows you to paste a JSON object and quickly extract its keys. This tool is useful for understanding and mapping the structure of JSON data effortlessly.</p>
+        <textarea id="textbox1" placeholder="Paste your JSON here..."></textarea>
+        <button onclick="handleSubmit()" class="extract-button">Extract Key</button>
+        <textarea id="keysOutput" placeholder="Keys will appear here..." readonly></textarea>
+        <!-- Copy and Clear Buttons Side by Side -->
+        <div class="button-row">
+            <button onclick="handleCopy()" class="copy-button">Copy</button>
+            <button onclick="handleClear()" class="clear-button">Clear</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 jsonkeyper.com. All rights reserved.</p>
+</footer>
+
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeContactModal()">&times;</span>
+        <h2>Feedback Form</h2>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; height: 100px;"></textarea>
+            <button type="button" onclick="sendContactForm()" style="width: 100%; background-color: #3498db; color: white; border: none; padding: 15px; border-radius: 5px; margin-top: 10px;">Send Message</button>
+        </form>
+    </div>
+</div>
+
+<div id="toast" class="toast">Placeholder</div>
+
+<!-- External JavaScript file -->
+<script src="script.js"></script>
+</body>
+</html>
