@@ -45,6 +45,24 @@ nav a:hover {
     background-color: #45a049;
 }
 
+/* Header Navigation Link Styling */
+.header-link {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+
+.header-link:hover {
+    color: #d1d1d1; /* Slightly lighter shade on hover */
+}
+
+.header-link:last-child {
+    margin-right: 0; /* Removes margin from the last link to ensure even spacing */
+}
+
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
