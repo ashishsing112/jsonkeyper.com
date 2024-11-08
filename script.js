@@ -40,7 +40,7 @@ function handleSubmit() {
     try {
         const input = document.getElementById("textbox1").value;
         if (!input.trim()) {
-            showToast("Input cannot be empty. Please paste your JSON.");
+            showToast("Please paste your JSON.");
             return;
         }
         let json;
@@ -129,7 +129,8 @@ function handleCopy() {
 
 function showToast(message) {
     const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.className = "toast show";
-    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2000);
+    const toast_body = document.getElementById("toast-body");
+    toast_body.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
 }
