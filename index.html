@@ -5,23 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Keyper</title>
-    <!-- External CSS file -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846"
      crossorigin="anonymous"></script>
 </head>
 <body>
 
-<header>
-    <h1 style="margin: 0; font-size: 24px;">JSON Keyper</h1>
-    <nav>
-        <a href="#" onclick="openContactModal()" style="background-color: #4CAF50; color: white; border: none; border-radius: 5px; padding: 8px 16px; cursor: pointer; font-size: 14px; text-decoration: none;">Feedback</a>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="privacy.html">Privacy Policy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="about.html">About</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="javascript:void(0)" onclick="openContactModal()">Feedback</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
     </nav>
 </header>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846"
-     crossorigin="anonymous"></script>
+
 <!-- horizontal banner ads -->
 <ins class="adsbygoogle"
      style="display:block"
@@ -32,24 +58,46 @@
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-<div class="container">
-    
+
+<div class="container-shadow">
     <div class="section" id="request">
-        <h2>JSON Key Mapper</h2>
-		<p>JSON Keyper allows you to paste a JSON object and quickly extract its keys. This tool is useful for understanding and mapping the structure of JSON data effortlessly.</p>
-        <textarea id="textbox1" placeholder="Paste your JSON here..."></textarea>
-        <button onclick="handleSubmit()" class="extract-button">Extract Key</button>
-        <textarea id="keysOutput" placeholder="Keys will appear here..." readonly></textarea>
-        <!-- Copy and Clear Buttons Side by Side -->
-        <div class="button-row">
-            <button onclick="handleCopy()" class="copy-button">Copy</button>
-            <button onclick="handleClear()" class="clear-button">Clear</button>
+        <div class="row">
+            <h2 class="mt-4 mb-3 heading">JSON Key Mapper</h2>
+            <p>JSON Keyper allows you to paste a JSON object and quickly extract its keys. This tool is useful for understanding and mapping the structure of JSON data effortlessly.</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row p-1">
+                    <textarea id="textbox1" placeholder="Paste your JSON here..."></textarea>
+                </div>
+                <div class="row p-1">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Key</button>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row p-1">
+                    <textarea id="keysOutput" placeholder="Keys will appear here..." readonly></textarea>
+                </div>
+                <!-- Copy and Clear Buttons Side by Side -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row p-1">
+                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row p-1">
+                            <button onclick="handleClear()" class="btn btn-danger btn-lg">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>&copy; 2024 jsonkeyper.com. All rights reserved.</p>
+    <p>&copy; 2024 jsonkeyper.com. All rights reserved. | We value your privacy and transparency.</p>
 </footer>
 
 <div id="contactModal" class="modal">
@@ -68,9 +116,17 @@
     </div>
 </div>
 
-<div id="toast" class="toast">Placeholder</div>
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body">
+            This is a toast message.
+        </div>
+    </div>
+</div>
 
-<!-- External JavaScript file -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
