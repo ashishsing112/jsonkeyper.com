@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn what JSON is, how its syntax works, the six data types it supports, and why it became the standard data format for the modern web.">
+    <title>What is JSON? A Beginner's Guide | JSON Keyper Blog</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "What is JSON? A Beginner's Guide to JavaScript Object Notation",
+      "datePublished": "2024-01-15",
+      "author": { "@type": "Organization", "name": "JSON Keyper" },
+      "publisher": { "@type": "Organization", "name": "JSON Keyper", "url": "https://jsonkeyper.com" }
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <p><a href="/blog/">&larr; Back to Blog</a></p>
+        <h1 class="heading">What is JSON? A Beginner's Guide to JavaScript Object Notation</h1>
+        <p class="text-muted"><small>Published January 15, 2024 &middot; 5 min read</small></p>
+
+        <div class="article-body">
+            <p>JSON (JavaScript Object Notation) is a lightweight, text-based format for storing and exchanging data. Despite having "JavaScript" in its name, JSON is language-independent and supported natively by virtually every modern programming language.</p>
+
+            <h2>The Basic Structure</h2>
+            <p>A JSON document is built from two fundamental structures:</p>
+            <ul>
+                <li><strong>Objects</strong> — An unordered collection of key-value pairs, enclosed in curly braces <code>{}</code></li>
+                <li><strong>Arrays</strong> — An ordered list of values, enclosed in square brackets <code>[]</code></li>
+            </ul>
+            <p>Here is a simple JSON object representing a user:</p>
+            <pre><code>{
+  "name": "Alice",
+  "age": 30,
+  "isActive": true,
+  "address": {
+    "city": "New York",
+    "zip": "10001"
+  },
+  "tags": ["developer", "designer"]
+}</code></pre>
+
+            <h2>JSON Data Types</h2>
+            <p>JSON supports exactly six data types:</p>
+            <ol>
+                <li><strong>String</strong> — Text wrapped in double quotes: <code>"hello"</code></li>
+                <li><strong>Number</strong> — Integer or decimal: <code>42</code>, <code>3.14</code></li>
+                <li><strong>Boolean</strong> — <code>true</code> or <code>false</code></li>
+                <li><strong>Null</strong> — Represents no value: <code>null</code></li>
+                <li><strong>Object</strong> — A nested set of key-value pairs: <code>{...}</code></li>
+                <li><strong>Array</strong> — An ordered list: <code>[...]</code></li>
+            </ol>
+            <p>Note that JSON does not support <code>undefined</code>, dates (stored as strings), or functions.</p>
+
+            <h2>JSON Syntax Rules</h2>
+            <p>JSON has a small set of strict rules:</p>
+            <ul>
+                <li>All keys must be strings enclosed in double quotes</li>
+                <li>String values must also use double quotes (not single quotes)</li>
+                <li>No trailing commas are allowed after the last item</li>
+                <li>No comments are allowed inside JSON</li>
+            </ul>
+
+            <h2>Why JSON Replaced XML</h2>
+            <p>Before JSON, XML was the dominant data exchange format for web services. JSON replaced it in most use cases because it is:</p>
+            <ul>
+                <li><strong>Simpler to read and write</strong> — far less verbose than XML</li>
+                <li><strong>Easier to parse</strong> — built into JavaScript natively via <code>JSON.parse()</code> and <code>JSON.stringify()</code></li>
+                <li><strong>Smaller payloads</strong> — reduces bandwidth usage</li>
+                <li><strong>Universally supported</strong> — every modern language has a JSON library</li>
+            </ul>
+
+            <h2>Where You Will Find JSON</h2>
+            <p>JSON is used throughout modern software development:</p>
+            <ul>
+                <li><strong>REST APIs</strong> — the standard format for API responses and request bodies</li>
+                <li><strong>Configuration files</strong> — <code>package.json</code> in Node.js, <code>settings.json</code> in VS Code</li>
+                <li><strong>Databases</strong> — MongoDB, Firestore, and PostgreSQL's <code>JSONB</code> column type</li>
+                <li><strong>Browser storage</strong> — <code>localStorage</code> and <code>sessionStorage</code> store JSON strings</li>
+                <li><strong>Log files</strong> — structured logging commonly uses JSON for machine-readable output</li>
+            </ul>
+
+            <h2>Parsing JSON in Code</h2>
+            <p>In JavaScript, parsing a JSON string is a single function call:</p>
+            <pre><code>const jsonString = '{"name": "Alice", "age": 30}';
+const obj = JSON.parse(jsonString);
+console.log(obj.name); // "Alice"
+
+// Convert an object back to a JSON string
+const str = JSON.stringify(obj);
+console.log(str); // '{"name":"Alice","age":30}'</code></pre>
+
+            <p>In Python it is equally straightforward:</p>
+            <pre><code>import json
+
+json_string = '{"name": "Alice", "age": 30}'
+obj = json.loads(json_string)
+print(obj["name"])  # Alice
+
+# Convert back to string
+print(json.dumps(obj))  # {"name": "Alice", "age": 30}</code></pre>
+
+            <div class="cta-box">
+                <h3>Explore Your JSON Structure</h3>
+                <p>Paste any JSON into JSON Keyper and instantly extract every key path — including nested objects and arrays. Free, no login required.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
