@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how nested JSON structures work, how to read dot-notation and bracket-notation key paths, and how to navigate deeply nested data without losing your mind.">
+    <title>Understanding Nested JSON Objects and Arrays | JSON Keyper Blog</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Understanding Nested JSON Objects and Arrays",
+      "datePublished": "2024-02-03",
+      "author": { "@type": "Organization", "name": "JSON Keyper" },
+      "publisher": { "@type": "Organization", "name": "JSON Keyper", "url": "https://jsonkeyper.com" }
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <p><a href="/blog/">&larr; Back to Blog</a></p>
+        <h1 class="heading">Understanding Nested JSON Objects and Arrays</h1>
+        <p class="text-muted"><small>Published February 3, 2024 &middot; 5 min read</small></p>
+
+        <div class="article-body">
+            <p>One of JSON's most powerful features is its ability to represent complex, hierarchical data through nesting — placing objects inside objects, or arrays of objects. Understanding how nested JSON works is essential for anyone working with real-world APIs.</p>
+
+            <h2>What is Nested JSON?</h2>
+            <p>Nested JSON is when a value in a JSON object is itself a JSON object or array, creating a tree-like structure. There is no technical limit to how deeply you can nest.</p>
+            <pre><code>{
+  "user": {
+    "id": 1,
+    "profile": {
+      "name": "Alice",
+      "location": {
+        "city": "London",
+        "country": "UK"
+      }
+    },
+    "orders": [
+      {
+        "id": "ord_001",
+        "items": [
+          { "product": "Laptop", "quantity": 1, "price": 999.99 }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+            <h2>Dot Notation for Nested Objects</h2>
+            <p>When navigating nested JSON, key paths use dot notation to describe where a value lives in the hierarchy. Each level is separated by a dot:</p>
+            <ul>
+                <li><code>user.id</code> → <code>1</code></li>
+                <li><code>user.profile.name</code> → <code>"Alice"</code></li>
+                <li><code>user.profile.location.city</code> → <code>"London"</code></li>
+                <li><code>user.profile.location.country</code> → <code>"UK"</code></li>
+            </ul>
+            <p>In JavaScript you can access these values directly:</p>
+            <pre><code>const data = { /* JSON above */ };
+console.log(data.user.profile.location.city); // "London"</code></pre>
+
+            <h2>Bracket Notation for Arrays</h2>
+            <p>Arrays use zero-based index notation inside square brackets:</p>
+            <ul>
+                <li><code>user.orders[0].id</code> → <code>"ord_001"</code></li>
+                <li><code>user.orders[0].items[0].product</code> → <code>"Laptop"</code></li>
+                <li><code>user.orders[0].items[0].price</code> → <code>999.99</code></li>
+            </ul>
+            <pre><code>console.log(data.user.orders[0].items[0].product); // "Laptop"</code></pre>
+
+            <h2>Accessing Nested Values in Python</h2>
+            <p>In Python, use chained dictionary and list access:</p>
+            <pre><code>import json
+
+data = json.loads(json_string)
+print(data["user"]["profile"]["location"]["city"])  # London
+print(data["user"]["orders"][0]["items"][0]["product"])  # Laptop</code></pre>
+
+            <h2>Common Challenges with Nested JSON</h2>
+            <p>Working with nested data introduces several common problems:</p>
+            <ul>
+                <li><strong>Missing keys</strong> — Not every object in a list may have the same set of keys. Always check for key existence before accessing deeply nested values to avoid <code>KeyError</code> or <code>TypeError</code>.</li>
+                <li><strong>Deep nesting</strong> — Structures nested 5+ levels deep are hard to navigate manually. Tools like JSON Keyper can map the entire structure at once.</li>
+                <li><strong>Null values</strong> — A key may exist but hold a <code>null</code> value. Attempting to access a property of <code>null</code> throws an error.</li>
+                <li><strong>Mixed arrays</strong> — Arrays can contain objects of different shapes, making iteration more complex.</li>
+            </ul>
+
+            <h2>Safe Access in JavaScript</h2>
+            <p>Use optional chaining (<code>?.</code>) to safely access nested properties that might not exist:</p>
+            <pre><code>// Without optional chaining — throws if orders is null
+const product = data.user.orders[0].items[0].product;
+
+// With optional chaining — returns undefined instead of throwing
+const product = data?.user?.orders?.[0]?.items?.[0]?.product;</code></pre>
+
+            <h2>Safe Access in Python</h2>
+            <p>Use <code>.get()</code> with a default value to avoid <code>KeyError</code>:</p>
+            <pre><code>city = data.get("user", {}).get("profile", {}).get("location", {}).get("city")</code></pre>
+
+            <div class="cta-box">
+                <h3>Map Your Nested JSON Instantly</h3>
+                <p>JSON Keyper recursively walks any JSON structure and outputs every key path — including nested objects and array indices — in seconds.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

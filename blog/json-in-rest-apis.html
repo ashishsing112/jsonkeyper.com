@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore the most common JSON patterns used in REST APIs: wrapped responses, paginated lists, error objects, nested resources, and more — with real examples.">
+    <title>Common JSON Structures in REST APIs | JSON Keyper Blog</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Common JSON Structures You'll Encounter in REST APIs",
+      "datePublished": "2024-03-12",
+      "author": { "@type": "Organization", "name": "JSON Keyper" },
+      "publisher": { "@type": "Organization", "name": "JSON Keyper", "url": "https://jsonkeyper.com" }
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <p><a href="/blog/">&larr; Back to Blog</a></p>
+        <h1 class="heading">Common JSON Structures You'll Encounter in REST APIs</h1>
+        <p class="text-muted"><small>Published March 12, 2024 &middot; 6 min read</small></p>
+
+        <div class="article-body">
+            <p>If you work with REST APIs, you will encounter certain JSON patterns over and over. Recognising these common structures saves significant time when integrating new APIs — you can immediately understand the shape of a response rather than reading through documentation from scratch.</p>
+
+            <h2>1. The Wrapped Response</h2>
+            <p>Most production APIs do not return raw data at the root level. Instead, they wrap it in an envelope object that includes metadata about the response:</p>
+            <pre><code>{
+  "data": {
+    "id": 42,
+    "name": "Alice",
+    "email": "alice@example.com"
+  },
+  "status": "success",
+  "message": "User retrieved successfully"
+}</code></pre>
+            <p>The actual resource lives inside <code>data</code>, while <code>status</code> and <code>message</code> provide metadata. This pattern makes error handling consistent — you always check <code>status</code> before accessing <code>data</code>.</p>
+
+            <h2>2. Paginated List Responses</h2>
+            <p>When an endpoint can return many items, it paginates them to keep responses fast:</p>
+            <pre><code>{
+  "data": [
+    { "id": 1, "name": "Item One" },
+    { "id": 2, "name": "Item Two" }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 245,
+    "total_pages": 25,
+    "next": "/api/items?page=2",
+    "previous": null
+  }
+}</code></pre>
+            <p>Some APIs use cursor-based pagination instead of page numbers — <code>next_cursor</code> and <code>prev_cursor</code> fields point to the adjacent pages using opaque tokens rather than page indices.</p>
+
+            <h2>3. Error Responses</h2>
+            <p>A consistent error structure is a hallmark of a well-designed API:</p>
+            <pre><code>{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "One or more fields failed validation",
+    "details": [
+      { "field": "email", "issue": "required" },
+      { "field": "name", "issue": "too_short", "min": 2 }
+    ]
+  }
+}</code></pre>
+            <p>The <code>code</code> field is a machine-readable constant your code can switch on, while <code>message</code> is human-readable. The <code>details</code> array allows multiple validation errors to be reported at once.</p>
+
+            <h2>4. Nested Resource Responses</h2>
+            <p>APIs often embed related resources in a single response to reduce the number of round trips:</p>
+            <pre><code>{
+  "order": {
+    "id": "ord_001",
+    "status": "shipped",
+    "customer": {
+      "id": 99,
+      "name": "Bob",
+      "email": "bob@example.com"
+    },
+    "items": [
+      {
+        "product_id": 12,
+        "name": "Wireless Headphones",
+        "quantity": 2,
+        "unit_price": 49.99
+      }
+    ],
+    "total": 99.98,
+    "currency": "USD"
+  }
+}</code></pre>
+
+            <h2>5. JSON Array at Root</h2>
+            <p>Some endpoints — particularly older or simpler ones — return a plain array at the root level rather than a wrapper object:</p>
+            <pre><code>[
+  { "id": 1, "name": "Tag A", "slug": "tag-a" },
+  { "id": 2, "name": "Tag B", "slug": "tag-b" }
+]</code></pre>
+            <p>This is simpler but less flexible — there is no room to add pagination or status metadata without a breaking change to the API.</p>
+
+            <h2>6. Hypermedia / HATEOAS</h2>
+            <p>More advanced REST APIs include links to related actions directly in the response:</p>
+            <pre><code>{
+  "order": { "id": "ord_001", "status": "pending" },
+  "links": {
+    "self": "/api/orders/ord_001",
+    "cancel": "/api/orders/ord_001/cancel",
+    "customer": "/api/customers/99"
+  }
+}</code></pre>
+
+            <h2>Mapping API Responses Quickly</h2>
+            <p>When you first integrate a new API, the fastest way to understand its response structure is to extract all the keys at once. Paste the API response into JSON Keyper and you will get a flat list of every key path in seconds — no more manually scrolling through hundreds of lines of JSON to find the field you need.</p>
+
+            <div class="cta-box">
+                <h3>Understand Any API Response Instantly</h3>
+                <p>Paste your API response into JSON Keyper and get a complete map of every key path — including nested objects and array indices.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

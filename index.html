@@ -4,7 +4,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Keyper</title>
+    <meta name="description" content="JSON Keyper is a free online tool to extract and map all keys from any JSON object. Paste your JSON and instantly get a flat list of every key path — including nested objects and arrays.">
+    <title>JSON Keyper — Free Online JSON Key Extractor</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
@@ -18,6 +19,22 @@
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846"
      crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "JSON Keyper",
+      "url": "https://jsonkeyper.com",
+      "description": "A free online tool to extract and map all keys from any JSON object.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
 </head>
 <body>
 
@@ -30,18 +47,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="privacy.html">Privacy Policy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="about.html">About</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="javascript:void(0)" onclick="openContactModal()">Feedback</a>
-                    </li> -->
+                    <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
                 </ul>
             </div>
         </div>
@@ -62,8 +72,10 @@
 <div class="container-shadow">
     <div class="section" id="request">
         <div class="row">
-            <h2 class="mt-4 mb-3 heading">JSON Key Mapper</h2>
-            <p>JSON Keyper allows you to paste a JSON object and quickly extract its keys. This tool is useful for understanding and mapping the structure of JSON data effortlessly.</p>
+            <div class="col-12">
+                <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;">JSON Key Mapper</h1>
+                <p class="mb-3">Paste any JSON object below and instantly extract every key path — including nested objects and arrays. Free, browser-based, no login required.</p>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
@@ -71,14 +83,13 @@
                     <textarea id="textbox1" placeholder="Paste your JSON here..."></textarea>
                 </div>
                 <div class="row p-1">
-                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Key</button>
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="row p-1">
                     <textarea id="keysOutput" placeholder="Keys will appear here..." readonly></textarea>
                 </div>
-                <!-- Copy and Clear Buttons Side by Side -->
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="row p-1">
@@ -96,8 +107,68 @@
     </div>
 </div>
 
+<!-- How to Use -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">How to Use JSON Keyper</h2>
+    <div class="how-to-step">
+        <span class="step-number">1</span>
+        <div><strong>Paste your JSON</strong> — copy any JSON object or API response and paste it into the left input box.</div>
+    </div>
+    <div class="how-to-step">
+        <span class="step-number">2</span>
+        <div><strong>Click "Extract Keys"</strong> — JSON Keyper will recursively walk the entire structure.</div>
+    </div>
+    <div class="how-to-step">
+        <span class="step-number">3</span>
+        <div><strong>View all key paths</strong> — every key path appears in the right box using dot notation (e.g. <code>user.address.city</code>) and bracket notation for arrays (e.g. <code>items[0].name</code>).</div>
+    </div>
+    <div class="how-to-step">
+        <span class="step-number">4</span>
+        <div><strong>Copy or Clear</strong> — click Copy to send all keys to your clipboard, or Clear to reset both boxes.</div>
+    </div>
+</div>
+
+<!-- Use Cases -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">Use Cases</h2>
+    <div class="row">
+        <div class="col-sm-6 col-md-3 mb-3">
+            <div class="use-case-card">
+                <h5>API Exploration</h5>
+                <p class="mb-0" style="font-size: 14px;">Understand the structure of an unfamiliar API response at a glance without manually scrolling through hundreds of lines.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 mb-3">
+            <div class="use-case-card">
+                <h5>Data Transformation</h5>
+                <p class="mb-0" style="font-size: 14px;">Map source fields to destination fields in ETL pipelines, data migrations, and integration projects.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 mb-3">
+            <div class="use-case-card">
+                <h5>Schema Documentation</h5>
+                <p class="mb-0" style="font-size: 14px;">Generate a complete flat list of all fields in a JSON schema for sharing with your team or writing API docs.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 mb-3">
+            <div class="use-case-card">
+                <h5>Debugging</h5>
+                <p class="mb-0" style="font-size: 14px;">Quickly verify which fields are present in a JSON response when a parser isn't finding a field you expect.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer>
-    <p>&copy; 2024 jsonkeyper.com. All rights reserved. | We value your privacy and transparency.</p>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
 </footer>
 
 <div id="contactModal" class="modal">

@@ -4,7 +4,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Keyper - About</title>
+    <meta name="description" content="Learn about JSON Keyper — a free, lightweight, browser-based tool built to help developers and data analysts extract and map keys from JSON objects effortlessly.">
+    <title>About | JSON Keyper</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
@@ -27,18 +28,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="privacy.html">Privacy Policy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="about.html">About</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="javascript:void(0)" onclick="openContactModal()">Feedback</a>
-                    </li> -->
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/about.html">About</a></li>
                 </ul>
             </div>
         </div>
@@ -49,24 +43,38 @@
     <h1 class="heading">About JSON Keyper</h1>
     <p>Welcome to JSON Keyper, your go-to tool for effortlessly extracting keys from JSON objects. Created to simplify the lives of developers, data analysts, and anyone frequently working with JSON, our tool provides a streamlined, user-friendly experience.</p>
 
-    <h2 class="mt-4 mb-3 heading">Story</h2>
-    <p>JSON Keyper began as a passion project derived from a personal challenge to enhance my coding skills beyond my familiar back-end development. While delving into Python, I discovered the versatility and power of front-end technologies. This exploration led to the birth of JSON Keyper—a tool crafted entirely with HTML, CSS, and JavaScript to ensure it's lightweight, fast, and accessible to everyone directly from their browsers.</p>
+    <h2 class="mt-4 mb-3 heading">Our Story</h2>
+    <p>JSON Keyper began as a passion project derived from a personal challenge to enhance my coding skills beyond my familiar back-end development. While delving into Python, I discovered the versatility and power of front-end technologies. This exploration led to the birth of JSON Keyper — a tool crafted entirely with HTML, CSS, and JavaScript to ensure it is lightweight, fast, and accessible to everyone directly from their browsers.</p>
 
-    <h2 class="mt-4 mb-3 heading">Mission</h2>
-    <p>Our mission at JSON Keyper is to provide a hassle-free tool that makes data handling easier. We believe in empowering our users by saving them time and effort, allowing them to focus on what's truly important in their work.</p>
+    <h2 class="mt-4 mb-3 heading">Our Mission</h2>
+    <p>Our mission at JSON Keyper is to provide a hassle-free tool that makes data handling easier. We believe in empowering our users by saving them time and effort, allowing them to focus on what truly matters in their work. No sign-up, no installation, no cost — just paste your JSON and get results instantly.</p>
 
     <h2 class="mt-4 mb-3 heading">Why JSON Keyper?</h2>
     <ul>
-        <li><strong>Simplicity</strong>: With a clean interface and straightforward functionality, JSON Keyper allows you to get the job done without any complications.</li>
-        <li><strong>Efficiency</strong>: Designed to be efficient and quick, helping you extract JSON keys in just a few clicks.</li>
-        <li><strong>Accessibility</strong>: As a browser-based tool, it can be used anywhere, anytime, making it a truly versatile solution for all your JSON needs.</li>
+        <li><strong>Simplicity</strong> — A clean interface and straightforward functionality mean you can get the job done without any complications.</li>
+        <li><strong>Efficiency</strong> — Designed to be fast, helping you extract JSON keys in just a few clicks rather than writing code from scratch.</li>
+        <li><strong>Accessibility</strong> — As a browser-based tool it can be used anywhere, anytime, on any device — no installation required.</li>
+        <li><strong>Privacy</strong> — All processing happens entirely in your browser. We never see or store your JSON data.</li>
     </ul>
 
-    <p>Thank you for choosing JSON Keyper. We are excited to support your projects and are always here to improve your experience with continuous updates and new features.</p>
+    <h2 class="mt-4 mb-3 heading">What JSON Keyper Does</h2>
+    <p>JSON Keyper recursively traverses any JSON structure — no matter how deeply nested — and outputs a flat list of every key path using dot notation and bracket notation. For example, a JSON object like <code>{"user": {"address": {"city": "London"}}}</code> will produce the key path <code>user.address.city</code>, giving you an instant map of the entire structure.</p>
+
+    <p>This is especially useful when working with complex API responses, building field mappings for data transformations, or documenting JSON schemas for your team.</p>
+
+    <p>Thank you for choosing JSON Keyper. We are always here to improve your experience with continuous updates and new features. If you have a suggestion, please reach out via our <a href="/contact.html">contact page</a>.</p>
 </div>
 
 <footer>
-    <p>&copy; 2024 jsonkeyper.com. All rights reserved. | We value your privacy and transparency.</p>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
