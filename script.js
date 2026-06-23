@@ -40,7 +40,7 @@ function handleSubmit() {
     try {
         const input = document.getElementById("textbox1").value;
         if (!input.trim()) {
-            showToast("Input cannot be empty. Please paste your JSON.");
+            showToast("Please paste your JSON.");
             return;
         }
         let json;
@@ -89,7 +89,6 @@ function sendContactForm() {
         showToast("All fields are required.");
         return;
     }
-    // Send email to developer
     const mailtoLink = `mailto:admin@jsonkeyper.com?subject=Feedback from ${encodeURIComponent(name)}&body=Email: ${encodeURIComponent(email)}%0D%0A%0D%0A${encodeURIComponent(message)}`;
     window.location.href = mailtoLink;
     closeContactModal();
@@ -102,7 +101,6 @@ function handleCopy() {
         return;
     }
     if (navigator.clipboard && window.isSecureContext) {
-        // Use navigator.clipboard API
         navigator.clipboard.writeText(keysOutput.value)
             .then(() => {
                 showToast("Keys copied to clipboard!");
@@ -111,9 +109,8 @@ function handleCopy() {
                 showToast("Failed to copy text.");
             });
     } else {
-        // Fallback method for older browsers
         keysOutput.select();
-        keysOutput.setSelectionRange(0, keysOutput.value.length); // For mobile devices
+        keysOutput.setSelectionRange(0, keysOutput.value.length);
         try {
             const successful = document.execCommand('copy');
             if (successful) {
@@ -129,7 +126,8 @@ function handleCopy() {
 
 function showToast(message) {
     const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.className = "toast show";
-    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2000);
+    const toast_body = document.getElementById("toast-body");
+    toast_body.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
 }
