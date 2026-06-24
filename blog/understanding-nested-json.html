@@ -56,7 +56,7 @@
         <p class="text-muted"><small>Published February 3, 2024 &middot; 5 min read</small></p>
 
         <div class="article-body">
-            <p>One of JSON's most powerful features is its ability to represent complex, hierarchical data through nesting — placing objects inside objects, or arrays of objects. Understanding how nested JSON works is essential for anyone working with real-world APIs.</p>
+            <p>One of JSON's most powerful features is its ability to represent complex, hierarchical data through nesting - placing objects inside objects, or arrays of objects. Understanding how nested JSON works is essential for anyone working with real-world APIs.</p>
 
             <h2>What is Nested JSON?</h2>
             <p>Nested JSON is when a value in a JSON object is itself a JSON object or array, creating a tree-like structure. There is no technical limit to how deeply you can nest.</p>
@@ -113,18 +113,18 @@ print(data["user"]["orders"][0]["items"][0]["product"])  # Laptop</code></pre>
             <h2>Common Challenges with Nested JSON</h2>
             <p>Working with nested data introduces several common problems:</p>
             <ul>
-                <li><strong>Missing keys</strong> — Not every object in a list may have the same set of keys. Always check for key existence before accessing deeply nested values to avoid <code>KeyError</code> or <code>TypeError</code>.</li>
-                <li><strong>Deep nesting</strong> — Structures nested 5+ levels deep are hard to navigate manually. Tools like JSON Keyper can map the entire structure at once.</li>
-                <li><strong>Null values</strong> — A key may exist but hold a <code>null</code> value. Attempting to access a property of <code>null</code> throws an error.</li>
-                <li><strong>Mixed arrays</strong> — Arrays can contain objects of different shapes, making iteration more complex.</li>
+                <li><strong>Missing keys</strong> - Not every object in a list may have the same set of keys. Always check for key existence before accessing deeply nested values to avoid <code>KeyError</code> or <code>TypeError</code>.</li>
+                <li><strong>Deep nesting</strong> - Structures nested 5+ levels deep are hard to navigate manually. Tools like JSON Keyper can map the entire structure at once.</li>
+                <li><strong>Null values</strong> - A key may exist but hold a <code>null</code> value. Attempting to access a property of <code>null</code> throws an error.</li>
+                <li><strong>Mixed arrays</strong> - Arrays can contain objects of different shapes, making iteration more complex.</li>
             </ul>
 
             <h2>Safe Access in JavaScript</h2>
             <p>Use optional chaining (<code>?.</code>) to safely access nested properties that might not exist:</p>
-            <pre><code>// Without optional chaining — throws if orders is null
+            <pre><code>// Without optional chaining - throws if orders is null
 const product = data.user.orders[0].items[0].product;
 
-// With optional chaining — returns undefined instead of throwing
+// With optional chaining - returns undefined instead of throwing
 const product = data?.user?.orders?.[0]?.items?.[0]?.product;</code></pre>
 
             <h2>Safe Access in Python</h2>
@@ -133,7 +133,7 @@ const product = data?.user?.orders?.[0]?.items?.[0]?.product;</code></pre>
 
             <div class="cta-box">
                 <h3>Map Your Nested JSON Instantly</h3>
-                <p>JSON Keyper recursively walks any JSON structure and outputs every key path — including nested objects and array indices — in seconds.</p>
+                <p>JSON Keyper recursively walks any JSON structure and outputs every key path - including nested objects and array indices - in seconds.</p>
                 <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
             </div>
         </div>
