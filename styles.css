@@ -79,11 +79,11 @@ textarea {
 }
 
 .clear-button, .copy-button, .extract-button {
-    padding: 15px 25px;
+    padding: 15px 25px !important;
     color: white !important;
     border: none;
     border-radius: 5px !important;
-    font-size: 16px;
+    font-size: 16px !important;
     cursor: pointer;
     transition: background-color 0.3s;
 }
