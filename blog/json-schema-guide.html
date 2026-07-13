@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A practical guide to JSON Schema: how to define types, required fields, string patterns, number ranges, array constraints, and nested object validation with real examples.">
+    <title>JSON Schema: A Practical Guide to Validating JSON | JSON Keyper Blog</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "JSON Schema: A Practical Guide to Validating JSON",
+      "datePublished": "2024-06-10",
+      "author": { "@type": "Organization", "name": "JSON Keyper" },
+      "publisher": { "@type": "Organization", "name": "JSON Keyper", "url": "https://jsonkeyper.com" }
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <p><a href="/blog/">&larr; Back to Blog</a></p>
+        <h1 class="heading">JSON Schema: A Practical Guide to Validating JSON</h1>
+        <p class="text-muted"><small>Published June 10, 2024 &middot; 11 min read</small></p>
+
+        <div class="article-body">
+            <p>JSON Schema is a vocabulary that allows you to annotate and validate JSON documents. It defines what a JSON structure should look like - which fields are required, what types they should be, acceptable value ranges, and much more. If you have ever encountered TypeScript interfaces, Pydantic models in Python, or OpenAPI specifications, you have worked with JSON Schema concepts even if not directly.</p>
+
+            <p>JSON Schema serves several purposes: validating API request bodies, documenting the shape of data, generating code (TypeScript types, Python dataclasses), and configuring editors to provide autocomplete for JSON files.</p>
+
+            <h2>The Basic Structure of a JSON Schema</h2>
+            <p>A JSON Schema is itself a JSON document. At minimum, it contains a <code>$schema</code> declaration and a <code>type</code>:</p>
+            <pre><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/person.schema.json",
+  "title": "Person",
+  "description": "A person object",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The person's full name"
+    },
+    "age": {
+      "type": "integer",
+      "description": "Age in years",
+      "minimum": 0,
+      "maximum": 150
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    }
+  },
+  "required": ["name", "email"]
+}</code></pre>
+            <p>This schema describes a JSON object with three properties: <code>name</code> (required string), <code>age</code> (optional integer between 0 and 150), and <code>email</code> (required string in email format).</p>
+
+            <h2>Primitive Type Validation</h2>
+            <p>JSON Schema can validate all six JSON types and add constraints to each:</p>
+
+            <h3>String Constraints</h3>
+            <pre><code>{
+  "type": "string",
+  "minLength": 1,
+  "maxLength": 100,
+  "pattern": "^[a-zA-Z]+$",
+  "format": "email"
+}</code></pre>
+            <p>The <code>format</code> keyword is informational for basic validators but enforced by strict validators. Common formats include: <code>email</code>, <code>uri</code>, <code>date</code> (YYYY-MM-DD), <code>date-time</code> (ISO 8601), <code>uuid</code>, <code>ipv4</code>, and <code>ipv6</code>.</p>
+
+            <h3>Number Constraints</h3>
+            <pre><code>{
+  "type": "number",
+  "minimum": 0,
+  "maximum": 100,
+  "exclusiveMaximum": 100,
+  "multipleOf": 0.5
+}</code></pre>
+            <p>Use <code>type: "integer"</code> to reject decimals. Use <code>exclusiveMinimum</code> and <code>exclusiveMaximum</code> to exclude the boundary value.</p>
+
+            <h3>Boolean and Null</h3>
+            <pre><code>{ "type": "boolean" }
+{ "type": "null" }
+
+// Allow a value to be either a string or null (nullable)
+{ "type": ["string", "null"] }</code></pre>
+
+            <h2>Object Validation</h2>
+            <p>Object schemas can define properties, required fields, and control whether additional (unlisted) properties are allowed:</p>
+            <pre><code>{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 30,
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["admin", "editor", "viewer"]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["id", "username", "role"],
+  "additionalProperties": false,
+  "minProperties": 3,
+  "maxProperties": 10
+}</code></pre>
+            <p>Setting <code>"additionalProperties": false</code> means the validator rejects any property not listed in <code>properties</code>. This is useful for strict API contracts but can be too rigid for extensible schemas.</p>
+
+            <h2>Array Validation</h2>
+            <pre><code>{
+  "type": "array",
+  "items": {
+    "type": "string",
+    "minLength": 1
+  },
+  "minItems": 1,
+  "maxItems": 10,
+  "uniqueItems": true
+}</code></pre>
+            <p>The <code>items</code> keyword defines the schema for each element in the array. <code>uniqueItems: true</code> enforces that all array values are distinct (like a Set). You can also use <code>prefixItems</code> (in JSON Schema 2020-12) to define schemas for positional items in a tuple:</p>
+            <pre><code>{
+  "type": "array",
+  "prefixItems": [
+    { "type": "string", "description": "First name" },
+    { "type": "string", "description": "Last name" },
+    { "type": "integer", "description": "Age" }
+  ],
+  "items": false
+}</code></pre>
+
+            <h2>Reusing Schemas with $ref and $defs</h2>
+            <p>JSON Schema supports schema reuse through references. This avoids duplicating definitions and keeps schemas maintainable:</p>
+            <pre><code>{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": { "type": "string" },
+        "city": { "type": "string" },
+        "zip": { "type": "string", "pattern": "^[0-9]{5}$" }
+      },
+      "required": ["street", "city"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "billingAddress": { "$ref": "#/$defs/Address" },
+    "shippingAddress": { "$ref": "#/$defs/Address" }
+  }
+}</code></pre>
+
+            <h2>Combining Schemas with Logical Keywords</h2>
+            <p>JSON Schema includes Boolean logic operators for combining schemas:</p>
+            <pre><code>// allOf - must match ALL schemas
+{
+  "allOf": [
+    { "type": "object" },
+    { "required": ["id"] },
+    { "minProperties": 2 }
+  ]
+}
+
+// anyOf - must match AT LEAST ONE schema
+{
+  "anyOf": [
+    { "type": "string" },
+    { "type": "number" }
+  ]
+}
+
+// oneOf - must match EXACTLY ONE schema
+{
+  "oneOf": [
+    {
+      "properties": { "type": { "const": "circle" }, "radius": { "type": "number" } },
+      "required": ["type", "radius"]
+    },
+    {
+      "properties": { "type": { "const": "rectangle" }, "width": {}, "height": {} },
+      "required": ["type", "width", "height"]
+    }
+  ]
+}
+
+// not - must NOT match the schema
+{
+  "not": { "type": "null" }
+}</code></pre>
+
+            <h2>Conditional Validation with if/then/else</h2>
+            <p>JSON Schema supports conditional schema application - useful for discriminated unions where the required fields depend on another field's value:</p>
+            <pre><code>{
+  "type": "object",
+  "properties": {
+    "paymentMethod": {
+      "type": "string",
+      "enum": ["card", "bank_transfer"]
+    }
+  },
+  "if": {
+    "properties": { "paymentMethod": { "const": "card" } }
+  },
+  "then": {
+    "required": ["cardNumber", "expiryDate", "cvv"]
+  },
+  "else": {
+    "required": ["bankAccountNumber", "routingNumber"]
+  }
+}</code></pre>
+
+            <h2>Validating JSON with JSON Schema in Code</h2>
+            <p><strong>JavaScript (Ajv library):</strong></p>
+            <pre><code>import Ajv from "ajv";
+import addFormats from "ajv-formats";
+
+const ajv = new Ajv();
+addFormats(ajv);
+
+const schema = {
+  type: "object",
+  properties: {
+    name: { type: "string", minLength: 1 },
+    email: { type: "string", format: "email" }
+  },
+  required: ["name", "email"]
+};
+
+const validate = ajv.compile(schema);
+const data = { name: "Alice", email: "alice@example.com" };
+
+if (validate(data)) {
+  console.log("Valid!");
+} else {
+  console.log(validate.errors);
+}</code></pre>
+
+            <p><strong>Python (jsonschema library):</strong></p>
+            <pre><code>import json
+from jsonschema import validate, ValidationError
+
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "email": {"type": "string", "format": "email"}
+    },
+    "required": ["name", "email"]
+}
+
+data = {"name": "Alice", "email": "alice@example.com"}
+
+try:
+    validate(instance=data, schema=schema)
+    print("Valid!")
+except ValidationError as e:
+    print(f"Invalid: {e.message}")</code></pre>
+
+            <h2>JSON Schema in OpenAPI</h2>
+            <p>OpenAPI (formerly Swagger) uses JSON Schema to describe request and response bodies. If you have worked with OpenAPI specifications, the <code>schema:</code> sections are JSON Schema:</p>
+            <pre><code>paths:
+  /users:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - name
+                - email</code></pre>
+
+            <div class="cta-box">
+                <h3>Discover Your JSON Structure Before Writing a Schema</h3>
+                <p>Use JSON Keyper to extract all key paths from an existing JSON document - it gives you a complete inventory of every field to include in your JSON Schema definition.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

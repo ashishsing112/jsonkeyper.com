@@ -4,12 +4,11 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore the most common JSON patterns used in REST APIs: wrapped responses, paginated lists, error objects, nested resources, and more - with real examples.">
+    <meta name="description" content="A complete guide to JSON patterns in REST APIs: wrapped responses, pagination, error objects, authentication, versioning, webhooks, and GraphQL responses.">
     <title>Common JSON Structures in REST APIs | JSON Keyper Blog</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -53,101 +52,227 @@
     <article>
         <p><a href="/blog/">&larr; Back to Blog</a></p>
         <h1 class="heading">Common JSON Structures You'll Encounter in REST APIs</h1>
-        <p class="text-muted"><small>Published March 12, 2024 &middot; 6 min read</small></p>
+        <p class="text-muted"><small>Published March 12, 2024 &middot; 10 min read</small></p>
 
         <div class="article-body">
-            <p>If you work with REST APIs, you will encounter certain JSON patterns over and over. Recognising these common structures saves significant time when integrating new APIs - you can immediately understand the shape of a response rather than reading through documentation from scratch.</p>
+            <p>If you work with REST APIs, you will encounter certain JSON patterns over and over again. Recognising these common structures saves significant time when integrating new APIs - you can immediately understand the shape of a response rather than reading through documentation from scratch. This guide covers the most common patterns used by production APIs today, with real examples for each.</p>
 
-            <h2>1. The Wrapped Response</h2>
-            <p>Most production APIs do not return raw data at the root level. Instead, they wrap it in an envelope object that includes metadata about the response:</p>
+            <h2>1. The Wrapped Response (Envelope Pattern)</h2>
+            <p>Most production APIs do not return raw data at the root level. Instead, they wrap it in an envelope object that includes metadata about the response. This makes error handling consistent across all endpoints.</p>
             <pre><code>{
   "data": {
     "id": 42,
-    "name": "Alice",
-    "email": "alice@example.com"
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "createdAt": "2024-01-15T09:30:00Z"
   },
   "status": "success",
   "message": "User retrieved successfully"
 }</code></pre>
-            <p>The actual resource lives inside <code>data</code>, while <code>status</code> and <code>message</code> provide metadata. This pattern makes error handling consistent - you always check <code>status</code> before accessing <code>data</code>.</p>
+            <p>The actual resource lives inside <code>data</code>, while <code>status</code> and <code>message</code> provide metadata. Your code should always check <code>status</code> before accessing <code>data</code>. The GitHub API, Stripe API, and many others follow this pattern.</p>
 
             <h2>2. Paginated List Responses</h2>
-            <p>When an endpoint can return many items, it paginates them to keep responses fast:</p>
+            <p>When an endpoint can return many items, it paginates them to keep response times fast and payloads manageable. There are two main pagination styles:</p>
+
+            <p><strong>Page-based pagination:</strong></p>
             <pre><code>{
   "data": [
-    { "id": 1, "name": "Item One" },
-    { "id": 2, "name": "Item Two" }
+    { "id": 1, "name": "Item One", "price": 9.99 },
+    { "id": 2, "name": "Item Two", "price": 14.99 }
   ],
   "pagination": {
     "page": 1,
     "per_page": 10,
     "total": 245,
-    "total_pages": 25,
+    "total_pages": 25
+  },
+  "links": {
+    "self": "/api/items?page=1",
     "next": "/api/items?page=2",
+    "prev": null,
+    "last": "/api/items?page=25"
+  }
+}</code></pre>
+
+            <p><strong>Cursor-based pagination</strong> (used by Facebook, Twitter, Slack):</p>
+            <pre><code>{
+  "data": [
+    { "id": "post_abc", "text": "Hello world" },
+    { "id": "post_def", "text": "Second post" }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "NjAyMjQ2",
+      "after": "MTAxNTEx"
+    },
+    "next": "/api/posts?after=MTAxNTEx",
     "previous": null
   }
 }</code></pre>
-            <p>Some APIs use cursor-based pagination instead of page numbers - <code>next_cursor</code> and <code>prev_cursor</code> fields point to the adjacent pages using opaque tokens rather than page indices.</p>
+            <p>Cursor-based pagination is more efficient for large, frequently-changing datasets because it does not require counting total records. The cursor is an opaque token representing a position in the result set.</p>
 
             <h2>3. Error Responses</h2>
-            <p>A consistent error structure is a hallmark of a well-designed API:</p>
+            <p>A consistent error structure is a hallmark of a well-designed API. The best APIs use the same JSON structure for errors across all endpoints:</p>
             <pre><code>{
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "One or more fields failed validation",
     "details": [
-      { "field": "email", "issue": "required" },
-      { "field": "name", "issue": "too_short", "min": 2 }
-    ]
+      {
+        "field": "email",
+        "issue": "required",
+        "message": "Email address is required"
+      },
+      {
+        "field": "name",
+        "issue": "too_short",
+        "minimum": 2,
+        "message": "Name must be at least 2 characters"
+      }
+    ],
+    "requestId": "req_8f7d3a",
+    "timestamp": "2024-03-12T10:15:00Z"
   }
 }</code></pre>
-            <p>The <code>code</code> field is a machine-readable constant your code can switch on, while <code>message</code> is human-readable. The <code>details</code> array allows multiple validation errors to be reported at once.</p>
+            <p>The <code>code</code> field is a machine-readable constant your code can switch on. The <code>message</code> is human-readable. The <code>details</code> array allows multiple validation errors to be reported at once. The <code>requestId</code> helps with debugging by correlating the error to server logs.</p>
 
             <h2>4. Nested Resource Responses</h2>
-            <p>APIs often embed related resources in a single response to reduce the number of round trips:</p>
+            <p>APIs often embed related resources in a single response to reduce the number of round trips. This is called "eager loading" or "sideloading":</p>
             <pre><code>{
   "order": {
     "id": "ord_001",
     "status": "shipped",
+    "createdAt": "2024-03-01T14:00:00Z",
     "customer": {
       "id": 99,
-      "name": "Bob",
+      "name": "Bob Smith",
       "email": "bob@example.com"
+    },
+    "shippingAddress": {
+      "street": "456 Oak Ave",
+      "city": "Chicago",
+      "state": "IL",
+      "zip": "60601"
     },
     "items": [
       {
-        "product_id": 12,
+        "productId": 12,
         "name": "Wireless Headphones",
         "quantity": 2,
-        "unit_price": 49.99
+        "unitPrice": 49.99,
+        "subtotal": 99.98
       }
     ],
-    "total": 99.98,
+    "totals": {
+      "subtotal": 99.98,
+      "tax": 8.99,
+      "shipping": 5.00,
+      "total": 113.97
+    },
     "currency": "USD"
   }
 }</code></pre>
 
             <h2>5. JSON Array at Root</h2>
-            <p>Some endpoints - particularly older or simpler ones - return a plain array at the root level rather than a wrapper object:</p>
+            <p>Some endpoints return a plain array at the root level rather than an envelope object. This is simpler but less extensible:</p>
             <pre><code>[
-  { "id": 1, "name": "Tag A", "slug": "tag-a" },
-  { "id": 2, "name": "Tag B", "slug": "tag-b" }
+  { "id": 1, "name": "Tag A", "slug": "tag-a", "count": 42 },
+  { "id": 2, "name": "Tag B", "slug": "tag-b", "count": 17 },
+  { "id": 3, "name": "Tag C", "slug": "tag-c", "count": 5 }
 ]</code></pre>
-            <p>This is simpler but less flexible - there is no room to add pagination or status metadata without a breaking change to the API.</p>
+            <p>The downside of root arrays: there is no room to add pagination metadata, request IDs, or status codes without a breaking change to the API contract.</p>
 
-            <h2>6. Hypermedia / HATEOAS</h2>
-            <p>More advanced REST APIs include links to related actions directly in the response:</p>
+            <h2>6. Authentication Token Responses</h2>
+            <p>OAuth and token-based authentication APIs return a standard JSON structure after successful login:</p>
             <pre><code>{
-  "order": { "id": "ord_001", "status": "pending" },
-  "links": {
-    "self": "/api/orders/ord_001",
-    "cancel": "/api/orders/ord_001/cancel",
-    "customer": "/api/customers/99"
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "8xLOxBtZp8",
+  "scope": "read write",
+  "user": {
+    "id": 42,
+    "email": "alice@example.com"
+  }
+}</code></pre>
+            <p>The <code>access_token</code> is sent in the <code>Authorization: Bearer &lt;token&gt;</code> header for subsequent requests. The <code>refresh_token</code> is used to get a new access token when it expires.</p>
+
+            <h2>7. Rate Limiting Responses</h2>
+            <p>When you exceed an API's rate limit, you typically receive a <code>429 Too Many Requests</code> status with a JSON body:</p>
+            <pre><code>{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "You have exceeded your rate limit of 1000 requests per hour",
+    "retryAfter": 3600,
+    "limit": 1000,
+    "remaining": 0,
+    "resetAt": "2024-03-12T11:00:00Z"
+  }
+}</code></pre>
+            <p>The <code>retryAfter</code> field tells you how many seconds to wait before retrying. Many APIs also return rate limit headers like <code>X-RateLimit-Remaining</code> and <code>X-RateLimit-Reset</code> on every response.</p>
+
+            <h2>8. Webhook Payloads</h2>
+            <p>Webhooks send JSON payloads to your server when events occur. A typical webhook payload includes the event type, timestamp, and the event data:</p>
+            <pre><code>{
+  "event": "payment.completed",
+  "id": "evt_1234567890",
+  "created": 1710241200,
+  "data": {
+    "object": {
+      "id": "pay_abc123",
+      "amount": 4999,
+      "currency": "usd",
+      "status": "succeeded",
+      "customer": "cus_xyz789",
+      "metadata": {
+        "orderId": "ord_001"
+      }
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 1,
+  "request": {
+    "id": "req_abc",
+    "idempotency_key": null
   }
 }</code></pre>
 
+            <h2>9. GraphQL Responses</h2>
+            <p>GraphQL always returns JSON with a specific structure, regardless of the query:</p>
+            <pre><code>{
+  "data": {
+    "user": {
+      "id": "42",
+      "name": "Alice",
+      "posts": [
+        { "id": "1", "title": "Hello World" }
+      ]
+    }
+  },
+  "errors": null
+}</code></pre>
+            <p>When errors occur, they appear in the <code>errors</code> array alongside partial data:</p>
+            <pre><code>{
+  "data": { "user": null },
+  "errors": [
+    {
+      "message": "User not found",
+      "locations": [{ "line": 2, "column": 3 }],
+      "path": ["user"],
+      "extensions": { "code": "NOT_FOUND" }
+    }
+  ]
+}</code></pre>
+
             <h2>Mapping API Responses Quickly</h2>
-            <p>When you first integrate a new API, the fastest way to understand its response structure is to extract all the keys at once. Paste the API response into JSON Keyper and you will get a flat list of every key path in seconds - no more manually scrolling through hundreds of lines of JSON to find the field you need.</p>
+            <p>When you first integrate a new API, the fastest way to understand its response structure is to extract all key paths at once. Rather than scrolling through potentially hundreds of lines of JSON, you can paste the response into JSON Keyper and get a complete flat list of every field path in seconds.</p>
+            <p>This is especially useful for:</p>
+            <ul>
+                <li>Discovering which fields are available before writing any code</li>
+                <li>Finding the exact path to a deeply nested field</li>
+                <li>Comparing response shapes between different API versions</li>
+                <li>Documenting an API's response structure for your team</li>
+            </ul>
 
             <div class="cta-box">
                 <h3>Understand Any API Response Instantly</h3>

@@ -4,12 +4,11 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn how to extract all keys from a JSON object using JavaScript, Python, and free online tools - with a comparison of when to use each method.">
+    <meta name="description" content="Learn how to extract all keys from a JSON object using JavaScript, Python, Ruby, jq, and free online tools - with a full comparison of when to use each method.">
     <title>How to Extract All Keys from a JSON Object | JSON Keyper Blog</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -53,48 +52,64 @@
     <article>
         <p><a href="/blog/">&larr; Back to Blog</a></p>
         <h1 class="heading">How to Extract All Keys from a JSON Object</h1>
-        <p class="text-muted"><small>Published April 8, 2024 &middot; 5 min read</small></p>
+        <p class="text-muted"><small>Published April 8, 2024 &middot; 9 min read</small></p>
 
         <div class="article-body">
-            <p>Extracting all keys from a JSON object is one of the most common tasks when exploring unfamiliar API responses, building data pipelines, or documenting schemas. This guide covers four methods - from quick one-liners to full recursive implementations - so you can choose the right tool for the job.</p>
+            <p>Extracting all keys from a JSON object is one of the most common tasks when exploring unfamiliar API responses, building data transformation pipelines, or documenting schemas. This guide covers five different methods - from instant online tools to custom code implementations in JavaScript, Python, Ruby, and the command-line tool <code>jq</code>.</p>
 
-            <h2>Why Extract JSON Keys?</h2>
-            <p>Before writing code to process a JSON response, you need to know what fields are available. Key extraction is especially useful when:</p>
+            <h2>Why You Need to Extract JSON Keys</h2>
+            <p>Before writing code to process a JSON response, you need a map of what fields are available. Key extraction tells you the full structure of a JSON document, including deeply nested fields that you might miss by reading the raw JSON. It is especially valuable when:</p>
             <ul>
-                <li>Integrating a new third-party API for the first time</li>
-                <li>Building field mappings for data transformations or ETL pipelines</li>
-                <li>Documenting a JSON schema for your team</li>
-                <li>Debugging why a parser cannot find a field you expect to be there</li>
+                <li>Integrating a new third-party API for the first time and wanting to understand its full response shape</li>
+                <li>Building field mappings for data transformations, ETL pipelines, or database imports</li>
+                <li>Documenting a JSON schema for your team so everyone knows what fields exist</li>
+                <li>Debugging why a parser cannot find a field - extracting keys confirms whether the field actually exists in the response</li>
+                <li>Comparing two API responses to find what changed between versions</li>
+                <li>Generating code (e.g. TypeScript interfaces or Python dataclasses) based on a JSON structure</li>
             </ul>
 
-            <h2>Method 1: JavaScript - Object.keys()</h2>
-            <p><code>Object.keys()</code> returns only the <strong>top-level</strong> keys of an object:</p>
-            <pre><code>const json = {
+            <h2>Method 1: JSON Keyper - Instant, No Code</h2>
+            <p>For quick one-off exploration, <a href="/">JSON Keyper</a> is the fastest approach. Paste your JSON and click Extract Keys - no code, no terminal, no dependencies:</p>
+            <ol>
+                <li>Copy your JSON from your API client (Postman, Insomnia, browser DevTools, etc.)</li>
+                <li>Paste it into the left input box on JSON Keyper</li>
+                <li>Click <strong>Extract Keys</strong></li>
+                <li>Every key path appears in the right box - <code>user.address.city</code>, <code>items[0].name</code>, etc.</li>
+                <li>Click <strong>Copy</strong> to copy all paths to your clipboard</li>
+            </ol>
+            <p>This handles nested objects and arrays automatically, outputting paths in dot notation with bracket notation for array indices.</p>
+
+            <h2>Method 2: JavaScript - Object.keys()</h2>
+            <p><code>Object.keys()</code> returns only the <strong>top-level</strong> keys of an object. It is useful for flat JSON but misses nested fields:</p>
+            <pre><code>const data = {
   "name": "Alice",
   "age": 30,
-  "address": { "city": "London", "zip": "EC1A 1BB" }
+  "address": { "city": "London", "zip": "EC1A 1BB" },
+  "tags": ["developer", "admin"]
 };
 
-console.log(Object.keys(json));
-// ["name", "age", "address"]</code></pre>
-            <p>This misses nested keys like <code>address.city</code>. For flat JSON this is enough, but for anything nested you need a recursive approach.</p>
+console.log(Object.keys(data));
+// ["name", "age", "address", "tags"]
+// NOTE: does NOT include "address.city" or "address.zip"</code></pre>
 
-            <h2>Method 2: Recursive JavaScript</h2>
-            <p>To get every key path - including nested objects and arrays - write a recursive function:</p>
+            <h2>Method 3: Recursive JavaScript</h2>
+            <p>To extract every nested key path including arrays, you need a recursive function:</p>
             <pre><code>function getAllKeys(obj, prefix = '') {
     let keys = [];
     for (const key in obj) {
-        if (!obj.hasOwnProperty(key)) continue;
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
         const fullKey = prefix ? `${prefix}.${key}` : key;
         keys.push(fullKey);
         const value = obj[key];
         if (Array.isArray(value)) {
-            value.forEach((item, i) => {
-                if (typeof item === 'object' && item !== null) {
-                    keys = keys.concat(getAllKeys(item, `${fullKey}[${i}]`));
+            value.forEach((item, index) => {
+                if (item !== null && typeof item === 'object') {
+                    keys = keys.concat(getAllKeys(item, `${fullKey}[${index}]`));
+                } else {
+                    keys.push(`${fullKey}[${index}]`);
                 }
             });
-        } else if (typeof value === 'object' && value !== null) {
+        } else if (value !== null && typeof value === 'object') {
             keys = keys.concat(getAllKeys(value, fullKey));
         }
     }
@@ -102,10 +117,20 @@ console.log(Object.keys(json));
 }
 
 const json = JSON.parse(jsonString);
-console.log(getAllKeys(json));</code></pre>
+const keys = getAllKeys(json);
+console.log(keys.join('\n'));</code></pre>
+            <p>For the example above, this would output:</p>
+            <pre><code>name
+age
+address
+address.city
+address.zip
+tags
+tags[0]
+tags[1]</code></pre>
 
-            <h2>Method 3: Python</h2>
-            <p>Python's approach is equally straightforward using a recursive generator:</p>
+            <h2>Method 4: Python</h2>
+            <p>Python's approach is clean and readable using a recursive function with generator-style logic:</p>
             <pre><code>import json
 
 def get_all_keys(obj, prefix=''):
@@ -117,40 +142,91 @@ def get_all_keys(obj, prefix=''):
             keys.extend(get_all_keys(v, full_key))
     elif isinstance(obj, list):
         for i, v in enumerate(obj):
-            keys.extend(get_all_keys(v, f"{prefix}[{i}]"))
+            indexed_key = f"{prefix}[{i}]"
+            keys.append(indexed_key)
+            keys.extend(get_all_keys(v, indexed_key))
     return keys
 
-with open('data.json') as f:
-    data = json.load(f)
+# From a string
+data = json.loads(json_string)
+print('\n'.join(get_all_keys(data)))
 
+# From a file
+with open('response.json') as f:
+    data = json.load(f)
 print('\n'.join(get_all_keys(data)))</code></pre>
 
-            <h2>Method 4: JSON Keyper - No Code Required</h2>
-            <p>If you just need to see the keys quickly without writing or running any code, <a href="/">JSON Keyper</a> handles it instantly in your browser:</p>
-            <ol>
-                <li>Paste your JSON into the left input box</li>
-                <li>Click <strong>Extract Keys</strong></li>
-                <li>View every key path in the right output box</li>
-                <li>Click <strong>Copy</strong> to send them all to your clipboard</li>
-            </ol>
-            <p>JSON Keyper handles nested objects and arrays automatically using the same dot notation and bracket notation as the code examples above - but with zero setup.</p>
+            <h2>Method 5: Ruby</h2>
+            <pre><code>require 'json'
+
+def get_all_keys(obj, prefix = '')
+  keys = []
+  case obj
+  when Hash
+    obj.each do |k, v|
+      full_key = prefix.empty? ? k.to_s : "#{prefix}.#{k}"
+      keys << full_key
+      keys.concat(get_all_keys(v, full_key))
+    end
+  when Array
+    obj.each_with_index do |v, i|
+      indexed_key = "#{prefix}[#{i}]"
+      keys << indexed_key
+      keys.concat(get_all_keys(v, indexed_key))
+    end
+  end
+  keys
+end
+
+data = JSON.parse(File.read('response.json'))
+puts get_all_keys(data).join("\n")</code></pre>
+
+            <h2>Method 6: jq - Command Line</h2>
+            <p><code>jq</code> is a powerful command-line JSON processor available on Linux, macOS, and Windows. It can extract all keys from a JSON file in a single command:</p>
+            <pre><code># Get all top-level keys
+jq 'keys' data.json
+
+# Recursively get all paths (as arrays)
+jq '[path(..)] | map(join("."))' data.json
+
+# Get all string keys (excluding array indices)
+jq '[paths | select(type == "string")]' data.json
+
+# Extract specific nested value using a path
+jq '.user.address.city' data.json
+
+# Extract all values matching a pattern
+jq '.. | .name? // empty' data.json</code></pre>
+            <p><code>jq</code> is particularly useful in CI/CD pipelines, shell scripts, and when working with large JSON files where loading everything into memory is impractical.</p>
+
+            <h2>Handling Edge Cases</h2>
+            <p>When extracting keys, be aware of these common edge cases:</p>
+            <ul>
+                <li><strong>Empty objects</strong> - <code>{}</code> has no keys to extract</li>
+                <li><strong>Null values</strong> - the key exists but the value is <code>null</code>; still include the key path</li>
+                <li><strong>Keys with dots</strong> - if a key name contains a literal dot (e.g. <code>"user.name"</code>), dot-notation paths become ambiguous</li>
+                <li><strong>Numeric string keys</strong> - JSON object keys must be strings, but keys like <code>"0"</code> and <code>"1"</code> can look like array indices</li>
+                <li><strong>Very large JSON</strong> - recursive functions can hit stack limits on extremely deep or large structures; consider iterative alternatives</li>
+            </ul>
 
             <h2>Which Method Should You Use?</h2>
             <table>
                 <thead>
-                    <tr><th>Scenario</th><th>Best Approach</th></tr>
+                    <tr><th>Scenario</th><th>Best Method</th></tr>
                 </thead>
                 <tbody>
                     <tr><td>Quick one-off exploration</td><td>JSON Keyper</td></tr>
-                    <tr><td>Automated pipeline or script</td><td>Python recursive function</td></tr>
-                    <tr><td>Browser-side JavaScript processing</td><td>JS recursive function</td></tr>
+                    <tr><td>Shell scripts or CI pipelines</td><td>jq</td></tr>
+                    <tr><td>Python data pipeline</td><td>Python recursive function</td></tr>
+                    <tr><td>Node.js / browser application</td><td>JavaScript recursive function</td></tr>
                     <tr><td>Top-level keys only, flat JSON</td><td><code>Object.keys()</code></td></tr>
+                    <tr><td>Ruby application</td><td>Ruby recursive function</td></tr>
                 </tbody>
             </table>
 
             <div class="cta-box">
-                <h3>Extract JSON Keys Instantly</h3>
-                <p>Paste any JSON into JSON Keyper and get every key path in one click - no code, no setup, completely free.</p>
+                <h3>Extract JSON Keys Instantly - No Code Required</h3>
+                <p>Paste any JSON into JSON Keyper and get every nested key path in one click. Free, browser-based, no login required.</p>
                 <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
             </div>
         </div>
