@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete guide to working with JSON in Python: parsing, serialising, reading files, handling dates and custom objects, pretty printing, and using requests with JSON APIs.">
+    <title>Working with JSON in Python: A Complete Guide | JSON Keyper Blog</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Working with JSON in Python: A Complete Guide",
+      "datePublished": "2024-07-15",
+      "author": { "@type": "Organization", "name": "JSON Keyper" },
+      "publisher": { "@type": "Organization", "name": "JSON Keyper", "url": "https://jsonkeyper.com" }
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <p><a href="/blog/">&larr; Back to Blog</a></p>
+        <h1 class="heading">Working with JSON in Python: A Complete Guide</h1>
+        <p class="text-muted"><small>Published July 15, 2024 &middot; 11 min read</small></p>
+
+        <div class="article-body">
+            <p>Python's built-in <code>json</code> module makes working with JSON simple and intuitive. Whether you are consuming a REST API, storing configuration, or processing data files, Python's JSON tools handle the job with minimal code. This guide covers every common JSON operation in Python - from basic parsing to custom serialisation, error handling, and working with APIs.</p>
+
+            <h2>The json Module: Four Core Functions</h2>
+            <p>The <code>json</code> module has four primary functions:</p>
+            <ul>
+                <li><code>json.loads(string)</code> - parse a JSON <strong>string</strong> into a Python object</li>
+                <li><code>json.dumps(obj)</code> - serialise a Python object to a JSON <strong>string</strong></li>
+                <li><code>json.load(file)</code> - parse JSON from a <strong>file</strong> object</li>
+                <li><code>json.dump(obj, file)</code> - serialise Python object and write to a <strong>file</strong></li>
+            </ul>
+            <p>The "s" in <code>loads</code> and <code>dumps</code> stands for "string" - a helpful way to remember the distinction.</p>
+
+            <h2>Parsing JSON Strings</h2>
+            <pre><code>import json
+
+# Parse a simple JSON string
+json_string = '{"name": "Alice", "age": 30, "active": true}'
+data = json.loads(json_string)
+
+print(data["name"])    # Alice
+print(data["age"])     # 30 (integer, not string!)
+print(data["active"])  # True (Python bool)
+print(type(data))      # &lt;class 'dict'&gt;
+
+# Parse an array
+array_string = '[1, 2, 3, "four", null, true]'
+items = json.loads(array_string)
+print(items[3])  # four
+print(items[4])  # None (Python's null equivalent)
+print(items[5])  # True</code></pre>
+
+            <p>JSON types map to Python types as follows:</p>
+            <table>
+                <thead><tr><th>JSON Type</th><th>Python Type</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td>object</td><td>dict</td><td><code>{"a": 1}</code> → <code>{'a': 1}</code></td></tr>
+                    <tr><td>array</td><td>list</td><td><code>[1,2]</code> → <code>[1, 2]</code></td></tr>
+                    <tr><td>string</td><td>str</td><td><code>"hello"</code> → <code>'hello'</code></td></tr>
+                    <tr><td>number (int)</td><td>int</td><td><code>42</code> → <code>42</code></td></tr>
+                    <tr><td>number (float)</td><td>float</td><td><code>3.14</code> → <code>3.14</code></td></tr>
+                    <tr><td>true/false</td><td>True/False</td><td><code>true</code> → <code>True</code></td></tr>
+                    <tr><td>null</td><td>None</td><td><code>null</code> → <code>None</code></td></tr>
+                </tbody>
+            </table>
+
+            <h2>Reading and Writing JSON Files</h2>
+            <pre><code>import json
+
+# Read JSON from a file
+with open("config.json", "r", encoding="utf-8") as f:
+    config = json.load(f)
+
+print(config["database"]["host"])
+
+# Write Python dict to a JSON file
+data = {
+    "version": "1.0",
+    "database": {
+        "host": "localhost",
+        "port": 5432,
+        "name": "myapp"
+    },
+    "features": ["auth", "logging", "cache"]
+}
+
+with open("config.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+# The file will contain formatted JSON:
+# {
+#   "version": "1.0",
+#   "database": { ... },
+#   ...
+# }</code></pre>
+
+            <h2>Pretty Printing JSON</h2>
+            <pre><code>import json
+
+data = {"name": "Alice", "scores": [95, 87, 92], "address": {"city": "London"}}
+
+# Compact (default)
+print(json.dumps(data))
+# {"name": "Alice", "scores": [95, 87, 92], "address": {"city": "London"}}
+
+# Indented - 2 or 4 spaces (your preference)
+print(json.dumps(data, indent=2))
+# {
+#   "name": "Alice",
+#   "scores": [95, 87, 92],
+#   "address": {
+#     "city": "London"
+#   }
+# }
+
+# Sorted keys - useful for reproducible output and diffing
+print(json.dumps(data, indent=2, sort_keys=True))
+
+# Print directly from a file to inspect it
+with open("data.json") as f:
+    print(json.dumps(json.load(f), indent=2))</code></pre>
+
+            <h2>Serialising Python Objects</h2>
+            <p>Not all Python objects can be serialised to JSON by default. The following types cause a <code>TypeError</code>:</p>
+            <pre><code>import json
+from datetime import datetime, date
+from decimal import Decimal
+import uuid
+
+data = {
+    "created_at": datetime.now(),  # TypeError!
+    "price": Decimal("9.99"),      # TypeError!
+    "id": uuid.uuid4()             # TypeError!
+}</code></pre>
+            <p>To handle these types, provide a custom <code>default</code> function or a subclass of <code>json.JSONEncoder</code>:</p>
+            <pre><code>import json
+from datetime import datetime, date
+from decimal import Decimal
+import uuid
+
+def default_serialiser(obj):
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    if isinstance(obj, Decimal):
+        return float(obj)
+    if isinstance(obj, uuid.UUID):
+        return str(obj)
+    raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
+data = {
+    "created_at": datetime.now(),
+    "price": Decimal("9.99"),
+    "id": uuid.uuid4()
+}
+
+# Pass the custom function as the 'default' argument
+json_string = json.dumps(data, default=default_serialiser, indent=2)
+print(json_string)</code></pre>
+
+            <h2>Using JSON with the Requests Library</h2>
+            <p>The <code>requests</code> library makes consuming JSON APIs simple:</p>
+            <pre><code>import requests
+
+# GET request - parse JSON response
+response = requests.get("https://api.example.com/users/1")
+response.raise_for_status()  # raises HTTPError for 4xx/5xx status codes
+user = response.json()       # automatically parses JSON response
+print(user["name"])
+
+# POST request with JSON body
+new_user = {
+    "name": "Bob Smith",
+    "email": "bob@example.com",
+    "role": "editor"
+}
+
+response = requests.post(
+    "https://api.example.com/users",
+    json=new_user,  # sets Content-Type: application/json and serialises automatically
+    headers={"Authorization": "Bearer your-token"}
+)
+response.raise_for_status()
+created_user = response.json()
+print(f"Created user with ID: {created_user['id']}")
+
+# PUT request to update a resource
+updates = {"name": "Robert Smith", "active": True}
+response = requests.put(
+    f"https://api.example.com/users/{created_user['id']}",
+    json=updates,
+    headers={"Authorization": "Bearer your-token"}
+)
+response.raise_for_status()</code></pre>
+
+            <h2>Error Handling</h2>
+            <pre><code>import json
+
+# Handle malformed JSON
+def safe_parse(json_string):
+    try:
+        return json.loads(json_string)
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON at line {e.lineno}, column {e.colno}: {e.msg}")
+        return None
+
+# Handle missing keys safely
+data = json.loads('{"user": {"name": "Alice"}}')
+
+# Bad - raises KeyError if email is missing
+# email = data["user"]["email"]
+
+# Good - .get() returns None (or a default) for missing keys
+email = data.get("user", {}).get("email", "no email provided")
+print(email)  # no email provided</code></pre>
+
+            <h2>Processing Large JSON Files</h2>
+            <p>For very large JSON files (gigabytes), loading everything into memory at once is impractical. Use the <code>ijson</code> library for streaming JSON parsing:</p>
+            <pre><code>import ijson
+
+# Stream through a large array of objects
+with open("large_data.json", "rb") as f:
+    for item in ijson.items(f, "item"):
+        # process one item at a time without loading the whole file
+        print(item["name"])
+
+# Stream nested objects
+with open("large_data.json", "rb") as f:
+    for key, value in ijson.kvitems(f, "users.item"):
+        print(key, value)</code></pre>
+
+            <h2>Converting JSON to Python Dataclasses</h2>
+            <p>For typed, structured access to JSON data, Python dataclasses (Python 3.7+) combined with the <code>dacite</code> or <code>marshmallow</code> library provide an excellent pattern:</p>
+            <pre><code">from dataclasses import dataclass
+from typing import Optional, List
+import json
+import dacite
+
+@dataclass
+class Address:
+    street: str
+    city: str
+    zip: Optional[str] = None
+
+@dataclass
+class User:
+    id: int
+    name: str
+    email: str
+    address: Address
+    tags: List[str]
+
+json_string = '''
+{
+  "id": 1,
+  "name": "Alice",
+  "email": "alice@example.com",
+  "address": {"street": "123 Main St", "city": "New York"},
+  "tags": ["admin", "developer"]
+}
+'''
+
+data = json.loads(json_string)
+user = dacite.from_dict(data_class=User, data=data)
+print(user.name)           # Alice
+print(user.address.city)   # New York
+print(user.tags[0])        # admin</code></pre>
+
+            <div class="cta-box">
+                <h3>Explore Any JSON Structure Before Processing It</h3>
+                <p>Before writing Python code to process a JSON response, use JSON Keyper to extract all key paths. This gives you a complete map of the data structure so you know exactly which fields to access.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
