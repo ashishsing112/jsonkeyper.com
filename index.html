@@ -4,8 +4,9 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="JSON Keyper is a free online tool to extract and map all keys from any JSON object. Paste your JSON and instantly get a flat list of every key path - including nested objects and arrays.">
-    <title>JSON Keyper - Free Online JSON Key Extractor</title>
+    <meta name="description" content="Free online JSON key extractor. Paste any JSON and get every key path in dot notation, JSONPath, or a generated TypeScript interface - with value types, structure stats, and array collapsing. Runs entirely in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/">
+    <title>JSON Keyper - Free Online JSON Key Extractor and Path Mapper</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
@@ -25,14 +26,76 @@
       "@type": "WebApplication",
       "name": "JSON Keyper",
       "url": "https://jsonkeyper.com",
-      "description": "A free online tool to extract and map all keys from any JSON object.",
+      "description": "A free browser-based tool that extracts every key path from a JSON object and outputs it as dot notation, JSONPath, an annotated type listing, or a TypeScript interface.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
+      "browserRequirements": "Requires JavaScript",
+      "author": { "@type": "Person", "name": "Ashish Singh" },
+      "featureList": [
+        "Extract all nested key paths from JSON",
+        "Annotate each key path with its value type",
+        "Collapse repeated array indices into a single path",
+        "Convert key paths to JSONPath expressions",
+        "Generate a TypeScript interface from a JSON sample",
+        "Report structure statistics including depth and key counts"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my JSON data uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. All parsing and key extraction happens in JavaScript inside your own browser tab. Your JSON is never transmitted, logged, or stored anywhere. You can confirm this by opening your browser's network tab while using the tool, or by disconnecting from the internet after the page loads - the tool keeps working."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do array indices appear in the output as items[0].name?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "By default JSON Keyper reports the literal path to every key it finds, so an array of three objects produces three separate paths. Tick 'Collapse array indices' to merge them into a single items[].name entry, which is usually what you want when you are documenting a schema rather than inspecting one specific record."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between dot notation and JSONPath?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dot notation such as user.address.city is how you access a value in JavaScript or Python code. JSONPath such as $.user.address.city is a query language understood by tools like jq, Postman, and many API gateways, and it supports wildcards like $.orders[*].total. JSON Keyper can output either."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can JSON Keyper handle large JSON files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Files up to a few megabytes are handled comfortably. Because the tool builds the full path list in memory, very large documents (tens of megabytes) may be slow or may exhaust the browser tab's memory. For files that size, a streaming command line tool such as jq is a better fit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the TypeScript interface generator handle optional fields?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, giftMessage appears on only one of the two orders, so it is generated as giftMessage?: string."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens to keys that contain dots or special characters?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dot notation becomes ambiguous when a key name itself contains a dot, because user.name could mean a nested field or a single literal key. The JSONPath output avoids this by quoting such keys in brackets, and the TypeScript output quotes them as string literal keys."
+          }
+        }
+      ]
     }
     </script>
 </head>
@@ -58,45 +121,67 @@
     </nav>
 </header>
 
-<!-- horizontal banner ads -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1186627905951846"
-     data-ad-slot="8486038914"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
 <div class="container-shadow">
     <div class="section" id="request">
         <div class="row">
             <div class="col-12">
-                <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;">JSON Key Mapper</h1>
-                <p class="mb-3">Paste any JSON object below and instantly extract every key path - including nested objects and arrays. Free, browser-based, no login required.</p>
+                <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;">JSON Key Extractor and Path Mapper</h1>
+                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface. Everything runs in your browser - your data never leaves this tab.</p>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-sm-6">
-                <div class="row p-1">
-                    <textarea id="textbox1" placeholder="Paste your JSON here..."></textarea>
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Input JSON</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
                 </div>
-                <div class="row p-1">
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
                     <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
                 </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="row p-1">
-                    <textarea id="keysOutput" placeholder="Keys will appear here..." readonly></textarea>
+                <div class="button-row secondary-actions">
+                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample JSON</button>
+                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
                 </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="output-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <option value="paths">Key paths (dot notation)</option>
+                        <option value="typed">Key paths with value types</option>
+                        <option value="unique">Unique key names only</option>
+                        <option value="jsonpath">JSONPath expressions</option>
+                        <option value="tree">Indented tree</option>
+                        <option value="typescript">TypeScript interface</option>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays">
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Extracted keys" placeholder="Keys will appear here..." readonly></textarea>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-4">
                         <div class="row p-1">
                             <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
                         <div class="row p-1">
                             <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
                         </div>
@@ -104,7 +189,156 @@
                 </div>
             </div>
         </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
     </div>
+</div>
+
+<!-- Worked example -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">A Worked Example</h2>
+    <p>The quickest way to understand what the tool returns is to see one input mapped to each output format. Take this trimmed-down order response, the kind of payload you get back from a typical e-commerce API:</p>
+    <pre class="example-block"><code>{
+  "user": {
+    "name": "Ada Lovelace",
+    "address": { "city": "London", "country": { "code": "GB" } },
+    "roles": ["admin", "engineer"]
+  },
+  "orders": [
+    { "orderId": "ord_1001", "total": 249.99 },
+    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  ]
+}</code></pre>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <h3 class="format-title">Key paths (dot notation)</h3>
+            <p class="format-note">Every key, at its literal position. Note that <code>orders</code> appears twice below it because there are two elements in the array.</p>
+            <pre class="example-block"><code>user
+user.name
+user.address
+user.address.city
+user.address.country
+user.address.country.code
+user.roles
+orders
+orders[0].orderId
+orders[0].total
+orders[1].orderId
+orders[1].total
+orders[1].giftMessage</code></pre>
+        </div>
+        <div class="col-md-6 mb-3">
+            <h3 class="format-title">The same, with array indices collapsed</h3>
+            <p class="format-note">Repeated indices merge into <code>[]</code> and duplicates are removed. This is the view you want when documenting a schema rather than inspecting one record.</p>
+            <pre class="example-block"><code>user
+user.name
+user.address
+user.address.city
+user.address.country
+user.address.country.code
+user.roles
+orders
+orders[].orderId
+orders[].total
+orders[].giftMessage</code></pre>
+        </div>
+        <div class="col-md-6 mb-3">
+            <h3 class="format-title">Key paths with value types</h3>
+            <p class="format-note">Useful when you need to know whether a field is a string, a number, or a container before you write the parsing code.</p>
+            <pre class="example-block"><code>user                        object
+user.name                   string
+user.address                object
+user.address.city           string
+user.address.country        object
+user.address.country.code   string
+user.roles                  array
+orders                      array
+orders[].orderId            string
+orders[].total              number
+orders[].giftMessage        string</code></pre>
+        </div>
+        <div class="col-md-6 mb-3">
+            <h3 class="format-title">TypeScript interface</h3>
+            <p class="format-note">Objects inside an array are merged, and any key missing from some elements is marked optional - here <code>giftMessage</code> exists on only one of the two orders.</p>
+            <pre class="example-block"><code>interface Root {
+  user: {
+    name: string;
+    address: {
+      city: string;
+      country: {
+        code: string;
+      };
+    };
+    roles: string[];
+  };
+  orders: {
+    orderId: string;
+    total: number;
+    giftMessage?: string;
+  }[];
+}</code></pre>
+        </div>
+    </div>
+</div>
+
+<!-- horizontal banner ads -->
+<div class="ad-slot">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-1186627905951846"
+         data-ad-slot="8486038914"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<!-- Notation reference -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">Path Notation Reference</h2>
+    <p>Different tools address the same nested value in different ways. This table maps a single field - the city inside the first order's shipping address - across the notations you are most likely to meet.</p>
+    <div class="table-wrap">
+        <table class="reference-table">
+            <thead>
+                <tr><th>Notation</th><th>How the path looks</th><th>Where you use it</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dot notation</td>
+                    <td><code>orders[0].shipping.city</code></td>
+                    <td>JavaScript and Python source code, and most ORM or config field mappings.</td>
+                </tr>
+                <tr>
+                    <td>Collapsed dot notation</td>
+                    <td><code>orders[].shipping.city</code></td>
+                    <td>Schema documentation and field-mapping spreadsheets, where the index is noise.</td>
+                </tr>
+                <tr>
+                    <td>JSONPath</td>
+                    <td><code>$.orders[0].shipping.city</code></td>
+                    <td>jq, Postman assertions, API gateway transforms, and many low-code integration tools.</td>
+                </tr>
+                <tr>
+                    <td>JSONPath with wildcard</td>
+                    <td><code>$.orders[*].shipping.city</code></td>
+                    <td>Selecting the same field across every element of an array in one query.</td>
+                </tr>
+                <tr>
+                    <td>Bracket notation</td>
+                    <td><code>orders[0]["shipping"]["city"]</code></td>
+                    <td>Required when a key contains a dot, a space, or a hyphen that would break dot notation.</td>
+                </tr>
+                <tr>
+                    <td>JSON Pointer (RFC 6901)</td>
+                    <td><code>/orders/0/shipping/city</code></td>
+                    <td>JSON Patch documents, JSON Schema <code>$ref</code> targets, and OpenAPI references.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="mt-3">The one case that trips people up is a key that literally contains a dot. If your JSON has <code>{"user.name": "Ada"}</code>, then the dot-notation path <code>user.name</code> is ambiguous - it could equally describe a nested <code>name</code> inside a <code>user</code> object. Switch to the JSONPath output in that situation, which quotes the key as <code>$['user.name']</code> and removes the ambiguity.</p>
 </div>
 
 <!-- How to Use -->
@@ -112,19 +346,43 @@
     <h2 class="heading mb-3">How to Use JSON Keyper</h2>
     <div class="how-to-step">
         <span class="step-number">1</span>
-        <div><strong>Paste your JSON</strong> - copy any JSON object or API response and paste it into the left input box.</div>
+        <div><strong>Add your JSON</strong> - paste an object or API response into the left box, drag a <code>.json</code> file onto it, or click <strong>Load sample JSON</strong> to try the tool with a realistic order payload.</div>
     </div>
     <div class="how-to-step">
         <span class="step-number">2</span>
-        <div><strong>Click "Extract Keys"</strong> - JSON Keyper will recursively walk the entire structure.</div>
+        <div><strong>Click "Extract Keys"</strong> - or press Ctrl + Enter. The whole structure is walked recursively, however deeply it nests. If the JSON is malformed you get the line and column of the problem rather than a generic failure.</div>
     </div>
     <div class="how-to-step">
         <span class="step-number">3</span>
-        <div><strong>View all key paths</strong> - every key path appears in the right box using dot notation (e.g. <code>user.address.city</code>) and bracket notation for arrays (e.g. <code>items[0].name</code>).</div>
+        <div><strong>Choose an output format</strong> - dot-notation paths, paths annotated with value types, unique key names, JSONPath expressions, an indented tree, or a TypeScript interface. Switching format re-renders instantly without re-parsing.</div>
     </div>
     <div class="how-to-step">
         <span class="step-number">4</span>
-        <div><strong>Copy or Clear</strong> - click Copy to send all keys to your clipboard, or Clear to reset both boxes.</div>
+        <div><strong>Collapse array indices if you want a schema view</strong> - tick the checkbox to turn <code>items[0].sku</code> and <code>items[1].sku</code> into a single <code>items[].sku</code>.</div>
+    </div>
+    <div class="how-to-step">
+        <span class="step-number">5</span>
+        <div><strong>Copy or download</strong> - send the result to your clipboard, or download it as a <code>.txt</code> file (or <code>.ts</code> when you have the TypeScript format selected).</div>
+    </div>
+</div>
+
+<!-- Output formats explained -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">Which Output Format Should You Use?</h2>
+    <div class="table-wrap">
+        <table class="reference-table">
+            <thead>
+                <tr><th>Format</th><th>Best for</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Key paths</strong></td><td>Grabbing an exact accessor to paste straight into code, or checking whether a specific field really exists in a response.</td></tr>
+                <tr><td><strong>Key paths with value types</strong></td><td>Deciding how to parse a payload - spotting that an <code>id</code> arrives as a string rather than a number before it causes a bug.</td></tr>
+                <tr><td><strong>Unique key names</strong></td><td>Building a field glossary, or diffing the vocabulary of two API versions to see which names were added or dropped.</td></tr>
+                <tr><td><strong>JSONPath</strong></td><td>Writing jq filters, Postman test assertions, or extraction rules in an integration platform.</td></tr>
+                <tr><td><strong>Indented tree</strong></td><td>Getting a visual sense of shape and nesting depth, especially for an unfamiliar payload. This view always collapses array indices, since drawing one branch per element would bury the shape.</td></tr>
+                <tr><td><strong>TypeScript interface</strong></td><td>Bootstrapping typed API clients. Treat the result as a first draft to review, not a finished contract - see the limitations below.</td></tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -135,28 +393,91 @@
         <div class="col-sm-6 col-md-3 mb-3">
             <div class="use-case-card">
                 <h5>API Exploration</h5>
-                <p class="mb-0" style="font-size: 14px;">Understand the structure of an unfamiliar API response at a glance without manually scrolling through hundreds of lines.</p>
+                <p class="mb-0" style="font-size: 14px;">Understand the structure of an unfamiliar API response at a glance instead of scrolling through hundreds of lines looking for the field you need.</p>
             </div>
         </div>
         <div class="col-sm-6 col-md-3 mb-3">
             <div class="use-case-card">
                 <h5>Data Transformation</h5>
-                <p class="mb-0" style="font-size: 14px;">Map source fields to destination fields in ETL pipelines, data migrations, and integration projects.</p>
+                <p class="mb-0" style="font-size: 14px;">Map source fields to destination fields in ETL pipelines and migrations. The collapsed-index view pastes cleanly into a mapping spreadsheet.</p>
             </div>
         </div>
         <div class="col-sm-6 col-md-3 mb-3">
             <div class="use-case-card">
                 <h5>Schema Documentation</h5>
-                <p class="mb-0" style="font-size: 14px;">Generate a complete flat list of all fields in a JSON schema for sharing with your team or writing API docs.</p>
+                <p class="mb-0" style="font-size: 14px;">Produce a complete flat list of every field, with types, to paste into API docs or share with the team implementing against it.</p>
             </div>
         </div>
         <div class="col-sm-6 col-md-3 mb-3">
             <div class="use-case-card">
                 <h5>Debugging</h5>
-                <p class="mb-0" style="font-size: 14px;">Quickly verify which fields are present in a JSON response when a parser isn't finding a field you expect.</p>
+                <p class="mb-0" style="font-size: 14px;">When a parser cannot find a field, extract the keys to settle whether the field is genuinely absent or simply nested where you did not expect.</p>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Limitations -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">Limitations Worth Knowing</h2>
+    <p>No tool fits every job. These are the cases where JSON Keyper will not serve you well, and what to reach for instead:</p>
+    <ul class="limitations-list">
+        <li><strong>Very large files.</strong> The full path list is built in memory, so documents in the tens of megabytes may be slow or exhaust the tab. Use a streaming processor such as <code>jq</code> for those.</li>
+        <li><strong>Sample-based type inference.</strong> The TypeScript output describes the sample you pasted, not the API's real contract. A field that happens to be <code>null</code> in your sample is typed <code>null</code>, and a field absent from your sample cannot appear at all. Review the output against the API documentation.</li>
+        <li><strong>Numbers are all <code>number</code>.</strong> JSON does not distinguish integers from floats, so the type annotations cannot either.</li>
+        <li><strong>Keys containing dots.</strong> Dot-notation output is ambiguous for these. Switch to JSONPath, which quotes them.</li>
+        <li><strong>Not a validator.</strong> The tool checks that your JSON parses, but it does not check it against a JSON Schema. For that, see our <a href="/blog/json-schema-guide.html">guide to JSON Schema validation</a>.</li>
+        <li><strong>Not a formatter.</strong> If you want to pretty-print or minify rather than map keys, a dedicated formatter is the better tool.</li>
+    </ul>
+</div>
+
+<!-- FAQ -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <h3>Is my JSON data uploaded to a server?</h3>
+        <p>No. All parsing and key extraction happens in JavaScript inside your own browser tab. Your JSON is never transmitted, logged, or stored anywhere. You can confirm this by opening your browser's network tab while using the tool, or by disconnecting from the internet after the page loads - the tool keeps working.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Why do array indices appear in the output as <code>items[0].name</code>?</h3>
+        <p>By default JSON Keyper reports the literal path to every key it finds, so an array of three objects produces three separate paths. Tick <strong>Collapse array indices</strong> to merge them into a single <code>items[].name</code> entry, which is usually what you want when you are documenting a schema rather than inspecting one specific record.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>What is the difference between dot notation and JSONPath?</h3>
+        <p>Dot notation such as <code>user.address.city</code> is how you access a value in JavaScript or Python code. JSONPath such as <code>$.user.address.city</code> is a query language understood by tools like jq, Postman, and many API gateways, and it supports wildcards like <code>$.orders[*].total</code>. JSON Keyper can output either.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Can JSON Keyper handle large JSON files?</h3>
+        <p>Files up to a few megabytes are handled comfortably. Because the tool builds the full path list in memory, very large documents (tens of megabytes) may be slow or may exhaust the browser tab's memory. For files that size, a streaming command line tool such as <code>jq</code> is a better fit.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Does the TypeScript interface generator handle optional fields?</h3>
+        <p>Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, <code>giftMessage</code> appears on only one of the two orders, so it is generated as <code>giftMessage?: string</code>.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>What happens to keys that contain dots or special characters?</h3>
+        <p>Dot notation becomes ambiguous when a key name itself contains a dot, because <code>user.name</code> could mean a nested field or a single literal key. The JSONPath output avoids this by quoting such keys in brackets, and the TypeScript output quotes them as string literal keys.</p>
+    </div>
+</div>
+
+<!-- Further reading -->
+<div class="container-shadow mt-3">
+    <h2 class="heading mb-3">Further Reading</h2>
+    <p>Longer guides on working with JSON, written alongside this tool:</p>
+    <ul class="reading-list">
+        <li><a href="/blog/how-to-extract-json-keys.html">How to Extract All Keys from a JSON Object</a> - the same job done in JavaScript, Python, Ruby, and jq, with a comparison of when each is worth the effort.</li>
+        <li><a href="/blog/understanding-nested-json.html">Understanding Nested JSON Objects and Arrays</a> - safe access patterns for deeply nested data, and how to flatten a structure.</li>
+        <li><a href="/blog/json-in-rest-apis.html">Common JSON Structures in REST APIs</a> - the envelope, pagination, and error shapes you will meet again and again.</li>
+        <li><a href="/blog/json-schema-guide.html">JSON Schema: A Practical Guide to Validating JSON</a> - moving from "what keys are here" to "what keys are required".</li>
+        <li><a href="/blog/working-with-json-in-python.html">Working with JSON in Python</a> - parsing, custom encoders, and streaming large files.</li>
+        <li><a href="/blog/">Browse all articles</a></li>
+    </ul>
 </div>
 
 <footer>
@@ -170,22 +491,6 @@
         <a href="/about.html">About</a>
     </nav>
 </footer>
-
-<div id="contactModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeContactModal()">&times;</span>
-        <h2>Feedback Form</h2>
-        <form>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; height: 100px;"></textarea>
-            <button type="button" onclick="sendContactForm()" style="width: 100%; background-color: #3498db; color: white; border: none; padding: 15px; border-radius: 5px; margin-top: 10px;">Send Message</button>
-        </form>
-    </div>
-</div>
 
 <div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
     <div class="d-flex">

@@ -60,9 +60,38 @@
     <h2 class="mt-4 mb-3 heading">What JSON Keyper Does</h2>
     <p>JSON Keyper recursively traverses any JSON structure - no matter how deeply nested - and outputs a flat list of every key path using dot notation and bracket notation. For example, a JSON object like <code>{"user": {"address": {"city": "London"}}}</code> will produce the key path <code>user.address.city</code>, giving you an instant map of the entire structure.</p>
 
+    <p>The same extracted structure can be rendered several ways, depending on what you are trying to do:</p>
+    <ul>
+        <li><strong>Key paths</strong> in dot notation, optionally with array indices collapsed so <code>items[0].sku</code> and <code>items[1].sku</code> become a single <code>items[].sku</code>.</li>
+        <li><strong>Value types</strong> alongside each path, so you can see whether a field arrives as a string, a number, or a container before writing the parsing code.</li>
+        <li><strong>JSONPath expressions</strong> for use with jq, Postman, and API gateway transforms.</li>
+        <li><strong>An indented tree</strong> for a quick visual read of shape and nesting depth.</li>
+        <li><strong>A TypeScript interface</strong> generated from your sample, merging objects across an array and marking inconsistent keys as optional.</li>
+    </ul>
+
+    <p>Alongside the output, the tool reports structure statistics - total key paths, unique key names, maximum nesting depth, and object and array counts - which is often the fastest way to gauge how complex a payload really is.</p>
+
     <p>This is especially useful when working with complex API responses, building field mappings for data transformations, or documenting JSON schemas for your team.</p>
 
-    <p>Thank you for choosing JSON Keyper. We are always here to improve your experience with continuous updates and new features. If you have a suggestion, please reach out via our <a href="/contact.html">contact page</a>.</p>
+    <h2 class="mt-4 mb-3 heading">Honest Limitations</h2>
+    <p>JSON Keyper is deliberately narrow, and there are jobs it is the wrong tool for. Type inference is based on the sample you paste, not on the API's real contract, so a field that happens to be <code>null</code> in your sample is reported as <code>null</code>. Very large documents can exhaust a browser tab, because the full path list is held in memory - reach for a streaming tool like <code>jq</code> at that scale. And the tool checks that your JSON parses, but it does not validate against a schema. The <a href="/">homepage</a> lists these caveats in full, and the <a href="/blog/json-schema-guide.html">JSON Schema guide</a> covers the validation side.</p>
+
+    <h2 class="mt-4 mb-3 heading">Who Writes This</h2>
+    <div class="author-box">
+        <div class="author-avatar">AS</div>
+        <div>
+            <p class="author-name">Ashish Singh</p>
+            <p class="author-blurb">I am a back-end developer, and JSON Keyper started as a way to push myself
+            beyond the server-side work I was comfortable with. Most of my working day involves reading API
+            responses I did not design, which is the itch this tool was built to scratch - and the reason the
+            feature list has grown the way it has. Every guide on this site comes out of a problem I actually
+            hit: payloads too deep to eyeball, keys that only appear on some records, and types that were not
+            what the documentation promised. If something here is wrong or missing, I would genuinely like to
+            know - <a href="/contact.html">tell me about it</a>.</p>
+        </div>
+    </div>
+
+    <p class="mt-4">Thank you for using JSON Keyper. If you have a suggestion or a bug report, please reach out via our <a href="/contact.html">contact page</a>.</p>
 </div>
 
 <footer>
