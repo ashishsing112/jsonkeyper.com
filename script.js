@@ -221,6 +221,19 @@ function currentFormat() {
     return select ? select.value : 'paths';
 }
 
+// Landing pages deep-link into a specific output format, e.g. /?format=typescript.
+// The select's own options are the source of truth, so adding a format needs no
+// change here and an unknown value simply falls through to the default.
+function applyFormatFromUrl(select) {
+    const requested = new URLSearchParams(window.location.search).get('format');
+    if (!requested) {
+        return;
+    }
+    if (Array.from(select.options).some(option => option.value === requested)) {
+        select.value = requested;
+    }
+}
+
 function collapseEnabled() {
     const box = document.getElementById('collapseArrays');
     return !!(box && box.checked);
@@ -522,6 +535,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const format = document.getElementById('outputFormat');
     const collapse = document.getElementById('collapseArrays');
     if (format) {
+        applyFormatFromUrl(format);
         format.addEventListener('change', render);
     }
     if (collapse) {

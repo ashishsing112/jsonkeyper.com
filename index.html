@@ -375,12 +375,12 @@ orders[].giftMessage        string</code></pre>
                 <tr><th>Format</th><th>Best for</th></tr>
             </thead>
             <tbody>
-                <tr><td><strong>Key paths</strong></td><td>Grabbing an exact accessor to paste straight into code, or checking whether a specific field really exists in a response.</td></tr>
+                <tr><td><strong><a href="/json-flattener.html">Key paths</a></strong></td><td>Grabbing an exact accessor to paste straight into code, or checking whether a specific field really exists in a response.</td></tr>
                 <tr><td><strong>Key paths with value types</strong></td><td>Deciding how to parse a payload - spotting that an <code>id</code> arrives as a string rather than a number before it causes a bug.</td></tr>
                 <tr><td><strong>Unique key names</strong></td><td>Building a field glossary, or diffing the vocabulary of two API versions to see which names were added or dropped.</td></tr>
-                <tr><td><strong>JSONPath</strong></td><td>Writing jq filters, Postman test assertions, or extraction rules in an integration platform.</td></tr>
+                <tr><td><strong><a href="/jsonpath-generator.html">JSONPath</a></strong></td><td>Writing jq filters, Postman test assertions, or extraction rules in an integration platform.</td></tr>
                 <tr><td><strong>Indented tree</strong></td><td>Getting a visual sense of shape and nesting depth, especially for an unfamiliar payload. This view always collapses array indices, since drawing one branch per element would bury the shape.</td></tr>
-                <tr><td><strong>TypeScript interface</strong></td><td>Bootstrapping typed API clients. Treat the result as a first draft to review, not a finished contract - see the limitations below.</td></tr>
+                <tr><td><strong><a href="/json-to-typescript.html">TypeScript interface</a></strong></td><td>Bootstrapping typed API clients. Treat the result as a first draft to review, not a finished contract - see the limitations below.</td></tr>
             </tbody>
         </table>
     </div>
@@ -469,6 +469,12 @@ orders[].giftMessage        string</code></pre>
 <!-- Further reading -->
 <div class="container-shadow mt-3">
     <h2 class="heading mb-3">Further Reading</h2>
+    <p>Focused guides for a single output format, each with a worked example:</p>
+    <ul class="reading-list">
+        <li><a href="/json-to-typescript.html">JSON to TypeScript Interface Converter</a> - how nested objects are inlined and optional fields detected.</li>
+        <li><a href="/json-flattener.html">Flatten JSON to Dot Notation</a> - collapsed vs expanded array indices, and when each view is the right one.</li>
+        <li><a href="/jsonpath-generator.html">JSONPath Expression Generator</a> - wildcards, bracket notation, and how JSONPath differs from plain dot notation.</li>
+    </ul>
     <p>Longer guides on working with JSON, written alongside this tool:</p>
     <ul class="reading-list">
         <li><a href="/blog/how-to-extract-json-keys.html">How to Extract All Keys from a JSON Object</a> - the same job done in JavaScript, Python, Ruby, and jq, with a comparison of when each is worth the effort.</li>
@@ -489,6 +495,7 @@ orders[].giftMessage        string</code></pre>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
 

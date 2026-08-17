@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online JSONPath generator. Paste any JSON and get a JSONPath expression for every field, with array wildcards and bracket notation for keys that need quoting. Runs in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/jsonpath-generator.html">
+    <title>JSONPath Generator - Extract JSONPath Expressions Online | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between dot notation and JSONPath?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dot notation describes where a key sits in the document. JSONPath is a query language: expressions start with a $ root marker and can use wildcards, so a single expression can match many values at once."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When are square brackets used instead of a dot?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A key that is not a bare identifier - one containing a dot, a space, a hyphen, or starting with a digit - is emitted in bracket-with-quotes form so the expression stays valid."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Everything runs in your browser using JavaScript. Your JSON never leaves your machine."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">JSONPath Expression Generator</h1>
+        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
+
+        <div class="article-body">
+            <p>Paste a JSON document and get a JSONPath expression for every field it contains. Array positions can be emitted either as concrete indices or as a <code>[*]</code> wildcard, and keys that need quoting are written in bracket form automatically. Everything runs in your browser.</p>
+
+            <div class="cta-box">
+                <h3>Generate JSONPath expressions</h3>
+                <p>Opens the tool with the JSONPath output format already selected.</p>
+                <a href="/?format=jsonpath" class="btn btn-success btn-lg">Open the generator</a>
+            </div>
+
+            <h2>A worked example</h2>
+            <p>Given this order payload:</p>
+            <pre><code>{
+  "user": {
+    "name": "Ada Lovelace",
+    "address": { "city": "London", "country": { "code": "GB" } },
+    "roles": ["admin", "engineer"]
+  },
+  "orders": [
+    { "orderId": "ord_1001", "total": 249.99 },
+    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  ]
+}</code></pre>
+
+            <p>With <strong>Collapse array indices</strong> enabled, you get wildcard expressions - one per distinct field:</p>
+            <pre><code>$.user
+$.user.name
+$.user.address
+$.user.address.city
+$.user.address.country
+$.user.address.country.code
+$.user.roles
+$.orders
+$.orders[*].orderId
+$.orders[*].total
+$.orders[*].giftMessage</code></pre>
+
+            <p>With collapsing turned off, each array element is addressed by its literal index instead:</p>
+            <pre><code>$.user
+$.user.name
+$.user.address
+$.user.address.city
+$.user.address.country
+$.user.address.country.code
+$.user.roles
+$.orders
+$.orders[0].orderId
+$.orders[0].total
+$.orders[1].orderId
+$.orders[1].total
+$.orders[1].giftMessage</code></pre>
+
+            <p>The wildcard form is what you usually want when writing a query. The indexed form is more useful when you are inspecting one specific record and need the exact address of a value.</p>
+
+            <h2>Dot notation vs JSONPath</h2>
+            <p>These are related but not the same thing, and the distinction matters:</p>
+            <ul>
+                <li><strong>Dot notation</strong> (<code>orders[0].total</code>) describes where a key sits in the document. It is a description of structure.</li>
+                <li><strong>JSONPath</strong> (<code>$.orders[*].total</code>) is a query language. The leading <code>$</code> marks the document root, and wildcards let one expression match many values at once.</li>
+            </ul>
+            <p>JSONPath is supported by libraries in most languages - <code>jsonpath</code> and <code>jsonpath-plus</code> for JavaScript, <code>jsonpath-ng</code> for Python - and appears in tools such as Kubernetes <code>kubectl -o jsonpath</code>, Azure CLI queries, and various API gateways.</p>
+
+            <h2>Keys that need bracket notation</h2>
+            <p>A key is only written after a dot when it is a bare identifier. Anything else - a key containing a dot, a space, or a hyphen, or one starting with a digit - is emitted in bracket-with-quotes form so the expression stays valid:</p>
+            <pre><code>$.user.name              a bare identifier
+$['user.name']           a key containing a literal dot
+$['first name']          a key containing a space
+$['2fa-enabled']         starts with a digit, contains a hyphen</code></pre>
+            <p>This matters because <code>$.user.name</code> and <code>$['user.name']</code> address completely different things. The first walks two levels down; the second reads a single key whose name happens to contain a dot.</p>
+
+            <h2>How to use it</h2>
+            <ol>
+                <li>Copy a JSON response from your API client or browser DevTools</li>
+                <li>Open the <a href="/?format=jsonpath">generator</a> - the JSONPath format is preselected</li>
+                <li>Paste into the left box, or drag a <code>.json</code> file onto it</li>
+                <li>Toggle <strong>Collapse array indices</strong> depending on whether you want <code>[*]</code> or literal indices</li>
+                <li>Click <strong>Extract Keys</strong>, then copy or download the result</li>
+            </ol>
+
+            <h2>Other output formats</h2>
+            <ul>
+                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
+                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a></li>
+                <li><a href="/?format=typed">Key paths with value types</a></li>
+                <li><a href="/?format=tree">Indented tree</a></li>
+            </ul>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a></li>
+            </ul>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

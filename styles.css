@@ -36,6 +36,10 @@ footer {
     text-decoration: underline;
 }
 
+.footer-links a.footer-sponsor {
+    color: #ffd6de;
+}
+
 nav {
     margin-top: 10px;
 }
