@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online JSON to TypeScript interface converter. Paste any JSON and get a typed interface with nested objects, arrays, and optional fields detected automatically. Runs entirely in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/json-to-typescript.html">
+    <title>JSON to TypeScript Interface Converter - Free Online Tool | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the converter detect optional fields?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Objects inside an array are merged into a single shape, and any key that is missing from at least one element is marked optional with a question mark."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The conversion runs entirely in your browser using JavaScript. Your JSON never leaves your machine, so it is safe to paste production payloads."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens with an empty array?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An empty array has no elements to infer a type from, so it is emitted as unknown[]. You will need to narrow the element type yourself."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">JSON to TypeScript Interface Converter</h1>
+        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
+
+        <div class="article-body">
+            <p>Paste a JSON payload and get a TypeScript interface back. Nested objects become nested type literals, arrays of objects are merged into a single element shape, and any field that is absent from some elements is marked optional. The conversion happens entirely in your browser - your JSON is never uploaded anywhere.</p>
+
+            <div class="cta-box">
+                <h3>Convert JSON to TypeScript</h3>
+                <p>Opens the tool with the TypeScript output format already selected.</p>
+                <a href="/?format=typescript" class="btn btn-success btn-lg">Open the converter</a>
+            </div>
+
+            <h2>A worked example</h2>
+            <p>Take this trimmed-down order response, the kind of payload a typical e-commerce API returns:</p>
+            <pre><code>{
+  "user": {
+    "name": "Ada Lovelace",
+    "address": { "city": "London", "country": { "code": "GB" } },
+    "roles": ["admin", "engineer"]
+  },
+  "orders": [
+    { "orderId": "ord_1001", "total": 249.99 },
+    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  ]
+}</code></pre>
+
+            <p>The converter returns:</p>
+            <pre><code>interface Root {
+  user: {
+    name: string;
+    address: {
+      city: string;
+      country: {
+        code: string;
+      };
+    };
+    roles: string[];
+  };
+  orders: {
+    orderId: string;
+    total: number;
+    giftMessage?: string;
+  }[];
+}</code></pre>
+
+            <p>Two things worth noticing. First, <code>roles</code> became <code>string[]</code> rather than a tuple - the element types are unified. Second, <code>giftMessage</code> is marked <code>?</code> optional, because it appears on the second order but not the first. That optional-field detection is the part that is tedious to do by hand and easy to get wrong.</p>
+
+            <h2>How optional detection works</h2>
+            <p>When the converter meets an array of objects, it does not emit a union of every distinct shape. Instead it merges them: the element type contains the union of all keys seen across every element, and a key is marked optional if it is missing from at least one of them.</p>
+            <p>This is almost always what you want from an API sample. A response containing three records where one lacks <code>deletedAt</code> tells you <code>deletedAt</code> is nullable in the schema, not that there are two different record types.</p>
+
+            <h2>How to use it</h2>
+            <ol>
+                <li>Copy a JSON response from your API client, browser DevTools, or a <code>.json</code> file</li>
+                <li>Open the <a href="/?format=typescript">converter</a> - the TypeScript format is preselected</li>
+                <li>Paste into the left box, or drag a <code>.json</code> file onto it</li>
+                <li>Click <strong>Extract Keys</strong> (or press Ctrl/Cmd + Enter)</li>
+                <li>Copy the interface, or download it as a file</li>
+            </ol>
+
+            <h2>Limitations worth knowing</h2>
+            <ul>
+                <li><strong>Types are inferred from one sample.</strong> A field that is <code>null</code> in your sample is typed as <code>null</code> - widen it to <code>string | null</code> or whatever it should be. Feed the converter a representative payload.</li>
+                <li><strong>Empty arrays become <code>unknown[]</code>.</strong> There are no elements to infer from, so you will need to narrow the element type yourself.</li>
+                <li><strong>Numbers are all <code>number</code>.</strong> JSON does not distinguish integers from floats, so neither can the converter.</li>
+                <li><strong>The root type is named <code>Root</code>.</strong> Rename it to something meaningful for your codebase.</li>
+                <li><strong>Nested types are inlined, not extracted.</strong> If you want <code>Address</code> as its own named interface, split it out by hand.</li>
+            </ul>
+
+            <h2>Other output formats</h2>
+            <p>The same tool produces several other views of the same JSON:</p>
+            <ul>
+                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - every key path as a flat list</li>
+                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a> - <code>$.orders[*].total</code> style queries</li>
+                <li><a href="/?format=typed">Key paths with value types</a> - paths annotated with the type at each position</li>
+                <li><a href="/?format=tree">Indented tree</a> - the hierarchy as a readable outline</li>
+            </ul>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/what-is-json.html">What is JSON? A complete beginner's guide</a></li>
+                <li><a href="/blog/json-schema-guide.html">JSON Schema: a practical guide to validating JSON</a></li>
+                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+            </ul>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

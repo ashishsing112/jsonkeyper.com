@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Flatten nested JSON to a list of dot-notation key paths. Paste any JSON and get every field path, with array indices either expanded or collapsed. Free and runs in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/json-flattener.html">
+    <title>Flatten JSON Online - Convert Nested JSON to Dot Notation | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does collapsing array indices do?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It merges repeated array positions into a single empty-bracket form and removes the resulting duplicates, so you get one line per distinct field rather than one line per record."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does flattening include intermediate container keys?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Objects and arrays appear as their own paths in addition to their children, so you can see the full shape rather than only the leaf values."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Flattening runs entirely in your browser using JavaScript. Your JSON never leaves your machine."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">Flatten JSON to Dot Notation</h1>
+        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
+
+        <div class="article-body">
+            <p>Turn a deeply nested JSON document into a flat list of key paths. Every field gets one line, written in dot notation with bracket notation for array positions. Useful when you need an inventory of what a payload actually contains - before writing parsing code, building a field mapping, or documenting a schema.</p>
+
+            <div class="cta-box">
+                <h3>Flatten your JSON</h3>
+                <p>Opens the tool with dot-notation key paths already selected.</p>
+                <a href="/?format=paths" class="btn btn-success btn-lg">Open the flattener</a>
+            </div>
+
+            <h2>A worked example</h2>
+            <p>Given this order payload:</p>
+            <pre><code>{
+  "user": {
+    "name": "Ada Lovelace",
+    "address": { "city": "London", "country": { "code": "GB" } },
+    "roles": ["admin", "engineer"]
+  },
+  "orders": [
+    { "orderId": "ord_1001", "total": 249.99 },
+    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  ]
+}</code></pre>
+
+            <p>Flattened, with every array element at its literal index:</p>
+            <pre><code>user
+user.name
+user.address
+user.address.city
+user.address.country
+user.address.country.code
+user.roles
+orders
+orders[0].orderId
+orders[0].total
+orders[1].orderId
+orders[1].total
+orders[1].giftMessage</code></pre>
+
+            <p>And with <strong>Collapse array indices</strong> enabled, repeated positions merge into <code>[]</code> and duplicates drop out:</p>
+            <pre><code>user
+user.name
+user.address
+user.address.city
+user.address.country
+user.address.country.code
+user.roles
+orders
+orders[].orderId
+orders[].total
+orders[].giftMessage</code></pre>
+
+            <p>The collapsed view is the one you want when documenting a schema - it answers "what fields exist" rather than "what does this particular record contain". Notice that <code>giftMessage</code> still appears even though only the second order has it, so the collapsed list is the union of all fields seen.</p>
+
+            <h2>Why intermediate keys are included</h2>
+            <p>Container keys appear as their own lines alongside their children - <code>user.address</code> is listed as well as <code>user.address.city</code>. This is deliberate. Knowing that <code>address</code> is an object rather than a flat string is part of understanding the shape, and it makes the output usable as a structural inventory rather than only a list of leaves.</p>
+            <p>If you want the type at each position too, the <a href="/?format=typed">typed paths format</a> annotates every line with <code>object</code>, <code>array</code>, <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>null</code>.</p>
+
+            <h2>Common uses</h2>
+            <ul>
+                <li><strong>Field mapping for ETL</strong> - get the complete source field list before writing a transformation</li>
+                <li><strong>Loading into a spreadsheet or relational table</strong> - flat paths become column names</li>
+                <li><strong>Comparing two API responses</strong> - diff the two flattened lists to see exactly which fields were added or removed between versions</li>
+                <li><strong>Documenting a payload</strong> - paste the collapsed output straight into a design doc or ticket</li>
+                <li><strong>Debugging a missing field</strong> - confirm whether a field is genuinely absent or just at a different path than you assumed</li>
+            </ul>
+
+            <h2>Keys containing dots</h2>
+            <p>If a key name contains a literal dot, dot-notation paths become ambiguous - <code>user.name</code> could mean a nested <code>name</code> under <code>user</code>, or a single key literally called <code>"user.name"</code>. When that distinction matters, use the <a href="/jsonpath-generator.html">JSONPath format</a> instead, which disambiguates by quoting such keys in brackets.</p>
+
+            <h2>How to use it</h2>
+            <ol>
+                <li>Copy a JSON response from your API client, DevTools, or a <code>.json</code> file</li>
+                <li>Open the <a href="/?format=paths">flattener</a> - dot-notation paths are preselected</li>
+                <li>Paste into the left box, or drag a file onto it</li>
+                <li>Toggle <strong>Collapse array indices</strong> depending on whether you want a schema view or a record view</li>
+                <li>Click <strong>Extract Keys</strong>, then copy or download the result</li>
+            </ol>
+
+            <h2>Other output formats</h2>
+            <ul>
+                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
+                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a></li>
+                <li><a href="/?format=unique">Unique key names only</a> - just the distinct key names, no paths</li>
+                <li><a href="/?format=tree">Indented tree</a> - the hierarchy as a readable outline</li>
+            </ul>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a></li>
+                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+                <li><a href="/blog/json-tools-for-developers.html">Best JSON tools for developers</a></li>
+            </ul>
+        </div>
+    </article>
+</div>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
