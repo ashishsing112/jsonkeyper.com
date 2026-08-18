@@ -136,16 +136,16 @@
                     <span>Input JSON</span>
                     <span class="io-hint">Paste, or drop a .json file here</span>
                 </div>
-                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
-                <div id="errorBox" class="error-box" role="alert"></div>
-                <div class="button-row">
-                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
-                </div>
-                <div class="button-row secondary-actions">
+                <div class="io-controls">
                     <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample JSON</button>
                     <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
                     <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
                     <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                </div>
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
                 </div>
             </div>
 
@@ -154,7 +154,7 @@
                     <span>Output</span>
                     <span class="io-hint" id="outputCount">0 lines</span>
                 </div>
-                <div class="output-controls">
+                <div class="io-controls">
                     <label for="outputFormat" class="control-label">Format</label>
                     <select id="outputFormat" class="form-control form-control-sm output-select">
                         <option value="paths">Key paths (dot notation)</option>
