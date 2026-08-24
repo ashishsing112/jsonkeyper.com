@@ -74,7 +74,7 @@ textarea {
     padding: 15px;
     box-sizing: border-box;
     display: block;
-    height: 295px !important;
+    height: 240px !important;
     text-align: left;
     vertical-align: top;
     border: 2px solid #ddd;
@@ -170,24 +170,20 @@ textarea.drag-active {
     padding: 4px;
 }
 
-.secondary-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
 .shortcut-hint {
     color: #999;
     font-size: 12px;
     margin-left: auto;
 }
 
-.output-controls {
+/* Controls row sitting between the label and the textarea. Both the input and
+   output columns use this so their textareas start at the same height. */
+.io-controls {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+    min-height: calc(1.5em + 0.5rem + 2px);
     margin-bottom: 8px;
     padding: 0 4px;
 }
@@ -251,6 +247,10 @@ textarea.drag-active {
     max-width: 1100px;
     margin: 20px auto;
     padding: 0 20px;
+    min-height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Example and reference blocks */
