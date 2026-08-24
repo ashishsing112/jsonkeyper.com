@@ -95,8 +95,7 @@ Issues and pull requests are welcome. A few conventions worth knowing:
 
 - **Match the existing style.** Vanilla JS with inline `onclick` handlers for the
   tool controls, four-space indentation, and no new runtime dependencies.
-- **Use hyphens, not em dashes,** in page copy. `replace-emdash.sh` exists to fix
-  this after the fact.
+- **Use hyphens, not em dashes,** in page copy.
 - **Update `sitemap.xml`** when you add or remove a page.
 - **Keep dates honest.** Article `datePublished` / `dateModified` values, visible
   bylines, and sitemap `lastmod` entries must reflect when the content was
