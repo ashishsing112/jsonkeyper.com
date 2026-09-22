@@ -656,3 +656,39 @@ textarea.drag-active {
     from {top: 20px; opacity: 1;}
     to {top: 0; opacity: 0;}
 }
+
+/* Breadcrumbs */
+.breadcrumb-nav {
+    max-width: 1100px;
+    margin: 16px auto -6px;
+    padding: 0 20px;
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.breadcrumb-nav ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumb-nav li + li::before {
+    content: "\203A";
+    margin: 0 8px;
+    color: #adb5bd;
+}
+
+.breadcrumb-nav a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.breadcrumb-nav a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-nav [aria-current="page"] {
+    color: #6c757d;
+}
