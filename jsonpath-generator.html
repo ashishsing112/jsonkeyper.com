@@ -10,6 +10,20 @@
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <meta name="description" content="Free online JSONPath generator. Paste any JSON and get a JSONPath expression for every field, with array wildcards and bracket notation for keys that need quoting. Runs in your browser.">
     <link rel="canonical" href="https://jsonkeyper.com/jsonpath-generator.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="JSONPath Generator - Extract JSONPath Expressions Online">
+    <meta property="og:description" content="Free online JSONPath generator. Paste any JSON and get a JSONPath expression for every field, with array wildcards and bracket notation for keys that need quoting. Runs in your browser.">
+    <meta property="og:url" content="https://jsonkeyper.com/jsonpath-generator.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSONPath Generator - Extract JSONPath Expressions Online">
+    <meta name="twitter:description" content="Free online JSONPath generator. Paste any JSON and get a JSONPath expression for every field, with array wildcards and bracket notation for keys that need quoting. Runs in your browser.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
     <title>JSONPath Generator - Extract JSONPath Expressions Online | JSON Keyper</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -54,6 +68,26 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "JSONPath Generator",
+          "item": "https://jsonkeyper.com/jsonpath-generator.html"
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -75,6 +109,15 @@
         </div>
     </nav>
 </header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">JSONPath Generator</span></li>
+    </ol>
+</nav>
+
 
 <div class="container-shadow article-container">
     <article>
@@ -163,6 +206,7 @@ $['2fa-enabled']         starts with a digit, contains a hyphen</code></pre>
             <ul>
                 <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
                 <li><a href="/json-flattener.html">Flatten JSON to dot notation</a></li>
+                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a></li>
                 <li><a href="/?format=typed">Key paths with value types</a></li>
                 <li><a href="/?format=tree">Indented tree</a></li>
             </ul>
@@ -177,6 +221,8 @@ $['2fa-enabled']         starts with a digit, contains a hyphen</code></pre>
     </article>
 </div>
 
+</main>
+
 <footer>
     <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
     <nav class="footer-links">
@@ -190,8 +236,6 @@ $['2fa-enabled']         starts with a digit, contains a hyphen</code></pre>
     </nav>
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" defer></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

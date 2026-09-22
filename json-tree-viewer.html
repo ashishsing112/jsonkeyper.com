@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="View the structure of any JSON document as an indented tree. Paste JSON and get a readable outline of every key, its nesting level, and its value type. Free and runs in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/json-tree-viewer.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="JSON Tree Viewer - See the Structure of Any JSON Document">
+    <meta property="og:description" content="View the structure of any JSON document as an indented tree. Paste JSON and get a readable outline of every key, its nesting level, and its value type. Free and runs in your browser.">
+    <meta property="og:url" content="https://jsonkeyper.com/json-tree-viewer.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSON Tree Viewer - See the Structure of Any JSON Document">
+    <meta name="twitter:description" content="View the structure of any JSON document as an indented tree. Paste JSON and get a readable outline of every key, its nesting level, and its value type. Free and runs in your browser.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <title>JSON Tree Viewer - View JSON Structure as an Indented Tree | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the tree view show array indices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The tree always collapses array indices, so an array of fifty objects contributes one branch describing the shape rather than fifty near-identical branches. If you need the literal index of a specific element, use the dot-notation key paths format instead."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do the labels in brackets mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each line ends with the JSON type of that key's value: object, array, string, number, boolean, or null. Because JSON itself does not distinguish integers from floats, every numeric value is reported as number."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the tree view a JSON formatter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A formatter re-prints your data with indentation and keeps every value. The tree view discards values entirely and shows only the structure, which is what makes it readable for large documents where the values would drown out the shape."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The document is parsed in JavaScript inside your own browser tab. Your JSON is never transmitted, logged, or stored anywhere."
+          }
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "JSON Tree Viewer",
+          "item": "https://jsonkeyper.com/json-tree-viewer.html"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">JSON Tree Viewer</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">JSON Tree Viewer</h1>
+        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
+
+        <div class="article-body">
+            <p>See the shape of a JSON document at a glance. The tree view strips out every value and redraws the document as an indented outline of key names, each annotated with its type. It answers the question you actually have when an unfamiliar API response lands in front of you - <em>how is this thing organised?</em> - without making you scroll through hundreds of lines of data to work it out.</p>
+
+            <div class="cta-box">
+                <h3>View your JSON as a tree</h3>
+                <p>Opens the tool with the indented tree format already selected.</p>
+                <a href="/?format=tree" class="btn btn-success btn-lg">Open the tree viewer</a>
+            </div>
+
+            <h2>A worked example</h2>
+            <p>Take the same order payload used elsewhere on this site:</p>
+            <pre><code>{
+  "user": {
+    "name": "Ada Lovelace",
+    "address": { "city": "London", "country": { "code": "GB" } },
+    "roles": ["admin", "engineer"]
+  },
+  "orders": [
+    { "orderId": "ord_1001", "total": 249.99 },
+    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  ]
+}</code></pre>
+
+            <p>As a tree, it becomes:</p>
+            <pre><code>user  (object)
+  name  (string)
+  address  (object)
+    city  (string)
+    country  (object)
+      code  (string)
+  roles  (array)
+orders  (array)
+  orderId  (string)
+  total  (number)
+  giftMessage  (string)</code></pre>
+
+            <p>Eleven lines describe the whole document. Indentation carries the nesting, so you can see immediately that <code>code</code> lives three levels deep inside <code>user</code>, and that <code>orders</code> is an array whose elements have three fields between them.</p>
+
+            <h2>Why array indices are always collapsed</h2>
+            <p>The tree is a structural view, so repeated array positions are merged before anything is drawn. The two orders in the sample above produce a single <code>orders</code> branch rather than one branch per element. For an array of fifty records that difference is the whole point - drawing fifty near-identical branches would bury the shape under repetition.</p>
+            <p>A side effect worth knowing: the branch is the <strong>union</strong> of the fields seen across all elements. <code>giftMessage</code> appears in the tree even though only the second order carries it. That is usually what you want from a structural view, but it does mean the tree tells you a field <em>can</em> appear, not that it appears on every record. When you need to know which specific element has which field, switch to <a href="/json-flattener.html">dot-notation key paths</a>, which keep the literal index.</p>
+
+            <h2>Tree view vs a JSON formatter</h2>
+            <p>These solve different problems and it is worth being clear about which one you need.</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th></th><th>JSON formatter</th><th>Tree view</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Keeps values</td><td>Yes, all of them</td><td>No, structure only</td></tr>
+                        <tr><td>Output length</td><td>Grows with the data</td><td>Grows with the schema</td></tr>
+                        <tr><td>Repeated array elements</td><td>Printed in full</td><td>Merged into one branch</td></tr>
+                        <tr><td>Shows types</td><td>Implicitly, by syntax</td><td>Explicitly, on every line</td></tr>
+                        <tr><td>Best for</td><td>Reading one specific record</td><td>Understanding an unfamiliar payload</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>A ten-thousand-line API response with a repetitive <code>results</code> array will still format to ten thousand lines. The same document usually reduces to a tree of a few dozen, because the size of a tree tracks the complexity of the schema rather than the volume of the data.</p>
+
+            <h2>Common uses</h2>
+            <ul>
+                <li><strong>Onboarding onto an unfamiliar API</strong> - understand the response shape before you write a single line of parsing code</li>
+                <li><strong>Checking nesting depth</strong> - find out how far down a field really sits before designing your accessors</li>
+                <li><strong>Reviewing a payload in a pull request</strong> - paste the tree into the description so reviewers see the shape without a wall of sample data</li>
+                <li><strong>Spotting structural drift</strong> - diff the tree of two API versions to see schema changes without the noise of changed values</li>
+                <li><strong>Explaining a structure to someone else</strong> - the outline reads well in a ticket, a design doc, or a chat message</li>
+            </ul>
+
+            <h2>Reading the type labels</h2>
+            <p>Every line ends with the JSON type of that key's value - <code>object</code>, <code>array</code>, <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>null</code>. Two caveats apply:</p>
+            <ul>
+                <li><strong>All numbers are <code>number</code>.</strong> JSON does not distinguish integers from floats, so neither can the label.</li>
+                <li><strong><code>null</code> describes the sample, not the contract.</strong> A field that happens to be null in the document you pasted is labelled <code>null</code>, even though the API may return a string for it most of the time.</li>
+            </ul>
+            <p>If you want the full path to each key rather than an indented name, the <a href="/?format=typed">typed key paths format</a> gives you the same type information against complete dot-notation paths.</p>
+
+            <h2>How to use it</h2>
+            <ol>
+                <li>Copy a JSON response from your API client, browser DevTools, or a <code>.json</code> file</li>
+                <li>Open the <a href="/?format=tree">tree viewer</a> - the indented tree format is preselected</li>
+                <li>Paste into the left box, or drag the file straight onto it</li>
+                <li>Click <strong>Extract Keys</strong>, or press Ctrl + Enter</li>
+                <li>Copy the outline, or download it as a <code>.txt</code> file</li>
+            </ol>
+
+            <h2>Other output formats</h2>
+            <ul>
+                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - one full path per line, indices kept or collapsed</li>
+                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
+                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a></li>
+                <li><a href="/?format=unique">Unique key names only</a> - the distinct key vocabulary, sorted</li>
+            </ul>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a></li>
+            </ul>
+        </div>
+    </article>
+</div>
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -55,22 +55,37 @@ These are deliberate, and documented on the site itself:
 ## Repository layout
 
 ```
-index.html          Tool plus reference content, FAQ, and structured data
-script.js           Traversal, output formatters, and UI wiring (no dependencies)
-styles.css          All custom styling; Bootstrap 4.5.2 is loaded from a CDN
-about.html          Project background, capabilities, limitations, author
-contact.html        Contact form (composes a mailto:)
-privacy.html        Privacy policy
-terms.html          Terms of service
-blog/index.html     Article listing
-blog/*.html         Eight long-form guides on working with JSON
-sitemap.xml         Kept in sync by hand when pages are added
-robots.txt          Allows all crawlers, points at the sitemap
-CNAME               Custom domain for GitHub Pages
+index.html                Tool plus reference content, FAQ, and structured data
+script.js                 Traversal, output formatters, and UI wiring (no dependencies)
+nav.js                    Navbar collapse toggle, loaded by every page
+styles.css                All custom styling; Bootstrap 4.5.2 CSS is loaded from a CDN
+
+json-flattener.html       Landing page: dot-notation key paths
+json-to-typescript.html   Landing page: TypeScript interface generation
+jsonpath-generator.html   Landing page: JSONPath expressions
+json-tree-viewer.html     Landing page: indented structural tree
+                          Each deep-links into the tool via /?format=<name>
+
+about.html                Project background, capabilities, limitations, author
+contact.html              Contact form (composes a mailto:)
+privacy.html              Privacy policy
+terms.html                Terms of service
+404.html                  Not-found page; GitHub Pages serves it automatically
+blog/index.html           Article listing
+blog/*.html               Eight long-form guides on working with JSON
+
+og-image.png              1200x630 social card referenced by og:image on every page
+sitemap.xml               Kept in sync by hand when pages are added
+robots.txt                Allows all crawlers, points at the sitemap
+ads.txt                   AdSense seller declaration
+CNAME                     Custom domain for GitHub Pages
 ```
 
 There is no build step, no bundler, and no package manifest - the files served
-are the files in the repository.
+are the files in the repository. The only JavaScript loaded is `script.js` (on
+the homepage) and `nav.js` (everywhere); Bootstrap's CSS is still used from a
+CDN, but its JavaScript, jQuery, and Popper were removed because the navbar
+toggle was the only behaviour that depended on them.
 
 ## Running locally
 

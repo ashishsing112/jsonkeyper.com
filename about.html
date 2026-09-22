@@ -11,6 +11,20 @@
     <meta name="description" content="Learn about JSON Keyper - a free, lightweight, browser-based tool built to help developers and data analysts extract and map keys from JSON objects effortlessly.">
     <title>About | JSON Keyper</title>
     <link rel="canonical" href="https://jsonkeyper.com/about.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="About JSON Keyper">
+    <meta property="og:description" content="Learn about JSON Keyper - a free, lightweight, browser-based tool built to help developers and data analysts extract and map keys from JSON objects effortlessly.">
+    <meta property="og:url" content="https://jsonkeyper.com/about.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About JSON Keyper">
+    <meta name="twitter:description" content="Learn about JSON Keyper - a free, lightweight, browser-based tool built to help developers and data analysts extract and map keys from JSON objects effortlessly.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
@@ -23,6 +37,26 @@
         gtag('config', 'G-93PGB9SJBN');
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://jsonkeyper.com/about.html"
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -44,6 +78,15 @@
         </div>
     </nav>
 </header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">About</span></li>
+    </ol>
+</nav>
+
 
 <div class="container-shadow about-container">
     <h1 class="heading">About JSON Keyper</h1>
@@ -100,6 +143,8 @@
     <p class="mt-4">Thank you for using JSON Keyper. If you have a suggestion or a bug report, please reach out via our <a href="/contact.html">contact page</a>.</p>
 </div>
 
+</main>
+
 <footer>
     <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
     <nav class="footer-links">
@@ -113,8 +158,6 @@
     </nav>
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" defer></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>
