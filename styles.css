@@ -692,3 +692,30 @@ textarea.drag-active {
 .breadcrumb-nav [aria-current="page"] {
     color: #6c757d;
 }
+
+/* Limitation callout - a warning-toned sibling of .cta-box, left aligned
+   because it carries explanatory prose rather than a single call to action. */
+.limitation-box {
+    background: #fdf6e3;
+    border: 1px solid #e0c97f;
+    border-left: 4px solid #d9a441;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin: 24px 0;
+    text-align: left;
+}
+
+.limitation-box h3 {
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #7a5c12;
+}
+
+.limitation-box p {
+    margin-bottom: 10px;
+}
+
+.limitation-box p:last-child {
+    margin-bottom: 0;
+}

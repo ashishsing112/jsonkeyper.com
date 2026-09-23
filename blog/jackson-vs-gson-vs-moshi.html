@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="A technical comparison of Jackson, Gson and Moshi for Java services: architecture, unknown-property handling, deeply nested payloads, Spring Boot integration, and a JMH harness to benchmark them on your own data.">
+    <title>Jackson vs Gson vs Moshi: Choosing a Java JSON Library | JSON Keyper Blog</title>
+    <link rel="canonical" href="https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="Jackson vs Gson vs Moshi: Choosing a Java JSON Library">
+    <meta property="og:description" content="A technical comparison of Jackson, Gson and Moshi for Java services: architecture, unknown-property handling, deeply nested payloads, Spring Boot integration, and a JMH harness to benchmark them on your own data.">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-09-23">
+    <meta property="article:modified_time" content="2026-09-23">
+    <meta property="article:author" content="Ashish Singh">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jackson vs Gson vs Moshi: Choosing a Java JSON Library">
+    <meta name="twitter:description" content="A technical comparison of Jackson, Gson and Moshi for Java services: architecture, unknown-property handling, deeply nested payloads, Spring Boot integration, and a JMH harness to benchmark them on your own data.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Jackson vs Gson vs Moshi: Choosing a Java JSON Library",
+      "datePublished": "2026-09-23",
+      "dateModified": "2026-09-23",
+      "author": {
+        "@type": "Person",
+        "name": "Ashish Singh",
+        "url": "https://jsonkeyper.com/about.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Keyper",
+        "url": "https://jsonkeyper.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jsonkeyper.com/og-image.png"
+        }
+      },
+      "description": "A technical comparison of Jackson, Gson and Moshi for Java services: architecture, unknown-property handling, deeply nested payloads, Spring Boot integration, and a JMH harness to benchmark them on your own data.",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://jsonkeyper.com/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html"
+      },
+      "url": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html",
+      "inLanguage": "en"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://jsonkeyper.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Jackson vs Gson vs Moshi: Choosing a Java JSON Library",
+          "item": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><span aria-current="page">Jackson vs Gson vs Moshi: Choosing a Java JSON Library</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">Jackson vs Gson vs Moshi: Choosing a Java JSON Library</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published September 23, 2026 &middot; 12 min read</small></p>
+
+        <div class="article-body">
+
+            <p>Three libraries dominate JSON handling on the JVM, and the choice is usually made
+            by inertia rather than analysis. Jackson ships with Spring Boot, so most services
+            never evaluate anything else. That default is defensible, but it is worth knowing
+            what you are getting and where the alternatives genuinely differ.</p>
+
+            <p>The short version: <strong>Jackson</strong> if you are in Spring or need the
+            module ecosystem, <strong>Gson</strong> if you want a small dependency with no
+            configuration surface, <strong>Moshi</strong> if you are writing Kotlin. The
+            reasoning below matters more than the summary, because one of those three behaves
+            very differently in Java than its reputation suggests.</p>
+
+            <h2>Architecture, and what follows from it</h2>
+
+            <p>All three are built on a streaming core with a binding layer on top. The
+            difference is what the binding layer does at runtime.</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th></th><th>Jackson</th><th>Gson</th><th>Moshi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Binding strategy</td><td>Reflection, with cached serialisers per type</td><td>Reflection, with cached type adapters</td><td>Adapters; generated at compile time for Kotlin, reflective for Java</td></tr>
+                        <tr><td>Streaming API</td><td><code>JsonParser</code> / <code>JsonGenerator</code></td><td><code>JsonReader</code> / <code>JsonWriter</code></td><td><code>JsonReader</code> / <code>JsonWriter</code>, over Okio</td></tr>
+                        <tr><td>Unknown fields</td><td>Throws by default</td><td>Ignores</td><td>Ignores</td></tr>
+                        <tr><td>Transitive deps</td><td><code>jackson-core</code>, <code>jackson-annotations</code></td><td>None</td><td>Okio</td></tr>
+                        <tr><td>Spring Boot</td><td>Auto-configured default</td><td>Auto-configured, opt in</td><td>No auto-configuration</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>The Moshi caveat that decides most Java evaluations</h3>
+
+            <p>Moshi's headline advantage is compile-time generated adapters: no reflection,
+            no <code>kotlin-reflect</code>, less startup cost. That advantage
+            <strong>does not exist in Java</strong>. The
+            <code>@JsonClass(generateAdapter = true)</code> annotation is processed by a Kotlin
+            symbol processor, and it only runs against Kotlin classes. Point Moshi at a plain
+            Java POJO and you get <code>ClassJsonAdapter</code>, which is reflective, which is
+            the same broad approach Gson takes.</p>
+
+            <p>So the honest framing is: in a Kotlin codebase Moshi is a genuinely different
+            proposition, and in a Java codebase it is a smaller, stricter Gson that costs you an
+            Okio dependency and all of your Spring integration. That is not an argument against
+            it, but it is an argument against choosing it for benchmark numbers that were
+            measured in Kotlin.</p>
+
+            <h2>Parsing the same payload</h2>
+
+            <p>Given a model of the shape most order APIs return:</p>
+
+            <pre><code>public class Order {
+    public String orderId;
+    public BigDecimal total;
+    public Customer customer;
+    public List&lt;LineItem&gt; items;
+}</code></pre>
+
+            <div class="row">
+                <div class="col-lg-4 mb-3">
+                    <h3 class="format-title">Jackson</h3>
+                    <pre><code>// com.fasterxml.jackson.databind.ObjectMapper
+ObjectMapper mapper = new ObjectMapper();
+
+Order order = mapper.readValue(json, Order.class);
+String out  = mapper.writeValueAsString(order);
+
+// Throws JsonProcessingException</code></pre>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <h3 class="format-title">Gson</h3>
+                    <pre><code>// com.google.gson.Gson
+Gson gson = new Gson();
+
+Order order = gson.fromJson(json, Order.class);
+String out  = gson.toJson(order);
+
+// Throws JsonSyntaxException (unchecked)</code></pre>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <h3 class="format-title">Moshi</h3>
+                    <pre><code>// com.squareup.moshi.Moshi
+Moshi moshi = new Moshi.Builder().build();
+JsonAdapter&lt;Order&gt; a = moshi.adapter(Order.class);
+
+Order order = a.fromJson(json);
+String out  = a.toJson(order);
+
+// Throws IOException</code></pre>
+                </div>
+            </div>
+
+            <p>Note the exception contracts, because they leak into your error handling. Jackson
+            throws a checked <code>JsonProcessingException</code>. Gson throws an unchecked
+            <code>JsonSyntaxException</code>, which is easy to forget to catch at a service
+            boundary. Moshi throws <code>IOException</code>, because it reads through Okio
+            rather than from a <code>String</code>.</p>
+
+            <h2>Unknown properties: the one default that will bite you</h2>
+
+            <p>A provider adds a field to their response. Two of these libraries keep working
+            and one throws <code>UnrecognizedPropertyException</code> in production. This is the single most consequential
+            behavioural difference between them.</p>
+
+            <h3>Jackson: strict by default, except in Spring Boot</h3>
+
+            <p>A bare <code>ObjectMapper</code> has
+            <code>FAIL_ON_UNKNOWN_PROPERTIES</code> enabled, so an unexpected key is a hard
+            failure. Spring Boot's auto-configuration disables it, and has since Boot 1.2 - which
+            is why the same DTO behaves differently in a unit test that news up its own mapper
+            than it does inside the running application. If you have ever had a parsing test fail
+            only in isolation, this is usually why.</p>
+
+            <pre><code>// Global: turn the failure off for every type
+ObjectMapper mapper = JsonMapper.builder()
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build();
+
+// Per type: keep strictness everywhere else
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Order { /* ... */ }
+
+// Capture the extras instead of discarding them
+public class Order {
+    public String orderId;
+
+    private final Map&lt;String, Object&gt; unknown = new LinkedHashMap&lt;&gt;();
+
+    @JsonAnySetter
+    void put(String key, Object value) {
+        unknown.put(key, value);
+    }
+}</code></pre>
+
+            <h3>Gson: silent, always</h3>
+
+            <pre><code>// Nothing to configure. Gson skips fields it cannot map.
+Gson gson = new Gson();
+Order order = gson.fromJson(json, Order.class);
+
+// To detect extras you must read the tree yourself
+JsonObject tree = JsonParser.parseString(json).getAsJsonObject();
+Set&lt;String&gt; known = Set.of(&quot;orderId&quot;, &quot;total&quot;, &quot;customer&quot;, &quot;items&quot;);
+tree.keySet().stream()
+    .filter(k -&gt; !known.contains(k))
+    .forEach(k -&gt; log.warn(&quot;unmapped field: {}&quot;, k));</code></pre>
+
+            <h3>Moshi: silent, but with an opt-in switch</h3>
+
+            <pre><code>// Also silent by default: the reflective adapter calls
+// JsonReader.skipValue() on names it does not recognise.
+Moshi moshi = new Moshi.Builder().build();
+JsonAdapter&lt;Order&gt; adapter = moshi.adapter(Order.class);
+
+// failOnUnknown() opts one adapter back into strictness
+JsonAdapter&lt;Order&gt; strict = adapter.failOnUnknown();
+strict.fromJson(json); // throws JsonDataException on an extra key</code></pre>
+
+            <p>Moshi is the only one of the three that lets you flip strictness on a single
+            adapter rather than globally or per class, which is useful when exactly one upstream
+            contract is worth being pedantic about.</p>
+
+            <h2>Deeply nested structures</h2>
+
+            <p>Binding is recursive in all three, so nesting depth translates into stack depth.
+            Jackson is the only one that bounds this for you: recent 2.x releases enforce a
+            maximum nesting depth through <code>StreamReadConstraints</code>, which turns a
+            potential <code>StackOverflowError</code> on hostile input into a catchable parse
+            exception. The exact ceilings have moved between releases, so print them rather than
+            trusting any article, including this one.</p>
+
+            <pre><code>// Jackson caps nesting depth to bound stack use on hostile input.
+// The defaults differ between 2.x releases, so read them rather than assume:
+System.out.println(StreamReadConstraints.defaults());
+
+JsonFactory factory = JsonFactory.builder()
+        .streamReadConstraints(StreamReadConstraints.builder()
+                .maxNestingDepth(2_000)
+                .build())
+        .build();</code></pre>
+
+            <p>Measured against Jackson 2.17.2, those defaults are a maximum nesting depth
+            of <code>1000</code>, a maximum string length of <code>20000000</code>, and a
+            maximum number length of <code>1000</code>. Treat the numbers as version-specific
+            and the mechanism as the durable part.</p>
+
+            <p>Gson and Moshi have no equivalent depth guard. If you accept JSON from anywhere
+            you do not control, that asymmetry is a security consideration and not just a
+            robustness one.</p>
+
+            <h2>Spring Boot integration</h2>
+
+            <p>This is where the three genuinely diverge, and where the version you are on
+            matters more than the library you prefer.</p>
+
+            <p><strong>Spring Boot 4</strong> moved to <strong>Jackson 3</strong> as the
+            auto-configured default, and Jackson 2 support is deprecated and slated for removal
+            in a later 4.x release. It also replaced the single preferred-mapper property with
+            context-specific keys.</p>
+
+            <pre><code># Spring Boot 3.x - single property, values: jackson | gson | jsonb
+spring.mvc.converters.preferred-json-mapper=gson
+
+# Spring Boot 4.x - Jackson 3 is the default; the keys are context specific
+spring.http.converters.preferred-json-mapper=jackson2   # Spring MVC, imperative clients
+spring.http.codecs.preferred-json-mapper=jackson2       # WebFlux, reactive clients
+
+# Jackson tuning is unchanged across both
+spring.jackson.deserialization.fail-on-unknown-properties=true</code></pre>
+
+            <p>Gson still has first-class auto-configuration: put it on the classpath and you
+            get a <code>Gson</code> bean, <code>spring.gson.*</code> properties, and
+            <code>GsonBuilderCustomizer</code> beans for anything those do not cover.</p>
+
+            <p>Moshi has no auto-configuration at all. Using it for HTTP message conversion
+            means writing and registering the converter yourself:</p>
+
+            <pre><code>public class MoshiHttpMessageConverter extends AbstractHttpMessageConverter&lt;Object&gt; {
+
+    private final Moshi moshi = new Moshi.Builder().build();
+
+    public MoshiHttpMessageConverter() {
+        super(MediaType.APPLICATION_JSON);
+    }
+
+    @Override
+    protected boolean supports(Class&lt;?&gt; clazz) {
+        return true;
+    }
+
+    @Override
+    protected Object readInternal(Class&lt;?&gt; clazz, HttpInputMessage message)
+            throws IOException {
+        JsonAdapter&lt;?&gt; adapter = moshi.adapter(clazz);
+        try (BufferedSource source = Okio.buffer(Okio.source(message.getBody()))) {
+            return adapter.fromJson(source);
+        }
+    }
+
+    @Override
+    protected void writeInternal(Object body, HttpOutputMessage message)
+            throws IOException {
+        @SuppressWarnings(&quot;unchecked&quot;)
+        JsonAdapter&lt;Object&gt; adapter =
+                (JsonAdapter&lt;Object&gt;) moshi.adapter(body.getClass());
+        try (BufferedSink sink = Okio.buffer(Okio.sink(message.getBody()))) {
+            adapter.toJson(sink, body);
+        }
+    }
+}</code></pre>
+
+            <p>That is roughly forty lines you now own, plus the Okio dependency, in exchange
+            for a library whose main advantage does not apply to Java. Worth doing if Moshi is
+            already in the codebase for other reasons; hard to justify otherwise.</p>
+
+            <h2>Benchmark on your payload, not on someone else's</h2>
+
+            <p>Published throughput comparisons between these libraries are close enough, and
+            volatile enough across versions, that they rarely survive contact with a real
+            payload. Field count, nesting depth, string-to-number ratio, array length and
+            whether you reuse the mapper all move the result more than the library choice does.
+            Measure it:</p>
+
+            <pre><code>@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+@State(Scope.Benchmark)
+@Fork(value = 2, jvmArgs = {&quot;-Xms2G&quot;, &quot;-Xmx2G&quot;})
+@Warmup(iterations = 5, time = 1)
+@Measurement(iterations = 10, time = 1)
+public class JsonLibraryBenchmark {
+
+    private String payload;
+    private ObjectMapper jackson;
+    private Gson gson;
+    private JsonAdapter&lt;Order&gt; moshi;
+
+    @Setup
+    public void setUp() throws IOException {
+        // Use a payload from your own API, not a synthetic one.
+        payload = Files.readString(Path.of(&quot;src/jmh/resources/order.json&quot;));
+        jackson = new ObjectMapper();
+        gson    = new Gson();
+        moshi   = new Moshi.Builder().build().adapter(Order.class);
+    }
+
+    @Benchmark
+    public Order jackson() throws IOException {
+        return jackson.readValue(payload, Order.class);
+    }
+
+    @Benchmark
+    public Order gson() {
+        return gson.fromJson(payload, Order.class);
+    }
+
+    @Benchmark
+    public Order moshi() throws IOException {
+        return moshi.fromJson(payload);
+    }
+}</code></pre>
+
+            <p>Two things that will dominate whatever you find. First, <strong>reuse the
+            mapper</strong>: <code>ObjectMapper</code>, <code>Gson</code> and
+            <code>JsonAdapter</code> are all thread-safe and all cache per-type metadata, so
+            constructing one per request discards that cache and is usually a far larger
+            regression than any difference between the three. Second, measure allocation with
+            <code>-prof gc</code>, not just throughput - on a busy service, allocation pressure
+            and the GC time it causes matter more than raw parse speed.</p>
+
+            <h2>Map the payload before you write the DTO</h2>
+
+            <p>Most of the time lost in this work is not parsing, it is discovering what the
+            response actually contains - which fields are nested where, which are optional,
+            which arrive as strings when you assumed numbers. Scrolling a pretty-printed
+            response in a terminal is a slow way to answer that.</p>
+
+            <div class="cta-box">
+                <h3>Map an API response before writing the DTO</h3>
+                <p>Paste a sample response into JSON Keyper to get every key path with its value
+                type, or generate a typed interface to check your DTO field names against.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+
+            <p>The typed key-path output answers the question you actually have when writing a
+            DTO: is <code>total</code> a number or a string, and is <code>giftMessage</code>
+            present on every element of the array or only some. The
+            <a href="/json-to-typescript.html">interface generator</a> is a quick cross-check on
+            field names and optionality before you hand-write the Java equivalent.</p>
+
+            <div class="limitation-box">
+                <h3>Where this approach stops working</h3>
+                <p><strong>Sample-sized payloads only.</strong> JSON Keyper buffers the whole
+                document in a browser tab, so it suits a representative response of a few
+                megabytes - not a bulk export. Past roughly ten megabytes it gets slow, and in
+                the hundreds of megabytes the tab will exhaust its heap and die. The same
+                ceiling applies to <code>ObjectMapper.readValue</code>,
+                <code>Gson.fromJson</code> and <code>JsonAdapter.fromJson</code>: all three
+                materialise the entire object graph.</p>
+                <p><strong>At that size, stop binding and start streaming.</strong> Use the
+                streaming parser directly so one record is live at a time, or do the inspection
+                outside the JVM with <code>jq</code>, which streams and keeps memory flat
+                regardless of file size.</p>
+            </div>
+
+            <pre><code>// Constant memory: one LineItem is live at a time, never the whole array.
+JsonFactory factory = new JsonFactory();
+ObjectMapper mapper = new ObjectMapper();
+
+try (JsonParser parser = factory.createParser(new File(&quot;orders-800mb.json&quot;))) {
+    while (parser.nextToken() != JsonToken.END_ARRAY) {
+        if (parser.currentToken() == JsonToken.START_OBJECT) {
+            LineItem item = mapper.readValue(parser, LineItem.class);
+            process(item);
+        }
+    }
+}</code></pre>
+
+            <p>For one-off inspection of a file that size, do not write Java at all:</p>
+
+            <pre><code># Stream one record at a time; memory stays flat regardless of file size.
+jq -c &#x27;.orders[]&#x27; orders-800mb.json &gt; lines.ndjson
+
+# Inventory the key paths without loading the document into a heap
+jq -r &#x27;paths(scalars) | join(&quot;.&quot;)&#x27; orders-800mb.json | sort -u</code></pre>
+
+            <p>The practical rule: use a browser tool or a databinding call to understand a
+            <em>sample</em>, and a streaming parser or <code>jq</code> to process the
+            <em>corpus</em>. Reaching for the wrong one is the most common cause of an
+            <code>OutOfMemoryError</code> in an otherwise correct ingestion job.</p>
+
+            <h2>Choosing</h2>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Situation</th><th>Pick</th><th>Why</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Spring Boot service</td><td>Jackson</td><td>Already auto-configured; the module ecosystem covers JSR-310, Kotlin, Guava and XML with no glue code.</td></tr>
+                        <tr><td>Library or SDK you ship to others</td><td>Gson</td><td>No transitive dependencies, so you cannot create a version conflict in someone else's build.</td></tr>
+                        <tr><td>Kotlin codebase</td><td>Moshi</td><td>Codegen adapters apply here; null-safety is respected rather than bypassed by reflection.</td></tr>
+                        <tr><td>Untrusted input</td><td>Jackson</td><td>The only one with a built-in nesting-depth bound.</td></tr>
+                        <tr><td>Android</td><td>Moshi or Gson</td><td>Smaller method count; Moshi avoids reflection when the models are Kotlin.</td></tr>
+                        <tr><td>Files in the hundreds of MB</td><td>Streaming API, or <code>jq</code></td><td>Databinding materialises the whole graph. The library choice is irrelevant at that size.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>If you are already on Jackson inside Spring and considering a switch, the honest
+            answer is that parse throughput is almost never the bottleneck worth chasing.
+            Connection pooling, N+1 queries and serialisation of responses you did not need to
+            send will all cost more. Benchmark before migrating anything.</p>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/json-schema-guide.html">JSON Schema: a practical guide to validating JSON</a></li>
+                <li><a href="/json-to-typescript.html">Generate a typed interface from a JSON sample</a></li>
+            </ul>
+
+        </div>
+    </article>
+</div>
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
