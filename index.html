@@ -58,7 +58,8 @@
         "Collapse repeated array indices into a single path",
         "Convert key paths to JSONPath expressions",
         "Generate a TypeScript interface from a JSON sample",
-        "Report structure statistics including depth and key counts"
+        "Report structure statistics including depth and key counts",
+        "Fetch a live API response via a pasted curl command and extract its keys"
       ],
       "offers": {
         "@type": "Offer",
@@ -129,6 +130,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "No. JSON Keyper does not save your JSON or give it a URL - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: nothing you paste leaves your machine, so there is nothing to leak, expire, or be fetched by anyone else later. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I fetch JSON from an API directly, instead of pasting it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Switch to the Execute cURL tab, paste a curl command, and JSON Keyper sends it through a Cloudflare Worker proxy to bypass the browser's CORS restrictions. The proxy fetches the response and hands it back to the page, where you can extract keys from it just like pasted JSON. It only reaches public http and https URLs, times out after 5 seconds, and caps responses at 2 MB; it does not log or store requests or responses."
           }
         }
       ]
@@ -222,20 +231,46 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="io-label">
-                    <span>Input JSON</span>
-                    <span class="io-hint">Paste, or drop a .json file here</span>
+                <div class="input-mode-toggle" role="tablist" aria-label="Input source">
+                    <button type="button" id="modeTabJson" class="mode-tab active" role="tab" aria-selected="true" onclick="setInputMode('json')">Paste JSON</button>
+                    <button type="button" id="modeTabCurl" class="mode-tab" role="tab" aria-selected="false" onclick="setInputMode('curl')">Execute cURL</button>
                 </div>
-                <div class="io-controls">
-                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample JSON</button>
-                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
-                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
-                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+
+                <div id="jsonModePanel">
+                    <div class="io-label">
+                        <span>Input JSON</span>
+                        <span class="io-hint">Paste, or drop a .json file here</span>
+                    </div>
+                    <div class="io-controls">
+                        <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample JSON</button>
+                        <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                        <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                        <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                    </div>
+                    <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                    <div id="errorBox" class="error-box" role="alert"></div>
+                    <div class="button-row">
+                        <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
+                    </div>
                 </div>
-                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
-                <div id="errorBox" class="error-box" role="alert"></div>
-                <div class="button-row">
-                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
+
+                <div id="curlModePanel" hidden>
+                    <div class="io-label">
+                        <span>cURL command</span>
+                        <span class="io-hint">Fetches a live response through a proxy</span>
+                    </div>
+                    <div class="io-controls">
+                        <button onclick="loadCurlSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample cURL</button>
+                        <span class="shortcut-hint">Tip: Ctrl + Enter executes</span>
+                    </div>
+                    <textarea id="curlInput" aria-label="cURL command" placeholder="curl https://api.example.com/users/1"></textarea>
+                    <div id="curlErrorBox" class="error-box" role="alert"></div>
+                    <div id="curlPreview" class="curl-preview" hidden></div>
+                    <div class="button-row">
+                        <button onclick="handleCurlExecute()" id="curlExecuteBtn" class="btn extract-button btn-lg">Execute</button>
+                    </div>
+                    <div id="curlResponsePanel" class="curl-response-panel" hidden></div>
+                    <p class="curl-disclosure">Requests are sent through a Cloudflare Worker proxy to bypass browser CORS. The proxy does not log or store requests or responses - see the <a href="/privacy.html">privacy policy</a>.</p>
                 </div>
             </div>
 
@@ -560,6 +595,11 @@ orders[].giftMessage        string</code></pre>
         <h3>Can I use JSON Keyper to store or host my JSON?</h3>
         <p>No. <strong>JSON Keyper does not save your JSON or give it a URL</strong> - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: nothing you paste leaves your machine, so there is nothing to leak, expire, or be fetched by anyone else later. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool.</p>
     </div>
+
+    <div class="faq-item">
+        <h3>Can I fetch JSON from an API directly, instead of pasting it?</h3>
+        <p>Yes. Switch to the <strong>Execute cURL</strong> tab, paste a curl command, and JSON Keyper sends it through a Cloudflare Worker proxy to bypass the browser's CORS restrictions. The proxy fetches the response and hands it back to the page, where you can extract keys from it just like pasted JSON. It only reaches public <code>http</code> and <code>https</code> URLs, times out after 5 seconds, and caps responses at 2 MB; it does not log or store requests or responses.</p>
+    </div>
 </section>
 
 <!-- Further reading -->
@@ -610,5 +650,7 @@ orders[].giftMessage        string</code></pre>
 
 <script src="/nav.js" defer></script>
 <script src="script.js" defer></script>
+<script src="curl-parser.js" defer></script>
+<script src="curl-proxy.js" defer></script>
 </body>
 </html>
