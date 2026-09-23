@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="Measured memory and timing for jq, Python and NDJSON on a 120 MB JSON document. Why plain jq is not streaming, what --stream actually costs, and how to inspect a file far larger than your RAM.">
+    <title>Processing Large JSON Files Without Running Out of Memory | JSON Keyper Blog</title>
+    <link rel="canonical" href="https://jsonkeyper.com/blog/processing-large-json-files.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="Processing Large JSON Files Without Running Out of Memory">
+    <meta property="og:description" content="Measured memory and timing for jq, Python and NDJSON on a 120 MB JSON document. Why plain jq is not streaming, what --stream actually costs, and how to inspect a file far larger than your RAM.">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/processing-large-json-files.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-09-23">
+    <meta property="article:modified_time" content="2026-09-23">
+    <meta property="article:author" content="Ashish Singh">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Processing Large JSON Files Without Running Out of Memory">
+    <meta name="twitter:description" content="Measured memory and timing for jq, Python and NDJSON on a 120 MB JSON document. Why plain jq is not streaming, what --stream actually costs, and how to inspect a file far larger than your RAM.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Processing Large JSON Files Without Running Out of Memory",
+      "datePublished": "2026-09-23",
+      "dateModified": "2026-09-23",
+      "author": {
+        "@type": "Person",
+        "name": "Ashish Singh",
+        "url": "https://jsonkeyper.com/about.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Keyper",
+        "url": "https://jsonkeyper.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jsonkeyper.com/og-image.png"
+        }
+      },
+      "description": "Measured memory and timing for jq, Python and NDJSON on a 120 MB JSON document. Why plain jq is not streaming, what --stream actually costs, and how to inspect a file far larger than your RAM.",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://jsonkeyper.com/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jsonkeyper.com/blog/processing-large-json-files.html"
+      },
+      "url": "https://jsonkeyper.com/blog/processing-large-json-files.html",
+      "inLanguage": "en"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://jsonkeyper.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Processing Large JSON Files Without Running Out of Memory",
+          "item": "https://jsonkeyper.com/blog/processing-large-json-files.html"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><span aria-current="page">Processing Large JSON Files Without Running Out of Memory</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">Processing Large JSON Files Without Running Out of Memory</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published September 23, 2026 &middot; 10 min read</small></p>
+
+        <div class="article-body">
+
+            <p>A JSON document that parses fine at 5 MB will take down a process at 500 MB, and
+            the usual advice - "use <code>jq</code>, it streams" - is wrong in a way that costs
+            people a production incident. Plain <code>jq</code> parses the entire document into
+            memory before your filter sees a single byte.</p>
+
+            <p>Below are measured numbers rather than folklore, then the approaches that
+            actually hold memory flat.</p>
+
+            <h2>The measurements</h2>
+
+            <p>One document, 119.9 MB on disk: a top-level object with a 400,000 element
+            <code>orders</code> array.</p>
+
+            <pre><code>{
+  &quot;generatedAt&quot;: &quot;2026-09-23&quot;,
+  &quot;orders&quot;: [
+    { &quot;orderId&quot;: &quot;ord_00000000&quot;, &quot;total&quot;: 10.99,
+      &quot;customer&quot;: { &quot;id&quot;: 0, &quot;city&quot;: &quot;London&quot;, &quot;country&quot;: { &quot;code&quot;: &quot;GB&quot; } },
+      &quot;items&quot;: [ { &quot;sku&quot;: &quot;SKU-0000&quot;, &quot;qty&quot;: 1, &quot;price&quot;: 19.99 } ],
+      &quot;note&quot;: &quot;...&quot; },
+    ...  400,000 of these
+  ]
+}</code></pre>
+
+            <p>Peak resident memory and wall time for each approach. Measured on Linux with
+            jq 1.7 and Python 3.12, taking <code>ru_maxrss</code> from a freshly spawned
+            process per run so the figures do not contaminate each other.</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Approach</th><th>Peak memory</th><th>vs file size</th><th>Time</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>jq -c '.orders[]'</code></td><td>1150 MB</td><td>9.6x</td><td>5.4s</td></tr>
+                        <tr><td><code>jq '.orders[] | .orderId'</code></td><td>1101 MB</td><td>9.2x</td><td>2.8s</td></tr>
+                        <tr><td><code>jq 'paths(scalars)'</code></td><td>1101 MB</td><td>9.2x</td><td>35.3s</td></tr>
+                        <tr><td>Python <code>json.load()</code></td><td>650 MB</td><td>5.4x</td><td>2.5s</td></tr>
+                        <tr><td><code>jq --stream</code></td><td><strong>12 MB</strong></td><td>0.10x</td><td>8.1s</td></tr>
+                        <tr><td>Python <code>ijson</code></td><td><strong>13 MB</strong></td><td>0.11x</td><td>2.6s</td></tr>
+                        <tr><td>NDJSON, one line at a time</td><td><strong>12 MB</strong></td><td>0.10x</td><td>2.0s</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Three things fall out of that table, and each one changes what you should do.</p>
+
+            <h2>1. Plain jq is not a streaming tool</h2>
+
+            <p>This is the misconception worth killing first. Both of these commands look like
+            they process records one at a time. Neither does:</p>
+
+            <pre><code># Reads like streaming. Is not streaming.
+jq -c &#x27;.orders[]&#x27; orders.json &gt; lines.ndjson        # 1150 MB peak
+
+# Also not streaming, despite touching one scalar at a time.
+jq -r &#x27;paths(scalars) | join(&quot;.&quot;)&#x27; orders.json      # 1101 MB peak</code></pre>
+
+            <p>A nine-fold multiplier over file size is not a jq defect, it is how jq works:
+            the filter operates on a parsed value, so the value has to exist first. The
+            <code>paths(scalars)</code> case is the clearest illustration - it emits one tiny
+            string per scalar, and still needs 1101 MB to do it.</p>
+
+            <p>Extrapolate before you run anything. At roughly 9x, an 8 GB machine will fail
+            somewhere under a 1 GB input.</p>
+
+            <h2>2. --stream is the real thing, and it costs about 3x in time</h2>
+
+            <p><code>--stream</code> switches jq to emitting <code>[path, value]</code> events
+            as it reads, so nothing accumulates:</p>
+
+            <pre><code># --stream emits [path, value] events instead of building the document.
+jq -cn --stream &#x27;inputs&#x27; orders.json | head -3
+
+[[&quot;generatedAt&quot;],&quot;2026-09-23&quot;]
+[[&quot;orders&quot;,0,&quot;orderId&quot;],&quot;ord_00000000&quot;]
+[[&quot;orders&quot;,0,&quot;total&quot;],10.99]</code></pre>
+
+            <p>Memory drops from 1101 MB to 12 MB. Wall time rises from 2.8s to 8.1s. That
+            trade is almost always worth taking, because the alternative is not a slower run,
+            it is a failed one.</p>
+
+            <p>Events are awkward to work with directly. <code>fromstream</code> and
+            <code>truncate_stream</code> reassemble them into whole records:</p>
+
+            <pre><code># Rebuild whole records from the event stream, one at a time.
+# truncate_stream&#x27;s depth must match how deeply the array is nested:
+# .orders[] sits two levels down, so the depth is 2.
+jq -cn --stream &#x27;
+  fromstream(2 | truncate_stream(inputs | select(.[0][0] == &quot;orders&quot;)))
+&#x27; orders.json &gt; orders.ndjson</code></pre>
+
+            <p>The depth argument to <code>truncate_stream</code> is where most people get
+            stuck. It must equal the nesting depth of the array you want. For a top-level array
+            the depth is <code>1</code>; for <code>.orders[]</code> inside a wrapper object it
+            is <code>2</code>. Get it wrong and you do not get an error, you get the entire
+            array rebuilt as a single record - which puts you straight back to 1 GB of memory.
+            Check with <code>head -2</code> before you let it run.</p>
+
+            <h3>A key-path inventory without loading the file</h3>
+
+            <p>This is the streaming equivalent of what this site's tool does, for files far
+            past what a browser can hold:</p>
+
+            <pre><code># A key-path inventory of a file far larger than RAM. 12 MB peak.
+jq -rn --stream &#x27;
+  inputs | select(length == 2) | .[0]
+  | reduce .[] as $p (
+      &quot;&quot;;
+      if ($p | type) == &quot;number&quot;
+      then . + &quot;[]&quot;
+      else (if . == &quot;&quot; then $p else . + &quot;.&quot; + $p end)
+      end)
+&#x27; orders.json | sort -u</code></pre>
+
+            <pre><code>generatedAt
+orders[].customer.city
+orders[].customer.country.code
+orders[].customer.id
+orders[].items[].price
+orders[].items[].qty
+orders[].items[].sku
+orders[].note
+orders[].orderId
+orders[].total</code></pre>
+
+            <p>Ten lines describing a 120 MB document, in 12 MB of memory. Array indices
+            collapse to <code>[]</code>, so the output is a schema rather than a record dump.</p>
+
+            <h2>3. Python's ijson is nearly free</h2>
+
+            <p>The most surprising row in the table. <code>ijson</code> used 13 MB against
+            <code>json.load</code>'s 650 MB, and took 2.6s against 2.5s - a 50x memory
+            reduction for a 4% time cost.</p>
+
+            <pre><code>import ijson
+
+# Yields each order as a dict; only one is live at a time.
+with open(&quot;orders.json&quot;, &quot;rb&quot;) as fh:
+    for order in ijson.items(fh, &quot;orders.item&quot;):
+        process(order)
+
+# Cheaper still: pull single fields without building the dict
+with open(&quot;orders.json&quot;, &quot;rb&quot;) as fh:
+    for total in ijson.items(fh, &quot;orders.item.total&quot;):
+        accumulate(total)</code></pre>
+
+            <p>The usual reason to reach for <code>json.load</code> is that it is faster. At
+            this size it is not meaningfully faster, so the habit is worth breaking whenever
+            input size is not something you control.</p>
+
+            <h2>Convert once, then stop streaming</h2>
+
+            <p>Streaming is the right answer for a single pass. If you are going to query the
+            same data repeatedly, pay the streaming cost once and convert to NDJSON - one JSON
+            document per line:</p>
+
+            <pre><code>import json
+
+# Once the file is NDJSON, the stdlib is enough. One line, one document.
+with open(&quot;orders.ndjson&quot;) as fh:
+    for line in fh:
+        order = json.loads(line)
+        process(order)</code></pre>
+
+            <p>Every subsequent pass is then both flat <em>and</em> fast: 12 MB and 2.0s, which
+            beats <code>--stream</code> on time and matches it on memory. The conversion itself
+            took 30s and 12 MB; after that the format stops fighting you.</p>
+
+            <p>NDJSON also makes the data trivially splittable, which a single JSON document
+            never is:</p>
+
+            <pre><code># Shard a large NDJSON file for parallel work
+split -l 50000 orders.ndjson chunk_
+
+# Process the shards concurrently, 4 at a time
+ls chunk_* | xargs -P 4 -I{} jq -r &#x27;.orderId&#x27; {} &gt; ids.txt</code></pre>
+
+            <p>If you control the producer, emitting NDJSON in the first place removes this
+            entire class of problem. A 50 GB NDJSON file is unremarkable to process; a 50 GB
+            JSON array is a research project.</p>
+
+            <h2>On the JVM</h2>
+
+            <p>The same rule holds: <code>ObjectMapper.readValue</code>,
+            <code>Gson.fromJson</code> and <code>JsonAdapter.fromJson</code> all materialise
+            the whole object graph. Jackson's <code>JsonParser</code> lets you bind one element
+            at a time while the surrounding array stays on disk - see
+            <a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a> for the
+            streaming loop and the nesting-depth limits that matter on untrusted input.</p>
+
+            <h2>Choosing</h2>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Situation</th><th>Use</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Sample of a few MB, exploring the shape</td><td>A browser tool, or plain <code>jq</code></td></tr>
+                        <tr><td>One pass over a file bigger than a third of your RAM</td><td><code>jq --stream</code>, or <code>ijson</code></td></tr>
+                        <tr><td>Repeated queries over the same large file</td><td>Convert to NDJSON once</td></tr>
+                        <tr><td>You control the producer</td><td>Emit NDJSON and skip the problem</td></tr>
+                        <tr><td>You only need the schema, not the data</td><td>The streaming path inventory above</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cta-box">
+                <h3>Working with a sample instead?</h3>
+                <p>For a representative response of a few megabytes, paste it into JSON Keyper
+                and get every key path with its value type, without writing a filter.</p>
+                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+            </div>
+
+            <div class="limitation-box">
+                <h3>Where the browser tool stops</h3>
+                <p>JSON Keyper buffers the whole document in a tab, so it has the same ceiling
+                as <code>json.load</code> and for the same reason. It suits a sample of a few
+                megabytes. Past roughly ten it degrades, and in the hundreds the tab will
+                exhaust its heap.</p>
+                <p>That is the boundary this article exists to cover: use the browser for a
+                sample, and <code>--stream</code> or <code>ijson</code> for the corpus. The
+                path-inventory command above is deliberately shaped to give the same
+                dot-notation output for files the tool cannot open.</p>
+            </div>
+
+            <h2>Caveats on these numbers</h2>
+
+            <p>One file shape, one machine, one version of each tool. The multipliers move with
+            record size, key count and how much of the document your filter touches - a
+            document of many small records costs relatively more per byte than one of few large
+            ones. Treat 5x to 10x as the order of magnitude to plan for, not a constant, and
+            measure your own payload before sizing a container.</p>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a> - streaming on the JVM</li>
+                <li><a href="/blog/working-with-json-in-python.html">Working with JSON in Python</a></li>
+                <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a></li>
+                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+            </ul>
+
+        </div>
+    </article>
+</div>
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>

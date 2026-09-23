@@ -479,8 +479,11 @@ public class JsonLibraryBenchmark {
                 materialise the entire object graph.</p>
                 <p><strong>At that size, stop binding and start streaming.</strong> Use the
                 streaming parser directly so one record is live at a time, or do the inspection
-                outside the JVM with <code>jq</code>, which streams and keeps memory flat
-                regardless of file size.</p>
+                outside the JVM with <code>jq --stream</code>. Note the flag: plain
+                <code>jq</code> parses the whole document into memory first, which measured
+                about 1.1 GB on a 120 MB input. See
+                <a href="/blog/processing-large-json-files.html">processing large JSON files</a>
+                for the measurements.</p>
             </div>
 
             <pre><code>// Constant memory: one LineItem is live at a time, never the whole array.
@@ -498,11 +501,19 @@ try (JsonParser parser = factory.createParser(new File(&quot;orders-800mb.json&q
 
             <p>For one-off inspection of a file that size, do not write Java at all:</p>
 
-            <pre><code># Stream one record at a time; memory stays flat regardless of file size.
-jq -c &#x27;.orders[]&#x27; orders-800mb.json &gt; lines.ndjson
+            <pre><code># --stream is required here. Plain `jq -c &#x27;.orders[]&#x27;` builds the whole
+# document first: roughly 1.1 GB resident for a 120 MB input.
+jq -cn --stream \
+  &#x27;fromstream(2 | truncate_stream(inputs | select(.[0][0] == &quot;orders&quot;)))&#x27; \
+  orders-800mb.json &gt; lines.ndjson
 
-# Inventory the key paths without loading the document into a heap
-jq -r &#x27;paths(scalars) | join(&quot;.&quot;)&#x27; orders-800mb.json | sort -u</code></pre>
+# Key-path inventory in constant memory (about 12 MB, regardless of size)
+jq -rn --stream &#x27;
+  inputs | select(length == 2) | .[0]
+  | reduce .[] as $p (&quot;&quot;;
+      if ($p | type) == &quot;number&quot; then . + &quot;[]&quot;
+      else (if . == &quot;&quot; then $p else . + &quot;.&quot; + $p end) end)
+&#x27; orders-800mb.json | sort -u</code></pre>
 
             <p>The practical rule: use a browser tool or a databinding call to understand a
             <em>sample</em>, and a streaming parser or <code>jq</code> to process the
