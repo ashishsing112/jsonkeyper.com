@@ -58,6 +58,8 @@ These are deliberate, and documented on the site itself:
 index.html                Tool plus reference content, FAQ, and structured data
 script.js                 Traversal, output formatters, and UI wiring (no dependencies)
 nav.js                    Navbar collapse toggle, loaded by every page
+curl-parser.js            Self-contained curl command string parser, no dependencies
+curl-proxy.js             Execute cURL tab: proxy request/response UI, wired to curl-parser.js
 styles.css                All custom styling; Bootstrap 4.5.2 CSS is loaded from a CDN
 
 json-flattener.html       Landing page: dot-notation key paths
@@ -82,10 +84,17 @@ CNAME                     Custom domain for GitHub Pages
 ```
 
 There is no build step, no bundler, and no package manifest - the files served
-are the files in the repository. The only JavaScript loaded is `script.js` (on
-the homepage) and `nav.js` (everywhere); Bootstrap's CSS is still used from a
-CDN, but its JavaScript, jQuery, and Popper were removed because the navbar
+are the files in the repository. The homepage loads `script.js`, `curl-parser.js`,
+and `curl-proxy.js`; every page loads `nav.js`. Bootstrap's CSS is still used from
+a CDN, but its JavaScript, jQuery, and Popper were removed because the navbar
 toggle was the only behaviour that depended on them.
+
+The homepage's Execute cURL tab sends the parsed request to a Cloudflare Worker
+(`jsonkeyper-worker`, deployed separately - not in this repository) that proxies
+the request server-side to work around browser CORS. It is the only feature on
+the site that transmits data off the visitor's device; see the [privacy
+policy](https://jsonkeyper.com/privacy.html#curl-proxy-feature) for what it does
+and does not do with that request.
 
 ## Running locally
 

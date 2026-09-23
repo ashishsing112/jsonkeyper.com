@@ -206,6 +206,129 @@ textarea.drag-active {
     white-space: nowrap;
 }
 
+/* Input mode toggle (Paste JSON / Execute cURL) */
+.input-mode-toggle {
+    display: flex;
+    gap: 4px;
+    margin: 0 4px 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.mode-tab {
+    background: none;
+    border: none;
+    padding: 8px 4px;
+    margin-right: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.mode-tab:hover {
+    color: #495057;
+}
+
+.mode-tab.active {
+    color: #4CAF50;
+    border-bottom-color: #4CAF50;
+}
+
+/* cURL preview and response */
+.curl-preview,
+.curl-response-panel {
+    margin: 10px 4px 0;
+    padding: 12px 14px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.curl-preview-row {
+    display: flex;
+    gap: 10px;
+    padding: 4px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.curl-preview-row:last-child {
+    border-bottom: none;
+}
+
+.curl-preview-row > span:last-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    word-break: break-all;
+}
+
+.curl-preview-key {
+    flex: 0 0 110px;
+    font-weight: 700;
+    color: #495057;
+}
+
+.curl-status-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.curl-status-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.curl-status-2xx { background-color: #4CAF50; }
+.curl-status-3xx { background-color: #3498db; }
+.curl-status-4xx { background-color: #e67e22; }
+.curl-status-5xx { background-color: #e74c3c; }
+
+.curl-response-headers {
+    margin-bottom: 10px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.curl-binary-warning {
+    color: #8b2b20;
+    background-color: #fdecea;
+    border-left: 4px solid #e74c3c;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.curl-response-body {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 12px;
+    max-height: 320px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    font-size: 12.5px;
+}
+
+.curl-disclosure {
+    font-size: 12px;
+    color: #888;
+    margin: 10px 4px 0;
+}
+
+.curl-disclosure a {
+    color: #4CAF50;
+}
+
 /* Structure statistics */
 .stats-panel {
     display: none;
