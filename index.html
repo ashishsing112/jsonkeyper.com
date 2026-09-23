@@ -41,13 +41,17 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
+      "@id": "https://jsonkeyper.com/#webapp",
       "name": "JSON Keyper",
       "url": "https://jsonkeyper.com",
       "description": "A free browser-based tool that extracts every key path from a JSON object and outputs it as dot notation, JSONPath, an annotated type listing, or a TypeScript interface.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript",
-      "author": { "@type": "Person", "name": "Ashish Singh" },
+      "author": {
+        "@type": "Person",
+        "name": "Ashish Singh"
+      },
       "featureList": [
         "Extract all nested key paths from JSON",
         "Annotate each key path with its value type",
@@ -56,7 +60,14 @@
         "Generate a TypeScript interface from a JSON sample",
         "Report structure statistics including depth and key counts"
       ],
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "sameAs": [
+        "https://github.com/ashishsing112/jsonkeyper.com"
+      ]
     }
     </script>
     <script type="application/ld+json">
@@ -110,6 +121,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Dot notation becomes ambiguous when a key name itself contains a dot, because user.name could mean a nested field or a single literal key. The JSONPath output avoids this by quoting such keys in brackets, and the TypeScript output quotes them as string literal keys."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use JSON Keyper to store or host my JSON?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. JSON Keyper does not save your JSON or give it a URL - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: nothing you paste leaves your machine, so there is nothing to leak, expire, or be fetched by anyone else later. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool."
           }
         }
       ]
@@ -499,6 +518,7 @@ orders[].giftMessage        string</code></pre>
         <li><strong>Keys containing dots.</strong> Dot-notation output is ambiguous for these. Switch to JSONPath, which quotes them.</li>
         <li><strong>Not a validator.</strong> The tool checks that your JSON parses, but it does not check it against a JSON Schema. For that, see our <a href="/blog/json-schema-guide.html">guide to JSON Schema validation</a>.</li>
         <li><strong>Not a formatter.</strong> If you want to pretty-print or minify rather than map keys, a dedicated formatter is the better tool.</li>
+        <li><strong>Not a store or host.</strong> JSON Keyper does not save your JSON or give it a URL. Everything is parsed in the browser and gone when you close the tab. If you need JSON hosted at a shareable endpoint, you want a JSON storage service, not this tool.</li>
     </ul>
 </section>
 
@@ -534,6 +554,11 @@ orders[].giftMessage        string</code></pre>
     <div class="faq-item">
         <h3>What happens to keys that contain dots or special characters?</h3>
         <p>Dot notation becomes ambiguous when a key name itself contains a dot, because <code>user.name</code> could mean a nested field or a single literal key. The JSONPath output avoids this by quoting such keys in brackets, and the TypeScript output quotes them as string literal keys.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Can I use JSON Keyper to store or host my JSON?</h3>
+        <p>No. <strong>JSON Keyper does not save your JSON or give it a URL</strong> - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: nothing you paste leaves your machine, so there is nothing to leak, expire, or be fetched by anyone else later. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool.</p>
     </div>
 </section>
 
