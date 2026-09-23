@@ -72,7 +72,7 @@ privacy.html              Privacy policy
 terms.html                Terms of service
 404.html                  Not-found page; GitHub Pages serves it automatically
 blog/index.html           Article listing
-blog/*.html               Eight long-form guides on working with JSON
+blog/*.html               Ten long-form guides on working with JSON
 
 og-image.png              1200x630 social card referenced by og:image on every page
 sitemap.xml               Kept in sync by hand when pages are added
