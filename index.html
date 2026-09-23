@@ -229,13 +229,13 @@
             </div>
         </div>
 
+        <div class="input-mode-toggle" role="tablist" aria-label="Input source">
+            <button type="button" id="modeTabJson" class="mode-tab active" role="tab" aria-selected="true" onclick="setInputMode('json')">Paste JSON</button>
+            <button type="button" id="modeTabCurl" class="mode-tab" role="tab" aria-selected="false" onclick="setInputMode('curl')">Execute cURL</button>
+        </div>
+
         <div class="row">
             <div class="col-lg-6">
-                <div class="input-mode-toggle" role="tablist" aria-label="Input source">
-                    <button type="button" id="modeTabJson" class="mode-tab active" role="tab" aria-selected="true" onclick="setInputMode('json')">Paste JSON</button>
-                    <button type="button" id="modeTabCurl" class="mode-tab" role="tab" aria-selected="false" onclick="setInputMode('curl')">Execute cURL</button>
-                </div>
-
                 <div id="jsonModePanel">
                     <div class="io-label">
                         <span>Input JSON</span>
