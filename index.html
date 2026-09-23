@@ -81,7 +81,7 @@
           "name": "Is my JSON data uploaded to a server?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. All parsing and key extraction happens in JavaScript inside your own browser tab. Your JSON is never transmitted, logged, or stored anywhere. You can confirm this by opening your browser's network tab while using the tool, or by disconnecting from the internet after the page loads - the tool keeps working."
+            "text": "No, not for JSON you paste. All parsing and key extraction happens in JavaScript inside your own browser tab, and pasted JSON is never transmitted, logged, or stored anywhere. You can confirm this by opening your browser's network tab while extracting keys, or by disconnecting from the internet after the page loads - key extraction keeps working. The one exception is the Execute cURL tab, which has to send your request through a proxy because browsers block cross-origin calls; see the privacy policy for what that involves."
           }
         },
         {
@@ -129,7 +129,7 @@
           "name": "Can I use JSON Keyper to store or host my JSON?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. JSON Keyper does not save your JSON or give it a URL - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: nothing you paste leaves your machine, so there is nothing to leak, expire, or be fetched by anyone else later. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool."
+            "text": "No. JSON Keyper does not save your JSON or give it a URL - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: there is no copy on a server to leak, expire, or be fetched by anyone else later. The Execute cURL tab does send your request through a proxy to reach the API you named, but nothing is retained there either. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool."
           }
         },
         {
@@ -563,7 +563,7 @@ orders[].giftMessage        string</code></pre>
 
     <div class="faq-item">
         <h3>Is my JSON data uploaded to a server?</h3>
-        <p>No. All parsing and key extraction happens in JavaScript inside your own browser tab. Your JSON is never transmitted, logged, or stored anywhere. You can confirm this by opening your browser's network tab while using the tool, or by disconnecting from the internet after the page loads - the tool keeps working.</p>
+        <p>No, not for JSON you paste. All parsing and key extraction happens in JavaScript inside your own browser tab, and pasted JSON is never transmitted, logged, or stored anywhere. You can confirm this by opening your browser's network tab while extracting keys, or by disconnecting from the internet after the page loads - key extraction keeps working. The one exception is the Execute cURL tab, which has to send your request through a proxy because browsers block cross-origin calls; see the privacy policy for what that involves.</p>
     </div>
 
     <div class="faq-item">
@@ -593,7 +593,7 @@ orders[].giftMessage        string</code></pre>
 
     <div class="faq-item">
         <h3>Can I use JSON Keyper to store or host my JSON?</h3>
-        <p>No. <strong>JSON Keyper does not save your JSON or give it a URL</strong> - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: nothing you paste leaves your machine, so there is nothing to leak, expire, or be fetched by anyone else later. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool.</p>
+        <p>No. <strong>JSON Keyper does not save your JSON or give it a URL</strong> - it is parsed in your browser and discarded when you close the tab. That is a design choice rather than a missing feature: there is no copy on a server to leak, expire, or be fetched by anyone else later. The Execute cURL tab does send your request through a proxy to reach the API you named, but nothing is retained there either. If you need JSON hosted at a shareable endpoint, for a mock API or a demo, you want a JSON storage service, which is a different category of tool.</p>
     </div>
 
     <div class="faq-item">
