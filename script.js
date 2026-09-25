@@ -410,6 +410,9 @@ function handleClear() {
         panel.classList.remove('show');
         panel.innerHTML = '';
     }
+    if (typeof resetCurlPanel === 'function') {
+        resetCurlPanel();
+    }
 }
 
 function handleCopy() {
