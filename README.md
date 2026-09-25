@@ -7,8 +7,10 @@ interface.
 
 Live at **[jsonkeyper.com](https://jsonkeyper.com)**.
 
-Everything runs client side. No JSON is uploaded, logged, or stored anywhere;
-the page keeps working with the network disconnected.
+Pasted JSON is processed entirely client side. It is never uploaded, logged, or
+stored, and that flow keeps working with the network disconnected. The one
+exception is the optional Execute cURL tab, which sends a request through a
+proxy to fetch a live API response (see [Repository layout](#repository-layout)).
 
 ## Features
 
@@ -30,6 +32,8 @@ Alongside those:
   depth, object and array counts, and payload size.
 - **Input options** - paste, drag a `.json` file onto the input box, use the file
   picker, or load the built-in sample. `Ctrl` / `Cmd` + `Enter` extracts.
+- **Execute cURL** - paste a curl command to fetch a live API response through a
+  CORS proxy, preview the status, headers, and body, then extract keys from it.
 - **Useful parse errors** - reports the line and column of malformed JSON rather
   than a generic failure.
 - **Copy or download** - to the clipboard, or as `.txt` (`.ts` for the TypeScript
@@ -51,6 +55,8 @@ These are deliberate, and documented on the site itself:
 - Dot-notation output is ambiguous for keys that themselves contain a dot. The
   JSONPath output quotes those instead.
 - It validates that JSON *parses*; it does not validate against a JSON Schema.
+- Execute cURL only reaches public `http`/`https` URLs on ports 80 and 443, times
+  out after 5 seconds, and rejects responses over 2 MB.
 
 ## Repository layout
 
