@@ -9,6 +9,7 @@ const CURL_WORKER_URL = 'https://jsonkeyper-worker.ashishsing112.workers.dev/api
 const CURL_SAMPLE = 'curl https://jsonplaceholder.typicode.com/users/1';
 
 let lastCurlResponseBody = null;
+let curlAbortController = null;
 
 function escapeHtml(value) {
     return String(value)
@@ -41,6 +42,21 @@ function setInputMode(mode) {
 
 function loadCurlSample() {
     document.getElementById('curlInput').value = CURL_SAMPLE;
+}
+
+function resetCurlPanel() {
+    if (curlAbortController) {
+        curlAbortController.abort();
+    }
+    document.getElementById('curlInput').value = '';
+    clearCurlError();
+    const preview = document.getElementById('curlPreview');
+    preview.hidden = true;
+    preview.innerHTML = '';
+    const response = document.getElementById('curlResponsePanel');
+    response.hidden = true;
+    response.innerHTML = '';
+    lastCurlResponseBody = null;
 }
 
 /* ---------------------------------------------------------------------------
@@ -212,8 +228,14 @@ async function handleCurlExecute() {
 
     renderCurlPreview(parsed);
 
+    // Ctrl + Enter bypasses the disabled button, so supersede any request still in flight.
+    if (curlAbortController) {
+        curlAbortController.abort();
+    }
+    const controller = new AbortController();
+    curlAbortController = controller;
+
     const button = document.getElementById('curlExecuteBtn');
-    const originalLabel = button.textContent;
     button.disabled = true;
     button.textContent = 'Executing...';
 
@@ -226,7 +248,8 @@ async function handleCurlExecute() {
                 method: parsed.method,
                 headers: parsed.headers,
                 body: parsed.body
-            })
+            }),
+            signal: controller.signal
         });
         const json = await res.json();
         if (json.error) {
@@ -235,10 +258,16 @@ async function handleCurlExecute() {
         }
         renderCurlResponse(json);
     } catch (e) {
+        if (e.name === 'AbortError') {
+            return;
+        }
         showCurlError('Could not reach the proxy. Check your connection and try again.');
     } finally {
-        button.disabled = false;
-        button.textContent = originalLabel;
+        if (curlAbortController === controller) {
+            curlAbortController = null;
+            button.disabled = false;
+            button.textContent = 'Execute';
+        }
     }
 }
 
