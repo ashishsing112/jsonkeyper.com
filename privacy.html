@@ -7,14 +7,13 @@
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
-    <meta name="description" content="JSON Keyper's privacy policy. All JSON processing happens in your browser - we never collect, store, or share your data.">
+    <meta name="description" content="JSON Keyper's privacy policy: JSON you paste never leaves your browser. What the Execute cURL proxy, Google Analytics, and Google AdSense do with data, and how to opt out.">
     <title>Privacy Policy | JSON Keyper</title>
     <link rel="canonical" href="https://jsonkeyper.com/privacy.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="Privacy Policy - JSON Keyper">
-    <meta property="og:description" content="JSON Keyper's privacy policy. All JSON processing happens in your browser - we never collect, store, or share your data.">
+    <meta property="og:description" content="JSON Keyper's privacy policy: JSON you paste never leaves your browser. What the Execute cURL proxy, Google Analytics, and Google AdSense do with data, and how to opt out.">
     <meta property="og:url" content="https://jsonkeyper.com/privacy.html">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -23,7 +22,7 @@
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Privacy Policy - JSON Keyper">
-    <meta name="twitter:description" content="JSON Keyper's privacy policy. All JSON processing happens in your browser - we never collect, store, or share your data.">
+    <meta name="twitter:description" content="JSON Keyper's privacy policy: JSON you paste never leaves your browser. What the Execute cURL proxy, Google Analytics, and Google AdSense do with data, and how to opt out.">
     <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -36,7 +35,6 @@
         gtag('js', new Date());
         gtag('config', 'G-93PGB9SJBN');
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -90,32 +88,33 @@
 
 <div class="container-shadow privacy-container">
     <h1 class="heading">Privacy Policy</h1>
-    <p>Welcome to JSON Keyper. Your privacy is of utmost importance to us. We are committed to maintaining transparency regarding how your information is handled.</p>
+    <p>JSON Keyper is run by one person, Ashish Singh. This page explains exactly what data leaves your browser when you use the site, where it goes, and how to opt out.</p>
 
     <h2 class="mt-4 mb-3 heading">No Data Storage</h2>
-    <p>JSON Keyper does not store any user data. Any JSON you paste into the tool is processed entirely in your own browser and never leaves your machine. This means that we do not collect, store, or share pasted JSON. Your privacy is completely protected while using the paste-JSON flow.</p>
+    <p>JSON Keyper does not store any user data. Any JSON you paste into the tool is processed entirely in your own browser and never leaves your machine. This means that I do not collect, store, or share pasted JSON. Your privacy is completely protected while using the paste-JSON flow.</p>
 
     <h2 class="mt-4 mb-3 heading" id="curl-proxy-feature">cURL Proxy Feature</h2>
-    <p>The <strong>Execute cURL</strong> tab works differently, because browsers block direct cross-origin requests. When you execute a curl command there, the parsed request (URL, method, headers, and body) is sent to a Cloudflare Worker we operate, which fetches the target API on your behalf and returns the response to your browser. This is the only feature on JSON Keyper that transmits data off your device.</p>
+    <p>The <strong>Execute cURL</strong> tab works differently, because browsers block direct cross-origin requests. When you execute a curl command there, the parsed request (URL, method, headers, and body) is sent to a Cloudflare Worker I operate, which fetches the target API on your behalf and returns the response to your browser. This is the only feature on JSON Keyper that transmits data off your device.</p>
     <p>The Worker does not log or persist requests or responses - it has no database and no storage, and each request is handled statelessly. It only reaches public <code>http</code> and <code>https</code> addresses (it refuses localhost and other private/internal addresses), enforces a 5-second timeout, and caps responses at 2 MB. If you paste a cURL command containing a bearer token, API key, or other credential in its headers or body, that credential is included in the request sent through the Worker to reach the API you specified - avoid pasting commands containing credentials for services you do not trust this feature with.</p>
 
     <h2 class="mt-4 mb-3 heading">Google Analytics</h2>
-    <p>We use Google Analytics to collect anonymous usage statistics such as page views and session duration. This helps us understand how visitors use the site so we can improve it. Google Analytics does not identify individual users. You can opt out using the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.</p>
+    <p>This site uses Google Analytics to measure usage, such as which pages are viewed, for how long, and from which country and type of device. I use it to see which tools and guides are useful and which are not. Google Analytics sets cookies (named <code>_ga</code> and <code>_ga_*</code>) that assign your browser a random identifier, so it can tell a returning visitor from a new one; it does not tell me your name or email address, and the JSON you paste is never sent to it. Google's processing of this data is described in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use its services</a>. You can opt out using the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.</p>
 
-    <h2 class="mt-4 mb-3 heading">Google AdSense</h2>
-    <p>We use Google AdSense to serve advertisements when you visit our website. Google AdSense may use cookies to provide relevant ads based on your visits to this and other websites. However, JSON Keyper itself does not collect any personally identifiable information.</p>
+    <h2 class="mt-4 mb-3 heading">Advertising (Google AdSense)</h2>
+    <p>This site uses Google AdSense to show advertisements. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the internet.</p>
+    <p>You can opt out of personalised advertising by visiting Google's <a href="https://adssettings.google.com" target="_blank" rel="noopener">Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">www.aboutads.info</a>. If you opt out, you will still see ads, but they will not be based on your browsing history.</p>
 
     <h2 class="mt-4 mb-3 heading">Cookies</h2>
-    <p>JSON Keyper does not use any first-party cookies for tracking purposes. However, third-party vendors, including Google, may use cookies to serve ads and collect analytics data based on your prior visits to our website or other websites on the internet.</p>
+    <p>JSON Keyper itself does not set any cookies - the tool and the guides work without them. The cookies you may see on this site are set by the Google Analytics and Google AdSense scripts described above. You can block or delete them in your browser settings; the tool keeps working if you do.</p>
 
     <h2 class="mt-4 mb-3 heading">Third-Party Links</h2>
-    <p>Our website may contain links to external websites. We are not responsible for the privacy practices of these other sites. Please review their privacy policies before providing them with your personal information.</p>
+    <p>This website contains links to external websites. I am not responsible for the privacy practices of these other sites. Please review their privacy policies before providing them with your personal information.</p>
 
     <h2 class="mt-4 mb-3 heading">Policy Updates</h2>
-    <p>We may update this Privacy Policy from time to time. We encourage you to review this page periodically to stay informed of any changes. This policy was last updated on September 23, 2026.</p>
+    <p>I may update this Privacy Policy from time to time, for example when a feature changes what data leaves your browser. This policy was last updated on September 29, 2026.</p>
 
-    <h2 class="mt-4 mb-3 heading">Contact Us</h2>
-    <p>If you have any questions about our privacy practices, please reach out via our <a href="/contact.html">contact page</a> or email us at <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>.</p>
+    <h2 class="mt-4 mb-3 heading">Contact</h2>
+    <p>If you have any questions about these privacy practices, please reach out via the <a href="/contact.html">contact page</a> or email me at <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>.</p>
 </div>
 
 </main>
@@ -129,6 +128,7 @@
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
