@@ -1,9 +1,13 @@
 # jsonkeyper.com
 
-A free, browser-based JSON key extractor. Paste any JSON object and get every
+A free, browser-based set of JSON tools. Paste any JSON document and get every
 key path it contains - including keys buried inside nested objects and arrays -
 rendered as dot notation, JSONPath, an indented tree, or a generated TypeScript
-interface.
+type; or pretty-print and minify it without changing a single value.
+
+Six tools share one engine: Key Extractor (the homepage), Formatter, Flattener,
+JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside them is a blog
+of tested, long-form guides on working with JSON.
 
 Live at **[jsonkeyper.com](https://jsonkeyper.com)**.
 
@@ -32,13 +36,16 @@ Alongside those:
 - **Structure statistics** - total key paths, unique key names, maximum nesting
   depth, object and array counts, and payload size.
 - **Input options** - paste, drag a `.json` file onto the input box, use the file
-  picker, or load the built-in sample. `Ctrl` / `Cmd` + `Enter` extracts.
+  picker, or load the built-in sample. `Ctrl` / `Cmd` + `Enter` runs the tool.
 - **Execute cURL** - paste a curl command to fetch a live API response through a
   CORS proxy, preview the status, headers, and body, then extract keys from it.
 - **Useful parse errors** - reports the line and column of malformed JSON rather
   than a generic failure.
-- **Copy or download** - to the clipboard, or as `.txt` (`.ts` for the TypeScript
-  format).
+- **Copy or download** - to the clipboard, or as `json-keys.txt` (`.ts` for the
+  TypeScript format, `formatted.json` for the formatted and minified outputs).
+- **Moving between tools** - a tab strip under the header on every tool page, and
+  a "JSON Tools" directory on the homepage. JSON already pasted comes along: it is
+  parked in `sessionStorage` for that tab, read once by the next tool, and deleted.
 
 The TypeScript generator merges objects across an array and marks any key absent
 from some elements as optional, so a `giftMessage` present on only one of two
@@ -93,27 +100,35 @@ json-tree-viewer.html     Tool page: indented structural tree (GeoJSON example)
 json-formatter.html       Tool page: pretty-print and minify (event feed example)
                           Each embeds the tool with its format preselected, and
                           its own sample in <script id="pageSample">, which
-                          loadSample() prefers over the homepage sample
+                          loadSample() loads verbatim in place of the homepage
+                          sample (a parse/stringify round trip would alter it)
 
-about.html                Project background, capabilities, limitations, author
+about.html                Author background and work history, how the guides are written
 contact.html              Contact form (composes a mailto:)
 privacy.html              Privacy policy
 terms.html                Terms of service
 changelog.html            User-facing change history, newest first
 404.html                  Not-found page; GitHub Pages serves it automatically
 blog/index.html           Article listing
-blog/*.html               Ten long-form guides on working with JSON
+blog/*.html               Twelve long-form guides on working with JSON
 
 og-image.png              1200x630 social card referenced by og:image on every page
 sitemap.xml               Kept in sync by hand when pages are added
 robots.txt                Allows all crawlers, points at the sitemap
 ads.txt                   AdSense seller declaration
 CNAME                     Custom domain for GitHub Pages
+
+tools/serve.py            Local server that resolves clean URLs like GitHub Pages
+tools/check-sitemap.py    Reports sitemap lastmod values older than the file's last commit
+tools/json-vs-xml-bench/  Reproduces the measurements in blog/json-vs-xml.html
+tools/model-mismatch/     Reproduces blog/null-missing-unknown-fields.html in
+                          Jackson 2 and 3, Pydantic, and Zod (see its README)
 ```
 
 There is no build step, no bundler, and no package manifest - the files served
-are the files in the repository. The homepage loads `script.js`, `curl-parser.js`,
-and `curl-proxy.js`; every page loads `nav.js`. Bootstrap's CSS is still used from
+are the files in the repository. The homepage and the five tool pages load
+`script.js`; the homepage also loads `curl-parser.js` and `curl-proxy.js` for the
+Execute cURL tab; every page loads `nav.js`. Bootstrap's CSS is still used from
 a CDN, but its JavaScript, jQuery, and Popper were removed because the navbar
 toggle was the only behaviour that depended on them.
 
@@ -121,16 +136,17 @@ The homepage's Execute cURL tab sends the parsed request to a Cloudflare Worker
 (`jsonkeyper-worker`, deployed separately - not in this repository) that proxies
 the request server-side to work around browser CORS. It is the only feature on
 the site that transmits data off the visitor's device; see the [privacy
-policy](https://jsonkeyper.com/privacy.html#curl-proxy-feature) for what it does
+policy](https://jsonkeyper.com/privacy#curl-proxy-feature) for what it does
 and does not do with that request.
 
 ## Running locally
 
-Any static file server works. The site uses root-relative links (`/blog/`), so
-serve from the repository root rather than opening `index.html` over `file://`:
+Internal links are root-relative and extensionless (`/about`, `/blog/`), so a
+plain `python3 -m http.server` will 404 on them. Use the bundled server, which
+resolves URLs the same way GitHub Pages does:
 
 ```bash
-python3 -m http.server 8000
+python3 tools/serve.py
 # then open http://localhost:8000
 ```
 
@@ -148,7 +164,11 @@ Issues and pull requests are welcome. A few conventions worth knowing:
 - **Match the existing style.** Vanilla JS with inline `onclick` handlers for the
   tool controls, four-space indentation, and no new runtime dependencies.
 - **Use hyphens, not em dashes,** in page copy.
-- **Update `sitemap.xml`** when you add or remove a page.
+- **Link without `.html`** (`/about`, not `/about.html`), and use the same clean
+  form in canonical tags, `og:url`, and JSON-LD. New pages also need the
+  address-bar script from the top of any existing page's `<head>`.
+- **Update `sitemap.xml`** when you add or remove a page, and run
+  `python3 tools/check-sitemap.py` to catch stale `lastmod` values.
 - **Keep dates honest.** Article `datePublished` / `dateModified` values, visible
   bylines, and sitemap `lastmod` entries must reflect when the content was
   actually written.
