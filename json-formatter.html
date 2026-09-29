@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="Free online JSON formatter and minifier that never changes your data: large integers, 12.50-style decimals, and key order come out exactly as pasted. Reports invalid JSON by line and column. Runs in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/json-formatter.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="JSON Formatter - Pretty-Print and Minify JSON Online">
+    <meta property="og:description" content="Free online JSON formatter and minifier that never changes your data: large integers, 12.50-style decimals, and key order come out exactly as pasted. Reports invalid JSON by line and column. Runs in your browser.">
+    <meta property="og:url" content="https://jsonkeyper.com/json-formatter.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSON Formatter - Pretty-Print and Minify JSON Online">
+    <meta name="twitter:description" content="Free online JSON formatter and minifier that never changes your data: large integers, 12.50-style decimals, and key order come out exactly as pasted. Reports invalid JSON by line and column. Runs in your browser.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <title>JSON Formatter - Pretty-Print and Minify JSON Online | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "JSON Formatter",
+          "item": "https://jsonkeyper.com/json-formatter.html"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">JSON Formatter</span></li>
+    </ol>
+</nav>
+
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSON Formatter: Pretty-Print and Minify JSON</h1>
+        <p class="mb-3 lead-copy">Paste JSON to indent it for reading, or minify it back to one line. The formatter only changes whitespace: every number, string, and key comes out exactly as you pasted it, which is not true of most formatters. Malformed JSON is reported with its line and column. Click <strong>Load this example</strong> to format the minified API response discussed below.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Input JSON</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
+                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                </div>
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Format JSON</button>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="io-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <optgroup label="Map the keys">
+                            <option value="paths">Key paths (dot notation)</option>
+                            <option value="typed">Key paths with value types</option>
+                            <option value="unique">Unique key names only</option>
+                            <option value="jsonpath">JSONPath expressions</option>
+                            <option value="tree">Indented tree</option>
+                            <option value="typescript">TypeScript interface</option>
+                        </optgroup>
+                        <optgroup label="Format the JSON">
+                            <option value="pretty2" selected>Formatted JSON (2-space indent)</option>
+                            <option value="pretty4">Formatted JSON (4-space indent)</option>
+                            <option value="minified">Minified JSON</option>
+                        </optgroup>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays">
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+        <p class="tool-note">Runs entirely in your browser - the JSON you paste is never uploaded. To fetch a live API response from a curl command instead, use the <a href="/">full tool on the homepage</a>.</p>
+    </div>
+</section>
+
+<div class="container-shadow article-container">
+    <article>
+        <div class="article-body">
+            <h2>A worked example: a minified event feed</h2>
+            <p>APIs send JSON minified - no spaces, no line breaks - because it is what machines want. Here is a page of payment events as it arrives, all on one line:</p>
+            <pre><code>{"cursor":"eyJwIjoyfQ","events":[{"id":1839274619283746817,"type":"order.paid","amount":12.50,"currency":"EUR","createdAt":"2026-09-29T10:15:04Z","tags":[]},{"id":1839274619283746818,"type":"order.refunded","amount":8.00,"currency":"EUR","createdAt":"2026-09-29T10:17:41Z","tags":["partial"],"meta":{}}],"hasMore":true}</code></pre>
+
+            <p>Formatted with a 2-space indent:</p>
+            <pre><code>{
+  "cursor": "eyJwIjoyfQ",
+  "events": [
+    {
+      "id": 1839274619283746817,
+      "type": "order.paid",
+      "amount": 12.50,
+      "currency": "EUR",
+      "createdAt": "2026-09-29T10:15:04Z",
+      "tags": []
+    },
+    {
+      "id": 1839274619283746818,
+      "type": "order.refunded",
+      "amount": 8.00,
+      "currency": "EUR",
+      "createdAt": "2026-09-29T10:17:41Z",
+      "tags": [
+        "partial"
+      ],
+      "meta": {}
+    }
+  ],
+  "hasMore": true
+}</code></pre>
+            <p>Empty containers stay compact as <code>[]</code> and <code>{}</code> rather than spreading over two lines, and every value is character-for-character what was in the input. That last part is worth dwelling on, because most formatters do not guarantee it.</p>
+
+            <h2>A formatter should never change your data</h2>
+            <p>The easy way to write a JSON formatter in JavaScript is two calls: <code>JSON.parse</code> the text, then <code>JSON.stringify</code> it back with indentation. Plenty of online formatters work that way. Here is what that approach does to the example above:</p>
+            <pre><code>      "id": 1839274619283746800,
+      "amount": 12.5,
+      ...
+      "id": 1839274619283746800,
+      "amount": 8,</code></pre>
+            <p>Both events now have <strong>the same ID</strong>. JavaScript numbers are 64-bit floats and are exact only up to 2<sup>53</sup>, so <code>1839274619283746817</code> and <code>1839274619283746818</code> both round to <code>1839274619283746800</code>. Nothing warns you. If you copy that "formatted" JSON into a bug report or a test fixture, you have quietly replaced two real IDs with one wrong one. The amounts lose their trailing zeros too - harmless to a parser, but no longer the bytes the API sent, which matters when you are debugging a signature or a checksum.</p>
+            <p>This formatter never re-serialises. It checks the text with <code>JSON.parse</code> to find errors, then walks the <em>original text</em> and changes nothing but the whitespace between tokens. Numbers, string escapes like <code>é</code>, key order, and even duplicate keys are left exactly as they were.</p>
+            <p>Command-line tools vary, so it is worth knowing what yours does. Each of these was run on a document containing <code>"id": 1839274619283746817</code>, <code>"amount": 12.50</code>, and a duplicated key:</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Formatter</th><th>Large integer</th><th><code>12.50</code></th><th>Duplicate key</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>This page</td><td>Kept exactly</td><td>Kept as <code>12.50</code></td><td>Both kept</td></tr>
+                        <tr><td><code>jq .</code> (jq 1.7)</td><td>Kept exactly</td><td>Kept as <code>12.50</code></td><td>Last one kept</td></tr>
+                        <tr><td><code>python3 -m json.tool</code> (3.12)</td><td>Kept exactly</td><td>Becomes <code>12.5</code></td><td>Last one kept</td></tr>
+                        <tr><td><code>JSON.stringify(JSON.parse(text))</code> (Node.js 24)</td><td><strong>Rounded</strong> to <code>...746800</code></td><td>Becomes <code>12.5</code></td><td>Last one kept</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>jq earns a mention: versions before 1.7 converted every number to a float and rounded large integers the same way JavaScript does. If you rely on jq to pretty-print IDs, check <code>jq --version</code>. For more on where JSON values break between languages, see <a href="/blog/what-is-json.html">What is JSON?</a>, which tests these cases in Node.js and Python.</p>
+
+            <h2>Validation comes with it</h2>
+            <p>Because the text is parsed before it is formatted, invalid JSON is caught with a specific message rather than a garbled result. The most common mistake - a comma after the last item, which JavaScript and most config formats allow but JSON does not - is located exactly. Given:</p>
+            <pre><code>{
+  "id": 1,
+  "tags": ["a", "b",],
+  "ok": true
+}</code></pre>
+            <p>the tool reports:</p>
+            <pre><code>Trailing comma before "]" (line 3, column 20). JSON does not allow a comma after the last item.</code></pre>
+            <p>Other errors report where the browser's parser gave up, so the wording varies between browsers. In Chrome, for example, a missing comma between two properties gives <code>Expected ',' or '}' after property value in JSON at position 14 (line 3 column 3)</code> - the position is where the parser noticed the problem, which is usually just <em>after</em> the actual mistake - look at the end of the previous line first.</p>
+            <p>Single-quoted strings, comments, and unquoted keys are all rejected too. They are valid in JavaScript and in JSON5, but not in JSON, and an API or <code>JSON.parse</code> on the other end will reject them just the same.</p>
+
+            <h2>What indentation costs</h2>
+            <p>Formatted JSON is for people; minified JSON is for everything else. To put a number on the difference, I formatted the 50,000-order dataset from the <a href="/blog/json-vs-xml.html">JSON vs XML comparison</a> each way and compressed the result with gzip at level 9 (Node.js zlib):</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Layout</th><th>Size</th><th>vs minified</th><th>gzipped</th><th>vs minified</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Minified</td><td>7.81 MB</td><td>-</td><td>0.96 MB</td><td>-</td></tr>
+                        <tr><td>Tab indent (for reference)</td><td>12.76 MB</td><td>+63%</td><td>1.01 MB</td><td>+5%</td></tr>
+                        <tr><td>2-space indent</td><td>16.21 MB</td><td>+108%</td><td>1.05 MB</td><td>+9%</td></tr>
+                        <tr><td>4-space indent</td><td>23.12 MB</td><td>+196%</td><td>1.08 MB</td><td>+12%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Indentation more than doubles the raw size of deeply nested data, because every line of a nested record repeats its indent. Compression takes most of that back, so for an HTTP response served with gzip, pretty-printing costs about a tenth more on the wire. Minifying matters most where nothing compresses the data: values stored in a database column or browser <code>localStorage</code>, message queues with a size limit, environment variables, and log lines.</p>
+            <p>Logs deserve a special mention. NDJSON - one JSON document per line, used by most log shippers and bulk APIs - <em>requires</em> minified records, because a newline is what separates one record from the next. A pretty-printed record there is not just larger; it breaks the file.</p>
+
+            <h2>2 spaces or 4?</h2>
+            <p>Neither is more correct, so match what the file will live next to. jq and Prettier indent with 2 spaces by default, and 2 is the common choice in JavaScript and TypeScript projects. Python's <code>json.tool</code> uses 4, as does a lot of Python code that calls <code>json.dumps(data, indent=4)</code>. For a file committed to a repository, whatever the project's formatter produces is the right answer, because it keeps diffs down to real changes.</p>
+
+            <h2>What the formatter does not do</h2>
+            <ul>
+                <li><strong>It does not sort keys.</strong> Key order is preserved as part of leaving your data untouched. To compare two documents with keys in different orders, use <code>jq -S .</code> on both first.</li>
+                <li><strong>It does not repair invalid JSON.</strong> It tells you where the problem is, but guessing a fix - which quote was meant to close which string - is a good way to hide a real bug.</li>
+                <li><strong>It is not built for very large files.</strong> File uploads are capped at 5 MB, and a formatted document of that size can make the output box slow to scroll. For big files, <code>jq .</code> on the command line is the better tool.</li>
+            </ul>
+
+            <h2>Other output formats</h2>
+            <p>The same box can do more than reformat. Switch the format to see the structure instead of the text:</p>
+            <ul>
+                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a> - the shape without the values, which stays short however long the data is</li>
+                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - every key path as a flat list</li>
+                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
+                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a></li>
+            </ul>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/what-is-json.html">What is JSON?</a> - including the values that do not survive a round trip between languages</li>
+                <li><a href="/blog/processing-large-json-files.html">Processing large JSON files</a> - when a file is too big to format in a browser</li>
+                <li><a href="/blog/json-schema-guide.html">JSON Schema: a practical guide to validating JSON</a> - checking structure, not just syntax</li>
+            </ul>
+        </div>
+    </article>
+</div>
+
+
+<script type="application/json" id="pageSample">
+{"cursor":"eyJwIjoyfQ","events":[{"id":1839274619283746817,"type":"order.paid","amount":12.50,"currency":"EUR","createdAt":"2026-09-29T10:15:04Z","tags":[]},{"id":1839274619283746818,"type":"order.refunded","amount":8.00,"currency":"EUR","createdAt":"2026-09-29T10:17:41Z","tags":["partial"],"meta":{}}],"hasMore":true}
+</script>
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
+</body>
+</html>

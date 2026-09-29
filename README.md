@@ -22,6 +22,7 @@ proxy to fetch a live API response (see [Repository layout](#repository-layout))
 | JSONPath | `$.user.address.city`, with `[*]` wildcards when indices are collapsed |
 | Indented tree | A visual read of shape and nesting depth |
 | TypeScript interface | A generated `interface Root { ... }` from your sample |
+| Formatted / minified JSON | The JSON itself, re-indented (2 or 4 spaces) or on one line |
 
 Alongside those:
 
@@ -45,6 +46,11 @@ orders is emitted as `giftMessage?: string`. A key that is present but `null` on
 some elements stays required and gains `| null` instead, and arrays nested in
 those elements pool their items, so an empty `labels: []` on one record does not
 hide the element type seen on another.
+
+The formatted and minified outputs never re-serialise: `formatJsonText` walks the
+original text and changes only whitespace outside strings, so integers above
+2^53, trailing zeros such as `12.50`, key order, and duplicate keys survive
+exactly. `JSON.parse` still runs first, to report errors.
 
 ### Known limitations
 
@@ -75,6 +81,7 @@ json-flattener.html       Tool page: dot-notation key paths (payment webhook exa
 json-to-typescript.html   Tool page: TypeScript generation (issue-tracker example)
 jsonpath-generator.html   Tool page: JSONPath expressions (Kubernetes pod list example)
 json-tree-viewer.html     Tool page: indented structural tree (GeoJSON example)
+json-formatter.html       Tool page: pretty-print and minify (event feed example)
                           Each embeds the tool with its format preselected, and
                           its own sample in <script id="pageSample">, which
                           loadSample() prefers over the homepage sample

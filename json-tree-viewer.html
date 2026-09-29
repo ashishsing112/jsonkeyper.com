@@ -117,12 +117,19 @@
                 <div class="io-controls">
                     <label for="outputFormat" class="control-label">Format</label>
                     <select id="outputFormat" class="form-control form-control-sm output-select">
-                        <option value="paths">Key paths (dot notation)</option>
-                        <option value="typed">Key paths with value types</option>
-                        <option value="unique">Unique key names only</option>
-                        <option value="jsonpath">JSONPath expressions</option>
-                        <option value="tree" selected>Indented tree</option>
-                        <option value="typescript">TypeScript interface</option>
+                        <optgroup label="Map the keys">
+                            <option value="paths">Key paths (dot notation)</option>
+                            <option value="typed">Key paths with value types</option>
+                            <option value="unique">Unique key names only</option>
+                            <option value="jsonpath">JSONPath expressions</option>
+                            <option value="tree" selected>Indented tree</option>
+                            <option value="typescript">TypeScript interface</option>
+                        </optgroup>
+                        <optgroup label="Format the JSON">
+                            <option value="pretty2">Formatted JSON (2-space indent)</option>
+                            <option value="pretty4">Formatted JSON (4-space indent)</option>
+                            <option value="minified">Minified JSON</option>
+                        </optgroup>
                     </select>
                     <div class="custom-control custom-checkbox collapse-toggle">
                         <input type="checkbox" class="custom-control-input" id="collapseArrays">
@@ -242,7 +249,7 @@ features  (array)
                     </tbody>
                 </table>
             </div>
-            <p>They work well together: use the tree to find where the field you care about lives, then look it up in the formatted document.</p>
+            <p>They work well together: use the tree to find where the field you care about lives, then look it up in the formatted document. The same tool does both - switch the format to <a href="/json-formatter.html">Formatted JSON</a> to get the document back with its values.</p>
 
             <h2>Good places to use it</h2>
             <ul>
@@ -259,6 +266,7 @@ features  (array)
                 <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - one full path per line, indices kept or collapsed</li>
                 <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a> - shows mixed shapes the tree cannot</li>
                 <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a></li>
+                <li><a href="/json-formatter.html">Format or minify the JSON</a> - whitespace only, every value kept exactly</li>
             </ul>
 
             <h2>Further reading</h2>

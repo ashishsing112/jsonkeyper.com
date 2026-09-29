@@ -3,6 +3,10 @@
 
 var lastNodes = null;
 var lastRoot = null;
+var lastInput = '';
+// Why the last input has no key paths (a bare scalar, or {} / []), or null.
+// Formatting still works on such input; only the key-based formats refuse it.
+var lastNoKeysReason = null;
 
 function getType(obj) {
     if (Array.isArray(obj)) {
@@ -219,6 +223,92 @@ function formatTypeScript(root) {
     return 'interface Root ' + tsObjectBody(mergeObjects([root]).values, new Set(), 0);
 }
 
+/* Pretty-printing and minifying work on the original text, not on the parsed
+   value. Re-serialising with JSON.stringify would silently change the data:
+   integers above 2^53 lose precision, 1.0 becomes 1, and duplicate keys
+   collapse to the last one. Walking the text and changing only whitespace
+   outside strings guarantees every value comes out exactly as it went in.
+   The caller must have validated the text with JSON.parse first; the scans
+   below rely on it (every string is closed, every bracket is matched). */
+function formatJsonText(text, indent) {
+    const newline = indent ? '\n' : '';
+    const parts = [];
+    let depth = 0;
+    let i = 0;
+    while (i < text.length) {
+        const ch = text[i];
+        switch (ch) {
+            case ' ':
+            case '\t':
+            case '\n':
+            case '\r':
+                i++;
+                break;
+            case '"': {
+                // Copy the whole string literal in one slice, skipping escapes, so
+                // brackets, commas and colons inside strings are never touched.
+                let j = i + 1;
+                while (text[j] !== '"') {
+                    j += text[j] === '\\' ? 2 : 1;
+                }
+                parts.push(text.slice(i, j + 1));
+                i = j + 1;
+                break;
+            }
+            case '{':
+            case '[': {
+                // An empty container stays on one line as {} or [].
+                const close = ch === '{' ? '}' : ']';
+                let j = i + 1;
+                while (' \t\n\r'.includes(text[j])) {
+                    j++;
+                }
+                if (text[j] === close) {
+                    parts.push(ch + close);
+                    i = j + 1;
+                } else {
+                    depth++;
+                    parts.push(ch + newline + indent.repeat(depth));
+                    i++;
+                }
+                break;
+            }
+            case '}':
+            case ']':
+                depth--;
+                parts.push(newline + indent.repeat(depth) + ch);
+                i++;
+                break;
+            case ',':
+                parts.push(',' + newline + indent.repeat(depth));
+                i++;
+                break;
+            case ':':
+                parts.push(indent ? ': ' : ':');
+                i++;
+                break;
+            default: {
+                // A number, true, false or null: copy the run up to the next
+                // structural character or whitespace unchanged.
+                let j = i + 1;
+                while (j < text.length && !',]} \t\n\r'.includes(text[j])) {
+                    j++;
+                }
+                parts.push(text.slice(i, j));
+                i = j;
+            }
+        }
+    }
+    return parts.join('');
+}
+
+// Output formats that re-emit the JSON itself, mapped to their indent string.
+const TEXT_FORMATS = { pretty2: '  ', pretty4: '    ', minified: '' };
+
+function isTextFormat(format) {
+    return Object.prototype.hasOwnProperty.call(TEXT_FORMATS, format);
+}
+
 /* ---------------------------------------------------------------------------
    Rendering
 --------------------------------------------------------------------------- */
@@ -241,6 +331,14 @@ function applyFormatFromUrl(select) {
     }
 }
 
+// Collapsing array indices means nothing when the JSON itself is the output.
+function syncControls() {
+    const box = document.getElementById('collapseArrays');
+    if (box) {
+        box.disabled = isTextFormat(currentFormat());
+    }
+}
+
 function collapseEnabled() {
     const box = document.getElementById('collapseArrays');
     return !!(box && box.checked);
@@ -250,9 +348,21 @@ function render() {
     if (!lastNodes) {
         return;
     }
+    const format = currentFormat();
+    if (isTextFormat(format)) {
+        clearError();
+        setOutput(formatJsonText(lastInput, TEXT_FORMATS[format]));
+        return;
+    }
+    if (lastNoKeysReason) {
+        showError(lastNoKeysReason);
+        setOutput('');
+        return;
+    }
+    clearError();
     const collapse = collapseEnabled();
     let output;
-    switch (currentFormat()) {
+    switch (format) {
         case 'typed':
             output = formatTypedPaths(lastNodes, collapse);
             break;
@@ -271,6 +381,10 @@ function render() {
         default:
             output = formatPaths(lastNodes, collapse);
     }
+    setOutput(output);
+}
+
+function setOutput(output) {
     document.getElementById('keysOutput').value = output;
     updateLineCount(output);
 }
@@ -343,9 +457,50 @@ function describeParseError(error, input) {
     }
 
     // Some engines give neither, and append a long echo of the source instead.
-    // Strip that echo so the user sees the actual complaint.
-    const trimmed = message.replace(/,?\s*(\.\.\.)?"[\s\S]*"\s*is not valid JSON\s*$/, '');
-    return (trimmed || message) + PARSE_HINT;
+    // A trailing comma is the most common cause and the easiest to pinpoint, so
+    // look for one before falling back to the engine's own complaint.
+    const trailing = findTrailingComma(input);
+    if (trailing) {
+        return 'Trailing comma before "' + trailing.close + '" (line ' + trailing.line +
+            ', column ' + trailing.column + '). JSON does not allow a comma after the last item.';
+    }
+    // Strip the echo, which may be truncated with "..." at either end, so the
+    // user sees the actual complaint.
+    const trimmed = message.replace(/,?\s*(\.\.\.)?"[\s\S]*"\s*is not valid JSON\s*$/, '')
+        .replace(/,?\s*(\.\.\.)?"[\s\S]*\.\.\."\s*is not valid JSON\s*$/, '');
+    return (trimmed || message).replace(/[.\s]*$/, '.') + PARSE_HINT;
+}
+
+// The position of the first comma followed only by whitespace and a closing
+// bracket, ignoring anything inside strings, or null if there is none.
+function findTrailingComma(input) {
+    let inString = false;
+    for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
+        if (inString) {
+            if (ch === '\\') {
+                i++;
+            } else if (ch === '"') {
+                inString = false;
+            }
+        } else if (ch === '"') {
+            inString = true;
+        } else if (ch === ',') {
+            let j = i + 1;
+            while (j < input.length && ' \t\n\r'.includes(input[j])) {
+                j++;
+            }
+            if (input[j] === ']' || input[j] === '}') {
+                const before = input.slice(0, i);
+                return {
+                    close: input[j],
+                    line: before.split('\n').length,
+                    column: i - before.lastIndexOf('\n')
+                };
+            }
+        }
+    }
+    return null;
 }
 
 function showError(message) {
@@ -387,20 +542,20 @@ function handleSubmit() {
     }
 
     const type = getType(parsed);
-    if (type !== 'object' && type !== 'array') {
-        showError('That is valid JSON, but it is a single ' + type + ' value with no keys to extract.');
-        return;
-    }
-
     const result = analyze(parsed);
-    if (!result.nodes.length) {
-        showError('Parsed successfully, but this JSON contains no keys.');
-        document.getElementById('keysOutput').value = '';
-        return;
+    if (type !== 'object' && type !== 'array') {
+        lastNoKeysReason = 'That is valid JSON, but it is a single ' + type +
+            ' value with no keys to extract. The formatted and minified formats still work.';
+    } else if (!result.nodes.length) {
+        lastNoKeysReason = 'Parsed successfully, but this JSON contains no keys.' +
+            ' The formatted and minified formats still work.';
+    } else {
+        lastNoKeysReason = null;
     }
 
     lastNodes = result.nodes;
     lastRoot = parsed;
+    lastInput = input;
     render();
     renderStats(result.stats, result.nodes.length, result.nodes, new Blob([input]).size);
 }
@@ -410,6 +565,8 @@ function handleClear() {
     document.getElementById('keysOutput').value = '';
     lastNodes = null;
     lastRoot = null;
+    lastInput = '';
+    lastNoKeysReason = null;
     clearError();
     updateLineCount('');
     const panel = document.getElementById('statsPanel');
@@ -449,17 +606,19 @@ function handleDownload() {
         showToast('Nothing to download yet.');
         return;
     }
-    const extension = currentFormat() === 'typescript' ? 'ts' : 'txt';
+    const format = currentFormat();
+    const extension = format === 'typescript' ? 'ts' : isTextFormat(format) ? 'json' : 'txt';
     const blob = new Blob([output], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'json-keys.' + extension;
+    const name = isTextFormat(format) ? 'formatted.' + extension : 'json-keys.' + extension;
+    link.download = name;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    showToast('Downloaded json-keys.' + extension);
+    showToast('Downloaded ' + name);
 }
 
 const SAMPLE_JSON = {
@@ -503,10 +662,13 @@ const SAMPLE_JSON = {
 
 // Tool pages embed their own example as <script type="application/json"
 // id="pageSample">, so each page demonstrates the payload its text discusses.
+// It is loaded verbatim: a parse/stringify round trip would round large
+// integers and drop trailing zeros, which the formatter page is about.
 function loadSample() {
     const own = document.getElementById('pageSample');
-    const sample = own ? JSON.parse(own.textContent) : SAMPLE_JSON;
-    document.getElementById('textbox1').value = JSON.stringify(sample, null, 2);
+    document.getElementById('textbox1').value = own
+        ? own.textContent.trim()
+        : JSON.stringify(SAMPLE_JSON, null, 2);
     handleSubmit();
 }
 
@@ -550,6 +712,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const collapse = document.getElementById('collapseArrays');
     if (format) {
         applyFormatFromUrl(format);
+        syncControls();
+        format.addEventListener('change', syncControls);
         format.addEventListener('change', render);
     }
     if (collapse) {
