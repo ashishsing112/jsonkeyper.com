@@ -332,10 +332,18 @@ function applyFormatFromUrl(select) {
 }
 
 // Collapsing array indices means nothing when the JSON itself is the output.
+// The collapse toggle means nothing when the JSON itself is the output, so it
+// is hidden then. Minified output is a single line, so it wraps; every other
+// format keeps its line structure and scrolls sideways instead.
 function syncControls() {
-    const box = document.getElementById('collapseArrays');
-    if (box) {
-        box.disabled = isTextFormat(currentFormat());
+    const format = currentFormat();
+    const toggle = document.querySelector('.collapse-toggle');
+    if (toggle) {
+        toggle.hidden = isTextFormat(format);
+    }
+    const output = document.getElementById('keysOutput');
+    if (output) {
+        output.classList.toggle('wrap-lines', format === 'minified');
     }
 }
 
@@ -707,7 +715,47 @@ function showToast(message) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+/* ---------------------------------------------------------------------------
+   Carrying input between tools
+   Switching tool is a page load, which would lose what was pasted. The input
+   is parked in sessionStorage (this tab only, never sent anywhere) for the
+   next page, which reads it once and deletes it.
+--------------------------------------------------------------------------- */
+
+const CARRY_KEY = 'jsonkeyper:carry';
+
+function carryInputOnToolSwitch() {
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest && e.target.closest('.tool-switcher a, .tool-card');
+        const input = document.getElementById('textbox1');
+        if (!link || !input || !input.value.trim()) {
+            return;
+        }
+        try {
+            sessionStorage.setItem(CARRY_KEY, input.value);
+        } catch (err) {
+            // Storage full or blocked: the next page simply starts empty.
+        }
+    });
+}
+
+function restoreCarriedInput() {
+    let carried = null;
+    try {
+        carried = sessionStorage.getItem(CARRY_KEY);
+        sessionStorage.removeItem(CARRY_KEY);
+    } catch (err) {
+        return;
+    }
+    const input = document.getElementById('textbox1');
+    if (carried && input && !input.value) {
+        input.value = carried;
+        handleSubmit();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    carryInputOnToolSwitch();
     const format = document.getElementById('outputFormat');
     const collapse = document.getElementById('collapseArrays');
     if (format) {
@@ -748,4 +796,5 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    restoreCarriedInput();
 });

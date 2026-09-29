@@ -222,6 +222,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#tools">Tools</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
@@ -236,6 +237,14 @@
 
 <section class="container-shadow" aria-labelledby="json-key-extractor-and-path-mapper">
     <div class="section" id="request">
+        <nav class="tool-switcher" aria-label="JSON tools">
+            <a href="/" class="active" aria-current="page">Key Extractor</a>
+            <a href="/json-formatter">Formatter</a>
+            <a href="/json-flattener">Flattener</a>
+            <a href="/jsonpath-generator">JSONPath</a>
+            <a href="/json-tree-viewer">Tree Viewer</a>
+            <a href="/json-to-typescript">JSON to TypeScript</a>
+        </nav>
         <div class="row">
             <div class="col-12">
                 <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;" id="json-key-extractor-and-path-mapper">JSON Key Extractor and Path Mapper</h1>
@@ -317,27 +326,46 @@
                     </div>
                 </div>
                 <textarea id="keysOutput" aria-label="Extracted keys" placeholder="Keys will appear here..." readonly></textarea>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="row p-1">
-                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="row p-1">
-                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="row p-1">
-                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
-                        </div>
-                    </div>
+                <div class="output-actions">
+                    <button onclick="handleCopy()" class="btn copy-button btn-lg" type="button">Copy</button>
+                    <button onclick="handleDownload()" class="btn download-button btn-lg" type="button">Download</button>
+                    <button onclick="handleClear()" class="btn btn-danger btn-lg clear-button" type="button">Clear</button>
                 </div>
             </div>
         </div>
 
         <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+    </div>
+</section>
+
+<section class="container-shadow mt-3" aria-labelledby="tools" id="tools-section">
+    <h2 class="heading mb-2" id="tools">JSON Tools</h2>
+    <p class="mb-3">Six tools, one engine. Each runs entirely in your browser, and the JSON you have pasted comes with you when you switch between them.</p>
+    <div class="tool-grid">
+        <a class="tool-card" href="/">
+            <span class="tool-card-title">Key Extractor <span class="tool-card-badge">This page</span></span>
+            <span class="tool-card-text">Every key path in a JSON document, as dot notation, typed paths, or unique names. Fetch a live API with a curl command.</span>
+        </a>
+        <a class="tool-card" href="/json-formatter">
+            <span class="tool-card-title">JSON Formatter</span>
+            <span class="tool-card-text">Pretty-print with a 2- or 4-space indent, or minify. Changes whitespace only - large IDs and values like 12.50 stay exact.</span>
+        </a>
+        <a class="tool-card" href="/json-flattener">
+            <span class="tool-card-title">JSON Flattener</span>
+            <span class="tool-card-text">Flatten nested JSON to one dot-notation path per field, ready for a spreadsheet, a table, or a field mapping.</span>
+        </a>
+        <a class="tool-card" href="/jsonpath-generator">
+            <span class="tool-card-title">JSONPath Generator</span>
+            <span class="tool-card-text">A JSONPath expression for every field, with [*] wildcards, for jq, kubectl, and JSONPath libraries.</span>
+        </a>
+        <a class="tool-card" href="/json-tree-viewer">
+            <span class="tool-card-title">JSON Tree Viewer</span>
+            <span class="tool-card-text">The shape of a document as an indented outline of keys and types, with the values stripped out.</span>
+        </a>
+        <a class="tool-card" href="/json-to-typescript">
+            <span class="tool-card-title">JSON to TypeScript</span>
+            <span class="tool-card-text">A TypeScript type from real samples, with optional and nullable fields marked separately.</span>
+        </a>
     </div>
 </section>
 
