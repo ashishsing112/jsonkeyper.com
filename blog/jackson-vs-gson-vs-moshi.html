@@ -4,18 +4,24 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <meta name="description" content="A technical comparison of Jackson, Gson and Moshi for Java services: architecture, unknown-property handling, deeply nested payloads, Spring Boot integration, and a JMH harness to benchmark them on your own data.">
     <title>Jackson vs Gson vs Moshi: Choosing a Java JSON Library | JSON Keyper Blog</title>
-    <link rel="canonical" href="https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html">
+    <link rel="canonical" href="https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="Jackson vs Gson vs Moshi: Choosing a Java JSON Library">
     <meta property="og:description" content="A technical comparison of Jackson, Gson and Moshi for Java services: architecture, unknown-property handling, deeply nested payloads, Spring Boot integration, and a JMH harness to benchmark them on your own data.">
-    <meta property="og:url" content="https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -48,10 +54,10 @@
       "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
-        "@id": "https://jsonkeyper.com/about.html#ashish-singh",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
         "name": "Ashish Singh",
         "jobTitle": "Back-end developer",
-        "url": "https://jsonkeyper.com/about.html",
+        "url": "https://jsonkeyper.com/about",
         "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
       },
       "publisher": {
@@ -72,9 +78,9 @@
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html"
+        "@id": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi"
       },
-      "url": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html",
+      "url": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi",
       "inLanguage": "en"
     }
     </script>
@@ -99,7 +105,7 @@
           "@type": "ListItem",
           "position": 3,
           "name": "Jackson vs Gson vs Moshi: Choosing a Java JSON Library",
-          "item": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi.html"
+          "item": "https://jsonkeyper.com/blog/jackson-vs-gson-vs-moshi"
         }
       ]
     }
@@ -117,9 +123,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                 </ul>
             </div>
         </div>
@@ -138,11 +144,11 @@
 <div class="container-shadow article-container">
     <article>
         <h1 class="heading">Jackson vs Gson vs Moshi: Choosing a Java JSON Library</h1>
-        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published September 23, 2026 &middot; Updated September 29, 2026 &middot; 12 min read</small></p>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published September 23, 2026 &middot; Updated September 29, 2026 &middot; 12 min read</small></p>
 
         <div class="limitation-box">
             <h3>Correction, September 29, 2026</h3>
-            <p>The original version said a bare Jackson <code>ObjectMapper</code> throws on unknown fields and that Jackson throws checked exceptions. Both are true of Jackson 2 only. In Jackson 3 - the version Spring Boot 4 uses - <code>FAIL_ON_UNKNOWN_PROPERTIES</code> is disabled by default and <code>JacksonException</code> is unchecked. Checked against Jackson 2.22.3 and 3.2.3; the details are in <a href="/blog/null-missing-unknown-fields.html">Null, Missing, or Unknown</a>. The affected sections below are updated.</p>
+            <p>The original version said a bare Jackson <code>ObjectMapper</code> throws on unknown fields and that Jackson throws checked exceptions. Both are true of Jackson 2 only. In Jackson 3 - the version Spring Boot 4 uses - <code>FAIL_ON_UNKNOWN_PROPERTIES</code> is disabled by default and <code>JacksonException</code> is unchecked. Checked against Jackson 2.22.3 and 3.2.3; the details are in <a href="/blog/null-missing-unknown-fields">Null, Missing, or Unknown</a>. The affected sections below are updated.</p>
         </div>
 
         <div class="article-body">
@@ -292,7 +298,7 @@ public class Order {
             behaviour, enable it explicitly, or set
             <code>spring.jackson.deserialization.fail-on-unknown-properties=true</code> in Boot.
             Jackson 3 also changed defaults for nulls and primitives; the
-            <a href="/blog/null-missing-unknown-fields.html">null, missing, and unknown field comparison</a>
+            <a href="/blog/null-missing-unknown-fields">null, missing, and unknown field comparison</a>
             has the full before-and-after.</p>
 
             <h3>Gson: silent, always</h3>
@@ -487,7 +493,7 @@ public class JsonLibraryBenchmark {
             <p>The typed key-path output answers the question you actually have when writing a
             DTO: is <code>total</code> a number or a string, and is <code>giftMessage</code>
             present on every element of the array or only some. The
-            <a href="/json-to-typescript.html">interface generator</a> is a quick cross-check on
+            <a href="/json-to-typescript">interface generator</a> is a quick cross-check on
             field names and optionality before you hand-write the Java equivalent.</p>
 
             <div class="limitation-box">
@@ -504,7 +510,7 @@ public class JsonLibraryBenchmark {
                 outside the JVM with <code>jq --stream</code>. Note the flag: plain
                 <code>jq</code> parses the whole document into memory first, which measured
                 about 1.1 GB on a 120 MB input. See
-                <a href="/blog/processing-large-json-files.html">processing large JSON files</a>
+                <a href="/blog/processing-large-json-files">processing large JSON files</a>
                 for the measurements.</p>
             </div>
 
@@ -567,10 +573,10 @@ jq -rn --stream &#x27;
 
             <h2>Further reading</h2>
             <ul>
-                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
-                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
-                <li><a href="/blog/json-schema-guide.html">JSON Schema: a practical guide to validating JSON</a></li>
-                <li><a href="/json-to-typescript.html">Generate a typed interface from a JSON sample</a></li>
+                <li><a href="/blog/understanding-nested-json">Understanding nested JSON objects and arrays</a></li>
+                <li><a href="/blog/json-in-rest-apis">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/json-schema-guide">JSON Schema: a practical guide to validating JSON</a></li>
+                <li><a href="/json-to-typescript">Generate a typed interface from a JSON sample</a></li>
             </ul>
 
         </div>
@@ -583,8 +589,8 @@ jq -rn --stream &#x27;
                 Java/Spring Boot, Python, and Node.js/TypeScript, and the sole builder of JSON Keyper. My work is
                 integrating third-party APIs, building REST services, and moving JSON through data pipelines, and
                 I write these guides from the problems that work turns up - payloads that do not match their
-                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about.html">More about me and the project</a>,
-                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact.html">get in touch</a>.</p>
+                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact">get in touch</a>.</p>
             </div>
         </div>
     </article>
@@ -596,11 +602,11 @@ jq -rn --stream &#x27;
     <nav class="footer-links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/about.html">About</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>

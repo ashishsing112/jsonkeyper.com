@@ -4,17 +4,23 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="description" content="Every user-facing change to JSON Keyper, newest first: new output formats, tool pages, fixes, and new and corrected guides.">
     <title>Changelog | JSON Keyper</title>
-    <link rel="canonical" href="https://jsonkeyper.com/changelog.html">
+    <link rel="canonical" href="https://jsonkeyper.com/changelog">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="JSON Keyper Changelog">
     <meta property="og:description" content="Every user-facing change to JSON Keyper, newest first: new output formats, tool pages, fixes, and new and corrected guides.">
-    <meta property="og:url" content="https://jsonkeyper.com/changelog.html">
+    <meta property="og:url" content="https://jsonkeyper.com/changelog">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -50,7 +56,7 @@
           "@type": "ListItem",
           "position": 2,
           "name": "Changelog",
-          "item": "https://jsonkeyper.com/changelog.html"
+          "item": "https://jsonkeyper.com/changelog"
         }
       ]
     }
@@ -68,9 +74,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                 </ul>
             </div>
         </div>
@@ -88,20 +94,21 @@
 
 <div class="container-shadow about-container">
     <h1 class="heading">Changelog</h1>
-    <p>Every user-facing change to JSON Keyper, newest first. The full history, including every line of code, is in the <a href="https://github.com/ashishsing112/jsonkeyper.com/commits/main" rel="noopener">GitHub repository</a>. Found a bug? <a href="/contact.html">Tell me</a>.</p>
+    <p>Every user-facing change to JSON Keyper, newest first. The full history, including every line of code, is in the <a href="https://github.com/ashishsing112/jsonkeyper.com/commits/main" rel="noopener">GitHub repository</a>. Found a bug? <a href="/contact">Tell me</a>.</p>
 
     <h2 class="mt-4 mb-3 heading" id="d2026-09-29"><time datetime="2026-09-29">29 September 2026</time></h2>
     <ul>
-        <li>New guide: <a href="/blog/null-missing-unknown-fields.html">Null, Missing, or Unknown</a> - thirteen mismatched payloads through Jackson 2, Jackson 3, Pydantic, and Zod, with the scripts to reproduce it.</li>
-        <li>Corrected <a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a>: its statements about unknown fields and checked exceptions were true of Jackson 2 only.</li>
-        <li>Added my work history and the problems behind the guides to the <a href="/about.html">About</a> page.</li>
-        <li>New <a href="/json-formatter.html">JSON formatter</a>: pretty-print with a 2- or 4-space indent, or minify, from the same format list. It changes only whitespace, so large integer IDs and values like <code>12.50</code> come out exactly as pasted.</li>
+        <li>Page addresses no longer end in <code>.html</code> - for example, <a href="/about">jsonkeyper.com/about</a>. Old links keep working.</li>
+        <li>New guide: <a href="/blog/null-missing-unknown-fields">Null, Missing, or Unknown</a> - thirteen mismatched payloads through Jackson 2, Jackson 3, Pydantic, and Zod, with the scripts to reproduce it.</li>
+        <li>Corrected <a href="/blog/jackson-vs-gson-vs-moshi">Jackson vs Gson vs Moshi</a>: its statements about unknown fields and checked exceptions were true of Jackson 2 only.</li>
+        <li>Added my work history and the problems behind the guides to the <a href="/about">About</a> page.</li>
+        <li>New <a href="/json-formatter">JSON formatter</a>: pretty-print with a 2- or 4-space indent, or minify, from the same format list. It changes only whitespace, so large integer IDs and values like <code>12.50</code> come out exactly as pasted.</li>
         <li>A trailing comma in invalid JSON is now reported with its line and column, instead of a truncated browser message.</li>
-        <li>The four tool pages - <a href="/json-to-typescript.html">JSON to TypeScript</a>, <a href="/jsonpath-generator.html">JSONPath generator</a>, <a href="/json-flattener.html">JSON flattener</a>, and <a href="/json-tree-viewer.html">tree viewer</a> - now run the tool directly on the page, each with its own worked example: an issue-tracker response, a Kubernetes pod list, a payment webhook, and a GeoJSON file.</li>
+        <li>The four tool pages - <a href="/json-to-typescript">JSON to TypeScript</a>, <a href="/jsonpath-generator">JSONPath generator</a>, <a href="/json-flattener">JSON flattener</a>, and <a href="/json-tree-viewer">tree viewer</a> - now run the tool directly on the page, each with its own worked example: an issue-tracker response, a Kubernetes pod list, a payment webhook, and a GeoJSON file.</li>
         <li>TypeScript output now marks a field that is <code>null</code> on some records as <code>T | null</code> instead of taking the type of whichever record came first, and pools array elements across records, so an empty <code>labels: []</code> on one record no longer hides the element type seen on another.</li>
-        <li>Rewrote the <a href="/about.html">About</a> and <a href="/contact.html">Contact</a> pages, and corrected the <a href="/privacy.html">privacy policy</a>: Google Analytics sets first-party cookies, which the previous wording denied.</li>
-        <li>Revised <a href="/blog/json-vs-xml.html">JSON vs XML</a> with measured payload sizes and parse times, added a section on what JSON cannot represent to <a href="/blog/what-is-json.html">What is JSON?</a>, and made the <a href="/blog/json-tools-for-developers.html">JSON tools guide</a> recommend other tools on their merits.</li>
-        <li>Expanded the <a href="/about.html">About</a> page with my background, how the site has grown, how the guides are written, and how it is funded; author details on every guide now say what I work in.</li>
+        <li>Rewrote the <a href="/about">About</a> and <a href="/contact">Contact</a> pages, and corrected the <a href="/privacy">privacy policy</a>: Google Analytics sets first-party cookies, which the previous wording denied.</li>
+        <li>Revised <a href="/blog/json-vs-xml">JSON vs XML</a> with measured payload sizes and parse times, added a section on what JSON cannot represent to <a href="/blog/what-is-json">What is JSON?</a>, and made the <a href="/blog/json-tools-for-developers">JSON tools guide</a> recommend other tools on their merits.</li>
+        <li>Expanded the <a href="/about">About</a> page with my background, how the site has grown, how the guides are written, and how it is funded; author details on every guide now say what I work in.</li>
         <li>Added this changelog.</li>
     </ul>
     <h2 class="mt-4 mb-3 heading" id="d2026-09-25"><time datetime="2026-09-25">25 September 2026</time></h2>
@@ -110,8 +117,8 @@
     </ul>
     <h2 class="mt-4 mb-3 heading" id="d2026-09-23"><time datetime="2026-09-23">23 September 2026</time></h2>
     <ul>
-        <li>New <strong>Execute cURL</strong> tab: paste a curl command and the tool fetches the live response through a proxy, then extracts its keys. See the <a href="/privacy.html#curl-proxy-feature">privacy policy</a> for what the proxy does and does not keep.</li>
-        <li>New guides: <a href="/blog/cors-explained.html">CORS explained</a>, <a href="/blog/processing-large-json-files.html">processing large JSON files</a> (with measured memory for jq and Python), and <a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a>.</li>
+        <li>New <strong>Execute cURL</strong> tab: paste a curl command and the tool fetches the live response through a proxy, then extracts its keys. See the <a href="/privacy#curl-proxy-feature">privacy policy</a> for what the proxy does and does not keep.</li>
+        <li>New guides: <a href="/blog/cors-explained">CORS explained</a>, <a href="/blog/processing-large-json-files">processing large JSON files</a> (with measured memory for jq and Python), and <a href="/blog/jackson-vs-gson-vs-moshi">Jackson vs Gson vs Moshi</a>.</li>
         <li>Corrected earlier claims that plain <code>jq</code> streams large files. It does not; the large-files guide measures why.</li>
         <li>Fixed misaligned input and output columns and a stray focus outline on the input tabs.</li>
     </ul>
@@ -155,11 +162,11 @@
     <nav class="footer-links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/about.html">About</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>

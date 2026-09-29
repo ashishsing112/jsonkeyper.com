@@ -4,6 +4,12 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -217,9 +223,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                 </ul>
             </div>
         </div>
@@ -233,7 +239,7 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;" id="json-key-extractor-and-path-mapper">JSON Key Extractor and Path Mapper</h1>
-                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface - or simply <a href="/json-formatter.html">pretty-print or minify</a> the JSON. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the Execute cURL tab fetches the response for you through a proxy.</p>
+                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface - or simply <a href="/json-formatter">pretty-print or minify</a> the JSON. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the Execute cURL tab fetches the response for you through a proxy.</p>
             </div>
         </div>
 
@@ -279,7 +285,7 @@
                         <button onclick="handleCurlExecute()" id="curlExecuteBtn" class="btn extract-button btn-lg">Execute</button>
                     </div>
                     <div id="curlResponsePanel" class="curl-response-panel" hidden></div>
-                    <p class="curl-disclosure">Requests are sent through a Cloudflare Worker proxy to bypass browser CORS. The proxy does not log or store requests or responses - see the <a href="/privacy.html">privacy policy</a>.</p>
+                    <p class="curl-disclosure">Requests are sent through a Cloudflare Worker proxy to bypass browser CORS. The proxy does not log or store requests or responses - see the <a href="/privacy">privacy policy</a>.</p>
                 </div>
             </div>
 
@@ -516,13 +522,13 @@ orders[].giftMessage        string</code></pre>
                 <tr><th>Format</th><th>Best for</th></tr>
             </thead>
             <tbody>
-                <tr><td><strong><a href="/json-flattener.html">Key paths</a></strong></td><td>Grabbing an exact accessor to paste straight into code, or checking whether a specific field really exists in a response.</td></tr>
+                <tr><td><strong><a href="/json-flattener">Key paths</a></strong></td><td>Grabbing an exact accessor to paste straight into code, or checking whether a specific field really exists in a response.</td></tr>
                 <tr><td><strong>Key paths with value types</strong></td><td>Deciding how to parse a payload - spotting that an <code>id</code> arrives as a string rather than a number before it causes a bug.</td></tr>
                 <tr><td><strong>Unique key names</strong></td><td>Building a field glossary, or diffing the vocabulary of two API versions to see which names were added or dropped.</td></tr>
-                <tr><td><strong><a href="/jsonpath-generator.html">JSONPath</a></strong></td><td>Writing jq filters, Postman test assertions, or extraction rules in an integration platform.</td></tr>
-                <tr><td><strong><a href="/json-tree-viewer.html">Indented tree</a></strong></td><td>Getting a visual sense of shape and nesting depth, especially for an unfamiliar payload. This view always collapses array indices, since drawing one branch per element would bury the shape.</td></tr>
-                <tr><td><strong><a href="/json-to-typescript.html">TypeScript interface</a></strong></td><td>Bootstrapping typed API clients. Treat the result as a first draft to review, not a finished contract - see the limitations below.</td></tr>
-                <tr><td><strong><a href="/json-formatter.html">Formatted or minified JSON</a></strong></td><td>Reading a one-line API response, or squeezing JSON back onto one line for a log, a queue, or a config value. Only whitespace changes: large integers, trailing zeros like <code>12.50</code>, and key order come out exactly as pasted.</td></tr>
+                <tr><td><strong><a href="/jsonpath-generator">JSONPath</a></strong></td><td>Writing jq filters, Postman test assertions, or extraction rules in an integration platform.</td></tr>
+                <tr><td><strong><a href="/json-tree-viewer">Indented tree</a></strong></td><td>Getting a visual sense of shape and nesting depth, especially for an unfamiliar payload. This view always collapses array indices, since drawing one branch per element would bury the shape.</td></tr>
+                <tr><td><strong><a href="/json-to-typescript">TypeScript interface</a></strong></td><td>Bootstrapping typed API clients. Treat the result as a first draft to review, not a finished contract - see the limitations below.</td></tr>
+                <tr><td><strong><a href="/json-formatter">Formatted or minified JSON</a></strong></td><td>Reading a one-line API response, or squeezing JSON back onto one line for a log, a queue, or a config value. Only whitespace changes: large integers, trailing zeros like <code>12.50</code>, and key order come out exactly as pasted.</td></tr>
             </tbody>
         </table>
     </div>
@@ -568,7 +574,7 @@ orders[].giftMessage        string</code></pre>
         <li><strong>Sample-based type inference.</strong> The TypeScript output describes the sample you pasted, not the API's real contract. A field that happens to be <code>null</code> in your sample is typed <code>null</code>, and a field absent from your sample cannot appear at all. Review the output against the API documentation.</li>
         <li><strong>Numbers are all <code>number</code>.</strong> JSON does not distinguish integers from floats, so the type annotations cannot either.</li>
         <li><strong>Keys containing dots.</strong> Dot-notation output is ambiguous for these. Switch to JSONPath, which quotes them.</li>
-        <li><strong>Not a validator.</strong> The tool checks that your JSON parses, but it does not check it against a JSON Schema. For that, see our <a href="/blog/json-schema-guide.html">guide to JSON Schema validation</a>.</li>
+        <li><strong>Not a validator.</strong> The tool checks that your JSON parses, but it does not check it against a JSON Schema. For that, see our <a href="/blog/json-schema-guide">guide to JSON Schema validation</a>.</li>
         <li><strong>Formatting does not sort keys or repair JSON.</strong> The formatted and minified outputs change whitespace only. They keep key order, and they report invalid JSON rather than guessing a fix.</li>
         <li><strong>Live fetches are limited.</strong> The Execute cURL tab only reaches public <code>http</code> and <code>https</code> addresses on the standard ports, gives up after 5 seconds, and rejects responses over 2 MB. It cannot reach <code>localhost</code> or your internal network, and binary responses come back garbled. Any token or API key in the command passes through the proxy, so paste the response instead if that matters to you. For internal or slow APIs, run curl yourself and paste the output.</li>
         <li><strong>Not a store or host.</strong> JSON Keyper does not save your JSON or give it a URL. Everything is parsed in the browser and gone when you close the tab. If you need JSON hosted at a shareable endpoint, you want a JSON storage service, not this tool.</li>
@@ -596,7 +602,7 @@ orders[].giftMessage        string</code></pre>
 
     <div class="faq-item">
         <h3>Can JSON Keyper pretty-print or minify JSON?</h3>
-        <p>Yes. Choose <strong>Formatted JSON</strong> (2-space or 4-space indent) or <strong>Minified JSON</strong> in the format list. Unlike formatters that parse and re-serialise, it changes only whitespace, so large integers such as <code>1839274619283746817</code>, decimals such as <code>12.50</code>, key order, and duplicate keys come out exactly as you pasted them. The <a href="/json-formatter.html">JSON formatter page</a> shows what the usual approach does to those values.</p>
+        <p>Yes. Choose <strong>Formatted JSON</strong> (2-space or 4-space indent) or <strong>Minified JSON</strong> in the format list. Unlike formatters that parse and re-serialise, it changes only whitespace, so large integers such as <code>1839274619283746817</code>, decimals such as <code>12.50</code>, key order, and duplicate keys come out exactly as you pasted them. The <a href="/json-formatter">JSON formatter page</a> shows what the usual approach does to those values.</p>
     </div>
 
     <div class="faq-item">
@@ -606,7 +612,7 @@ orders[].giftMessage        string</code></pre>
 
     <div class="faq-item">
         <h3>Does the TypeScript interface generator handle optional fields?</h3>
-        <p>Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, <code>giftMessage</code> appears on only one of the two orders, so it is generated as <code>giftMessage?: string</code>. A key that is present but <code>null</code> on some elements stays required and gains <code>| null</code> instead - the sample's <code>trackingCode</code> is generated as <code>trackingCode: string | null</code>. The <a href="/json-to-typescript.html">JSON to TypeScript page</a> explains why that distinction matters.</p>
+        <p>Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, <code>giftMessage</code> appears on only one of the two orders, so it is generated as <code>giftMessage?: string</code>. A key that is present but <code>null</code> on some elements stays required and gains <code>| null</code> instead - the sample's <code>trackingCode</code> is generated as <code>trackingCode: string | null</code>. The <a href="/json-to-typescript">JSON to TypeScript page</a> explains why that distinction matters.</p>
     </div>
 
     <div class="faq-item">
@@ -630,22 +636,22 @@ orders[].giftMessage        string</code></pre>
     <h2 class="heading mb-3" id="further-reading">Further Reading</h2>
     <p>Focused guides for a single output format, each with a worked example:</p>
     <ul class="reading-list">
-        <li><a href="/json-to-typescript.html">JSON to TypeScript Interface Converter</a> - how nested objects are inlined and optional fields detected.</li>
-        <li><a href="/json-flattener.html">Flatten JSON to Dot Notation</a> - collapsed vs expanded array indices, and when each view is the right one.</li>
-        <li><a href="/jsonpath-generator.html">JSONPath Expression Generator</a> - wildcards, bracket notation, and how JSONPath differs from plain dot notation.</li>
-        <li><a href="/json-tree-viewer.html">JSON Tree Viewer</a> - the structure as an indented outline, and why the tree always collapses array indices.</li>
-        <li><a href="/json-formatter.html">JSON Formatter</a> - pretty-print or minify without changing a single value, and why most formatters cannot promise that.</li>
+        <li><a href="/json-to-typescript">JSON to TypeScript Interface Converter</a> - how nested objects are inlined and optional fields detected.</li>
+        <li><a href="/json-flattener">Flatten JSON to Dot Notation</a> - collapsed vs expanded array indices, and when each view is the right one.</li>
+        <li><a href="/jsonpath-generator">JSONPath Expression Generator</a> - wildcards, bracket notation, and how JSONPath differs from plain dot notation.</li>
+        <li><a href="/json-tree-viewer">JSON Tree Viewer</a> - the structure as an indented outline, and why the tree always collapses array indices.</li>
+        <li><a href="/json-formatter">JSON Formatter</a> - pretty-print or minify without changing a single value, and why most formatters cannot promise that.</li>
     </ul>
     <p>Longer guides on working with JSON, written alongside this tool:</p>
     <ul class="reading-list">
-        <li><a href="/blog/how-to-extract-json-keys.html">How to Extract All Keys from a JSON Object</a> - the same job done in JavaScript, Python, Ruby, and jq, with a comparison of when each is worth the effort.</li>
-        <li><a href="/blog/understanding-nested-json.html">Understanding Nested JSON Objects and Arrays</a> - safe access patterns for deeply nested data, and how to flatten a structure.</li>
-        <li><a href="/blog/json-in-rest-apis.html">Common JSON Structures in REST APIs</a> - the envelope, pagination, and error shapes you will meet again and again.</li>
-        <li><a href="/blog/json-schema-guide.html">JSON Schema: A Practical Guide to Validating JSON</a> - moving from "what keys are here" to "what keys are required".</li>
-        <li><a href="/blog/working-with-json-in-python.html">Working with JSON in Python</a> - parsing, custom encoders, and streaming large files.</li>
-        <li><a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a> - choosing a JSON library on the JVM, and the unknown-property default that breaks services in production.</li>
-        <li><a href="/blog/processing-large-json-files.html">Processing Large JSON Files</a> - measured memory for jq and Python, and why plain jq is not a streaming tool.</li>
-        <li><a href="/blog/cors-explained.html">Why Your Browser Blocks API Calls</a> - CORS, preflight requests, and what routing a request through a proxy actually costs.</li>
+        <li><a href="/blog/how-to-extract-json-keys">How to Extract All Keys from a JSON Object</a> - the same job done in JavaScript, Python, Ruby, and jq, with a comparison of when each is worth the effort.</li>
+        <li><a href="/blog/understanding-nested-json">Understanding Nested JSON Objects and Arrays</a> - safe access patterns for deeply nested data, and how to flatten a structure.</li>
+        <li><a href="/blog/json-in-rest-apis">Common JSON Structures in REST APIs</a> - the envelope, pagination, and error shapes you will meet again and again.</li>
+        <li><a href="/blog/json-schema-guide">JSON Schema: A Practical Guide to Validating JSON</a> - moving from "what keys are here" to "what keys are required".</li>
+        <li><a href="/blog/working-with-json-in-python">Working with JSON in Python</a> - parsing, custom encoders, and streaming large files.</li>
+        <li><a href="/blog/jackson-vs-gson-vs-moshi">Jackson vs Gson vs Moshi</a> - choosing a JSON library on the JVM, and the unknown-property default that breaks services in production.</li>
+        <li><a href="/blog/processing-large-json-files">Processing Large JSON Files</a> - measured memory for jq and Python, and why plain jq is not a streaming tool.</li>
+        <li><a href="/blog/cors-explained">Why Your Browser Blocks API Calls</a> - CORS, preflight requests, and what routing a request through a proxy actually costs.</li>
         <li><a href="/blog/">Browse all articles</a></li>
     </ul>
 </section>
@@ -658,16 +664,16 @@ orders[].giftMessage        string</code></pre>
             <p class="author-name">Ashish Singh</p>
             <p class="author-blurb">JSON Keyper is built and maintained by one person: a back-end developer with more than four years of
             professional experience in Java/Spring Boot, Python, and Node.js/TypeScript. It started as the throwaway script I kept
-            rewriting to list the fields in API responses I did not design. <a href="/about.html">More about me and how the guides are written</a>.</p>
+            rewriting to list the fields in API responses I did not design. <a href="/about">More about me and how the guides are written</a>.</p>
         </div>
     </div>
-    <p class="mt-3 mb-2"><strong>Recent changes</strong> (full history in the <a href="/changelog.html">changelog</a>):</p>
+    <p class="mt-3 mb-2"><strong>Recent changes</strong> (full history in the <a href="/changelog">changelog</a>):</p>
     <ul class="reading-list">
-        <li><strong>September 29, 2026</strong> - a new guide testing how <a href="/blog/null-missing-unknown-fields.html">Jackson, Pydantic, and Zod handle null, missing, and unknown fields</a>, and a <a href="/json-formatter.html">JSON formatter</a> that never changes a value.</li>
+        <li><strong>September 29, 2026</strong> - a new guide testing how <a href="/blog/null-missing-unknown-fields">Jackson, Pydantic, and Zod handle null, missing, and unknown fields</a>, and a <a href="/json-formatter">JSON formatter</a> that never changes a value.</li>
         <li><strong>September 29, 2026</strong> - the format pages now run the tool themselves, and TypeScript output marks fields that are <code>null</code> on some records as <code>T | null</code>.</li>
         <li><strong>September 23, 2026</strong> - the Execute cURL tab, and new guides on CORS, large JSON files, and JVM JSON libraries.</li>
     </ul>
-    <p class="mb-0">Found a document the tool handles wrongly? <a href="/contact.html">Tell me</a>, or open an issue on <a href="https://github.com/ashishsing112/jsonkeyper.com/issues" rel="noopener">GitHub</a>.</p>
+    <p class="mb-0">Found a document the tool handles wrongly? <a href="/contact">Tell me</a>, or open an issue on <a href="https://github.com/ashishsing112/jsonkeyper.com/issues" rel="noopener">GitHub</a>.</p>
 </section>
 
 </main>
@@ -677,11 +683,11 @@ orders[].giftMessage        string</code></pre>
     <nav class="footer-links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/about.html">About</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>

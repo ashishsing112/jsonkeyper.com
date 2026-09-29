@@ -4,17 +4,23 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <meta name="description" content="Free online JSON to TypeScript interface converter. Paste any JSON and get a typed interface with nested objects, arrays, and optional fields detected automatically. Runs entirely in your browser.">
-    <link rel="canonical" href="https://jsonkeyper.com/json-to-typescript.html">
+    <link rel="canonical" href="https://jsonkeyper.com/json-to-typescript">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="JSON to TypeScript Interface Converter - Free Online Tool">
     <meta property="og:description" content="Free online JSON to TypeScript interface converter. Paste any JSON and get a typed interface with nested objects, arrays, and optional fields detected automatically. Runs entirely in your browser.">
-    <meta property="og:url" content="https://jsonkeyper.com/json-to-typescript.html">
+    <meta property="og:url" content="https://jsonkeyper.com/json-to-typescript">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -51,7 +57,7 @@
           "@type": "ListItem",
           "position": 2,
           "name": "JSON to TypeScript",
-          "item": "https://jsonkeyper.com/json-to-typescript.html"
+          "item": "https://jsonkeyper.com/json-to-typescript"
         }
       ]
     }
@@ -69,9 +75,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                 </ul>
             </div>
         </div>
@@ -276,7 +282,7 @@ type Milestone = NonNullable&lt;Issue['milestone']&gt;;</code></pre>
             </ul>
 
             <h2>Types are not validation</h2>
-            <p>TypeScript types are erased at compile time. If the API starts sending <code>"comments": "3"</code> as a string, nothing checks the response against your interface at runtime, and the wrong type flows through your code until something breaks further away. For data from a service you do not control, pair the type with a runtime check - a schema library such as Zod, or a JSON Schema validated with Ajv. The <a href="/blog/json-schema-guide.html">JSON Schema guide</a> covers the second approach.</p>
+            <p>TypeScript types are erased at compile time. If the API starts sending <code>"comments": "3"</code> as a string, nothing checks the response against your interface at runtime, and the wrong type flows through your code until something breaks further away. For data from a service you do not control, pair the type with a runtime check - a schema library such as Zod, or a JSON Schema validated with Ajv. The <a href="/blog/json-schema-guide">JSON Schema guide</a> covers the second approach.</p>
 
             <h2>Limitations worth knowing</h2>
             <ul>
@@ -289,21 +295,21 @@ type Milestone = NonNullable&lt;Issue['milestone']&gt;;</code></pre>
 
             <h2>Other output formats</h2>
             <ul>
-                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - every key path as a flat list, for field mappings</li>
-                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a> - query paths for jq, kubectl, and JSONPath libraries</li>
-                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a> - the shape at a glance, without the values</li>
-                <li><a href="/json-formatter.html">Format or minify the JSON</a> - whitespace only, every value kept exactly</li>
+                <li><a href="/json-flattener">Flatten JSON to dot notation</a> - every key path as a flat list, for field mappings</li>
+                <li><a href="/jsonpath-generator">Generate JSONPath expressions</a> - query paths for jq, kubectl, and JSONPath libraries</li>
+                <li><a href="/json-tree-viewer">View JSON as an indented tree</a> - the shape at a glance, without the values</li>
+                <li><a href="/json-formatter">Format or minify the JSON</a> - whitespace only, every value kept exactly</li>
             </ul>
 
             <h2>Further reading</h2>
             <ul>
-                <li><a href="/blog/null-missing-unknown-fields.html">Null, missing, or unknown</a> - how Jackson, Pydantic, and Zod treat the optional and nullable fields this page generates</li>
-                <li><a href="/blog/json-schema-guide.html">JSON Schema: a practical guide to validating JSON</a></li>
-                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
-                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
+                <li><a href="/blog/null-missing-unknown-fields">Null, missing, or unknown</a> - how Jackson, Pydantic, and Zod treat the optional and nullable fields this page generates</li>
+                <li><a href="/blog/json-schema-guide">JSON Schema: a practical guide to validating JSON</a></li>
+                <li><a href="/blog/json-in-rest-apis">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/understanding-nested-json">Understanding nested JSON objects and arrays</a></li>
             </ul>
 
-            <p class="page-maintainer">Written and maintained by <a href="/about.html">Ashish Singh</a> &middot; Last updated <time datetime="2026-09-29">September 29, 2026</time> &middot; <a href="/changelog.html">Changelog</a> &middot; Found a problem with this page? <a href="/contact.html">Tell me</a>.</p>
+            <p class="page-maintainer">Written and maintained by <a href="/about">Ashish Singh</a> &middot; Last updated <time datetime="2026-09-29">September 29, 2026</time> &middot; <a href="/changelog">Changelog</a> &middot; Found a problem with this page? <a href="/contact">Tell me</a>.</p>
         </div>
     </article>
 </div>
@@ -364,11 +370,11 @@ type Milestone = NonNullable&lt;Issue['milestone']&gt;;</code></pre>
     <nav class="footer-links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/about.html">About</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>

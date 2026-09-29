@@ -17,8 +17,12 @@ BASE = 'https://jsonkeyper.com/'
 
 
 def local_path(loc):
-    path = loc.replace(BASE, '') or 'index.html'
-    return path + 'index.html' if path.endswith('/') else path
+    # Sitemap URLs are extensionless (/about, /blog/); the files are about.html
+    # and blog/index.html, and GitHub Pages serves one for the other.
+    path = loc.replace(BASE, '')
+    if path == '' or path.endswith('/'):
+        return path + 'index.html'
+    return path + '.html'
 
 
 def main():

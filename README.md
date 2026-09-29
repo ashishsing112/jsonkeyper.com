@@ -67,6 +67,15 @@ These are deliberate, and documented on the site itself:
 - Execute cURL only reaches public `http`/`https` URLs on ports 80 and 443, times
   out after 5 seconds, and rejects responses over 2 MB.
 
+## URLs
+
+Pages are addressed without `.html` (`/about`, `/blog/cors-explained`): GitHub
+Pages serves `about.html` for `/about`. Every internal link, canonical tag,
+`og:url`, JSON-LD URL, and sitemap `<loc>` uses the clean form. GitHub Pages
+cannot redirect, so each page (except `404.html`) carries a small inline script
+that rewrites an old `.html` address in the address bar with
+`history.replaceState`, without reloading.
+
 ## Repository layout
 
 ```
