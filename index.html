@@ -102,6 +102,14 @@
         },
         {
           "@type": "Question",
+          "name": "Can JSON Keyper pretty-print or minify JSON?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Choose Formatted JSON (2-space or 4-space indent) or Minified JSON in the format list. Unlike formatters that parse and re-serialise, it changes only whitespace, so large integers such as 1839274619283746817, decimals such as 12.50, key order, and duplicate keys come out exactly as you pasted them."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Can JSON Keyper handle large JSON files?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -175,7 +183,7 @@
           "@type": "HowToStep",
           "position": 3,
           "name": "Choose an output format",
-          "text": "Pick dot-notation paths, paths annotated with value types, unique key names, JSONPath expressions, an indented tree, or a TypeScript interface. Switching format re-renders instantly without re-parsing.",
+          "text": "Pick dot-notation paths, paths annotated with value types, unique key names, JSONPath expressions, an indented tree, a TypeScript interface, or the JSON itself - formatted with a 2- or 4-space indent, or minified. Switching format re-renders instantly without re-parsing.",
           "url": "https://jsonkeyper.com/#how-to-use-json-keyper"
         },
         {
@@ -225,7 +233,7 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;" id="json-key-extractor-and-path-mapper">JSON Key Extractor and Path Mapper</h1>
-                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the Execute cURL tab fetches the response for you through a proxy.</p>
+                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface - or simply <a href="/json-formatter.html">pretty-print or minify</a> the JSON. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the Execute cURL tab fetches the response for you through a proxy.</p>
             </div>
         </div>
 
@@ -283,12 +291,19 @@
                 <div class="io-controls">
                     <label for="outputFormat" class="control-label">Format</label>
                     <select id="outputFormat" class="form-control form-control-sm output-select">
-                        <option value="paths">Key paths (dot notation)</option>
-                        <option value="typed">Key paths with value types</option>
-                        <option value="unique">Unique key names only</option>
-                        <option value="jsonpath">JSONPath expressions</option>
-                        <option value="tree">Indented tree</option>
-                        <option value="typescript">TypeScript interface</option>
+                        <optgroup label="Map the keys">
+                            <option value="paths">Key paths (dot notation)</option>
+                            <option value="typed">Key paths with value types</option>
+                            <option value="unique">Unique key names only</option>
+                            <option value="jsonpath">JSONPath expressions</option>
+                            <option value="tree">Indented tree</option>
+                            <option value="typescript">TypeScript interface</option>
+                        </optgroup>
+                        <optgroup label="Format the JSON">
+                            <option value="pretty2">Formatted JSON (2-space indent)</option>
+                            <option value="pretty4">Formatted JSON (4-space indent)</option>
+                            <option value="minified">Minified JSON</option>
+                        </optgroup>
                     </select>
                     <div class="custom-control custom-checkbox collapse-toggle">
                         <input type="checkbox" class="custom-control-input" id="collapseArrays">
@@ -480,7 +495,7 @@ orders[].giftMessage        string</code></pre>
     </div>
     <div class="how-to-step">
         <span class="step-number">3</span>
-        <div><strong>Choose an output format</strong> - dot-notation paths, paths annotated with value types, unique key names, JSONPath expressions, an indented tree, or a TypeScript interface. Switching format re-renders instantly without re-parsing.</div>
+        <div><strong>Choose an output format</strong> - dot-notation paths, paths annotated with value types, unique key names, JSONPath expressions, an indented tree, a TypeScript interface, or the JSON itself - formatted with a 2- or 4-space indent, or minified. Switching format re-renders instantly without re-parsing.</div>
     </div>
     <div class="how-to-step">
         <span class="step-number">4</span>
@@ -507,6 +522,7 @@ orders[].giftMessage        string</code></pre>
                 <tr><td><strong><a href="/jsonpath-generator.html">JSONPath</a></strong></td><td>Writing jq filters, Postman test assertions, or extraction rules in an integration platform.</td></tr>
                 <tr><td><strong><a href="/json-tree-viewer.html">Indented tree</a></strong></td><td>Getting a visual sense of shape and nesting depth, especially for an unfamiliar payload. This view always collapses array indices, since drawing one branch per element would bury the shape.</td></tr>
                 <tr><td><strong><a href="/json-to-typescript.html">TypeScript interface</a></strong></td><td>Bootstrapping typed API clients. Treat the result as a first draft to review, not a finished contract - see the limitations below.</td></tr>
+                <tr><td><strong><a href="/json-formatter.html">Formatted or minified JSON</a></strong></td><td>Reading a one-line API response, or squeezing JSON back onto one line for a log, a queue, or a config value. Only whitespace changes: large integers, trailing zeros like <code>12.50</code>, and key order come out exactly as pasted.</td></tr>
             </tbody>
         </table>
     </div>
@@ -553,7 +569,7 @@ orders[].giftMessage        string</code></pre>
         <li><strong>Numbers are all <code>number</code>.</strong> JSON does not distinguish integers from floats, so the type annotations cannot either.</li>
         <li><strong>Keys containing dots.</strong> Dot-notation output is ambiguous for these. Switch to JSONPath, which quotes them.</li>
         <li><strong>Not a validator.</strong> The tool checks that your JSON parses, but it does not check it against a JSON Schema. For that, see our <a href="/blog/json-schema-guide.html">guide to JSON Schema validation</a>.</li>
-        <li><strong>Not a formatter.</strong> If you want to pretty-print or minify rather than map keys, a dedicated formatter is the better tool.</li>
+        <li><strong>Formatting does not sort keys or repair JSON.</strong> The formatted and minified outputs change whitespace only. They keep key order, and they report invalid JSON rather than guessing a fix.</li>
         <li><strong>Live fetches are limited.</strong> The Execute cURL tab only reaches public <code>http</code> and <code>https</code> addresses on the standard ports, gives up after 5 seconds, and rejects responses over 2 MB. It cannot reach <code>localhost</code> or your internal network, and binary responses come back garbled. Any token or API key in the command passes through the proxy, so paste the response instead if that matters to you. For internal or slow APIs, run curl yourself and paste the output.</li>
         <li><strong>Not a store or host.</strong> JSON Keyper does not save your JSON or give it a URL. Everything is parsed in the browser and gone when you close the tab. If you need JSON hosted at a shareable endpoint, you want a JSON storage service, not this tool.</li>
     </ul>
@@ -576,6 +592,11 @@ orders[].giftMessage        string</code></pre>
     <div class="faq-item">
         <h3>What is the difference between dot notation and JSONPath?</h3>
         <p>Dot notation such as <code>user.address.city</code> is how you access a value in JavaScript or Python code. JSONPath such as <code>$.user.address.city</code> is a query language understood by tools like jq, Postman, and many API gateways, and it supports wildcards like <code>$.orders[*].total</code>. JSON Keyper can output either.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Can JSON Keyper pretty-print or minify JSON?</h3>
+        <p>Yes. Choose <strong>Formatted JSON</strong> (2-space or 4-space indent) or <strong>Minified JSON</strong> in the format list. Unlike formatters that parse and re-serialise, it changes only whitespace, so large integers such as <code>1839274619283746817</code>, decimals such as <code>12.50</code>, key order, and duplicate keys come out exactly as you pasted them. The <a href="/json-formatter.html">JSON formatter page</a> shows what the usual approach does to those values.</p>
     </div>
 
     <div class="faq-item">
@@ -613,6 +634,7 @@ orders[].giftMessage        string</code></pre>
         <li><a href="/json-flattener.html">Flatten JSON to Dot Notation</a> - collapsed vs expanded array indices, and when each view is the right one.</li>
         <li><a href="/jsonpath-generator.html">JSONPath Expression Generator</a> - wildcards, bracket notation, and how JSONPath differs from plain dot notation.</li>
         <li><a href="/json-tree-viewer.html">JSON Tree Viewer</a> - the structure as an indented outline, and why the tree always collapses array indices.</li>
+        <li><a href="/json-formatter.html">JSON Formatter</a> - pretty-print or minify without changing a single value, and why most formatters cannot promise that.</li>
     </ul>
     <p>Longer guides on working with JSON, written alongside this tool:</p>
     <ul class="reading-list">

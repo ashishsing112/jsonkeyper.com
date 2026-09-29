@@ -117,12 +117,19 @@
                 <div class="io-controls">
                     <label for="outputFormat" class="control-label">Format</label>
                     <select id="outputFormat" class="form-control form-control-sm output-select">
-                        <option value="paths">Key paths (dot notation)</option>
-                        <option value="typed">Key paths with value types</option>
-                        <option value="unique">Unique key names only</option>
-                        <option value="jsonpath" selected>JSONPath expressions</option>
-                        <option value="tree">Indented tree</option>
-                        <option value="typescript">TypeScript interface</option>
+                        <optgroup label="Map the keys">
+                            <option value="paths">Key paths (dot notation)</option>
+                            <option value="typed">Key paths with value types</option>
+                            <option value="unique">Unique key names only</option>
+                            <option value="jsonpath" selected>JSONPath expressions</option>
+                            <option value="tree">Indented tree</option>
+                            <option value="typescript">TypeScript interface</option>
+                        </optgroup>
+                        <optgroup label="Format the JSON">
+                            <option value="pretty2">Formatted JSON (2-space indent)</option>
+                            <option value="pretty4">Formatted JSON (4-space indent)</option>
+                            <option value="minified">Minified JSON</option>
+                        </optgroup>
                     </select>
                     <div class="custom-control custom-checkbox collapse-toggle">
                         <input type="checkbox" class="custom-control-input" id="collapseArrays" checked>
@@ -280,6 +287,7 @@ $.scores['2fa']                          starts with a digit</code></pre>
                 <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - accessor paths for code and field mappings</li>
                 <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
                 <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a></li>
+                <li><a href="/json-formatter.html">Format or minify the JSON</a> - whitespace only, every value kept exactly</li>
             </ul>
 
             <h2>Further reading</h2>
