@@ -22,7 +22,7 @@
     <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
     <meta property="og:locale" content="en_US">
     <meta property="article:published_time" content="2026-09-23">
-    <meta property="article:modified_time" content="2026-09-23">
+    <meta property="article:modified_time" content="2026-09-29">
     <meta property="article:author" content="Ashish Singh">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Jackson vs Gson vs Moshi: Choosing a Java JSON Library">
@@ -45,14 +45,14 @@
       "@type": "Article",
       "headline": "Jackson vs Gson vs Moshi: Choosing a Java JSON Library",
       "datePublished": "2026-09-23",
-      "dateModified": "2026-09-23",
+      "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
         "@id": "https://jsonkeyper.com/about.html#ashish-singh",
         "name": "Ashish Singh",
         "jobTitle": "Back-end developer",
         "url": "https://jsonkeyper.com/about.html",
-        "sameAs": ["https://github.com/ashishsing112"]
+        "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
       },
       "publisher": {
         "@type": "Organization",
@@ -138,7 +138,12 @@
 <div class="container-shadow article-container">
     <article>
         <h1 class="heading">Jackson vs Gson vs Moshi: Choosing a Java JSON Library</h1>
-        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published September 23, 2026 &middot; 12 min read</small></p>
+        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published September 23, 2026 &middot; Updated September 29, 2026 &middot; 12 min read</small></p>
+
+        <div class="limitation-box">
+            <h3>Correction, September 29, 2026</h3>
+            <p>The original version said a bare Jackson <code>ObjectMapper</code> throws on unknown fields and that Jackson throws checked exceptions. Both are true of Jackson 2 only. In Jackson 3 - the version Spring Boot 4 uses - <code>FAIL_ON_UNKNOWN_PROPERTIES</code> is disabled by default and <code>JacksonException</code> is unchecked. Checked against Jackson 2.22.3 and 3.2.3; the details are in <a href="/blog/null-missing-unknown-fields.html">Null, Missing, or Unknown</a>. The affected sections below are updated.</p>
+        </div>
 
         <div class="article-body">
 
@@ -166,7 +171,7 @@
                     <tbody>
                         <tr><td>Binding strategy</td><td>Reflection, with cached serialisers per type</td><td>Reflection, with cached type adapters</td><td>Adapters; generated at compile time for Kotlin, reflective for Java</td></tr>
                         <tr><td>Streaming API</td><td><code>JsonParser</code> / <code>JsonGenerator</code></td><td><code>JsonReader</code> / <code>JsonWriter</code></td><td><code>JsonReader</code> / <code>JsonWriter</code>, over Okio</td></tr>
-                        <tr><td>Unknown fields</td><td>Throws by default</td><td>Ignores</td><td>Ignores</td></tr>
+                        <tr><td>Unknown fields</td><td>Throws by default in 2.x; ignores by default in 3.x</td><td>Ignores</td><td>Ignores</td></tr>
                         <tr><td>Transitive deps</td><td><code>jackson-core</code>, <code>jackson-annotations</code></td><td>None</td><td>Okio</td></tr>
                         <tr><td>Spring Boot</td><td>Auto-configured default</td><td>Auto-configured, opt in</td><td>No auto-configuration</td></tr>
                     </tbody>
@@ -234,8 +239,9 @@ String out  = a.toJson(order);
                 </div>
             </div>
 
-            <p>Note the exception contracts, because they leak into your error handling. Jackson
-            throws a checked <code>JsonProcessingException</code>. Gson throws an unchecked
+            <p>Note the exception contracts, because they leak into your error handling. Jackson 2
+            throws a checked <code>JsonProcessingException</code>; Jackson 3 replaced it with an
+            unchecked <code>JacksonException</code>, so the compiler no longer reminds you to handle it. Gson throws an unchecked
             <code>JsonSyntaxException</code>, which is easy to forget to catch at a service
             boundary. Moshi throws <code>IOException</code>, because it reads through Okio
             rather than from a <code>String</code>.</p>
@@ -243,12 +249,12 @@ String out  = a.toJson(order);
             <h2>Unknown properties: the one default that will bite you</h2>
 
             <p>A provider adds a field to their response. Two of these libraries keep working
-            and one throws <code>UnrecognizedPropertyException</code> in production. This is the single most consequential
+            and one - Jackson 2 - throws <code>UnrecognizedPropertyException</code> in production. This is the single most consequential
             behavioural difference between them.</p>
 
-            <h3>Jackson: strict by default, except in Spring Boot</h3>
+            <h3>Jackson 2: strict by default, except in Spring Boot</h3>
 
-            <p>A bare <code>ObjectMapper</code> has
+            <p>A bare Jackson 2 <code>ObjectMapper</code> has
             <code>FAIL_ON_UNKNOWN_PROPERTIES</code> enabled, so an unexpected key is a hard
             failure. Spring Boot's auto-configuration disables it, and has since Boot 1.2 - which
             is why the same DTO behaves differently in a unit test that news up its own mapper
@@ -275,6 +281,19 @@ public class Order {
         unknown.put(key, value);
     }
 }</code></pre>
+
+            <h3>Jackson 3: lenient by default</h3>
+
+            <p>Jackson 3 changed the default: <code>JsonMapper.builder().build()</code> has
+            <code>FAIL_ON_UNKNOWN_PROPERTIES</code> <em>disabled</em>, so unknown keys are ignored
+            everywhere, not just inside Spring Boot. That removes the unit-test-versus-application
+            mismatch above, but in the other direction: a test that relied on a hand-built mapper to
+            catch an unexpected field will stop catching it after the upgrade. If you want the old
+            behaviour, enable it explicitly, or set
+            <code>spring.jackson.deserialization.fail-on-unknown-properties=true</code> in Boot.
+            Jackson 3 also changed defaults for nulls and primitives; the
+            <a href="/blog/null-missing-unknown-fields.html">null, missing, and unknown field comparison</a>
+            has the full before-and-after.</p>
 
             <h3>Gson: silent, always</h3>
 
