@@ -4,18 +4,24 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <meta name="description" content="A complete guide to JSON patterns in REST APIs: wrapped responses, pagination, error objects, authentication, versioning, webhooks, and GraphQL responses.">
     <title>Common JSON Structures in REST APIs | JSON Keyper Blog</title>
-    <link rel="canonical" href="https://jsonkeyper.com/blog/json-in-rest-apis.html">
+    <link rel="canonical" href="https://jsonkeyper.com/blog/json-in-rest-apis">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="Common JSON Structures in REST APIs">
     <meta property="og:description" content="A complete guide to JSON patterns in REST APIs: wrapped responses, pagination, error objects, authentication, versioning, webhooks, and GraphQL responses.">
-    <meta property="og:url" content="https://jsonkeyper.com/blog/json-in-rest-apis.html">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/json-in-rest-apis">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -48,10 +54,10 @@
       "dateModified": "2026-08-05",
       "author": {
         "@type": "Person",
-        "@id": "https://jsonkeyper.com/about.html#ashish-singh",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
         "name": "Ashish Singh",
         "jobTitle": "Back-end developer",
-        "url": "https://jsonkeyper.com/about.html",
+        "url": "https://jsonkeyper.com/about",
         "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
       },
       "publisher": {
@@ -72,9 +78,9 @@
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://jsonkeyper.com/blog/json-in-rest-apis.html"
+        "@id": "https://jsonkeyper.com/blog/json-in-rest-apis"
       },
-      "url": "https://jsonkeyper.com/blog/json-in-rest-apis.html",
+      "url": "https://jsonkeyper.com/blog/json-in-rest-apis",
       "inLanguage": "en"
     }
     </script>
@@ -99,7 +105,7 @@
           "@type": "ListItem",
           "position": 3,
           "name": "Common JSON Structures in REST APIs",
-          "item": "https://jsonkeyper.com/blog/json-in-rest-apis.html"
+          "item": "https://jsonkeyper.com/blog/json-in-rest-apis"
         }
       ]
     }
@@ -117,9 +123,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                 </ul>
             </div>
         </div>
@@ -139,7 +145,7 @@
 <div class="container-shadow article-container">
     <article>
         <h1 class="heading">Common JSON Structures You'll Encounter in REST APIs</h1>
-        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated August 5, 2026 &middot; 10 min read</small></p>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated August 5, 2026 &middot; 10 min read</small></p>
 
         <div class="article-body">
             <p>If you work with REST APIs, you will encounter certain JSON patterns over and over again. Recognising these common structures saves significant time when integrating new APIs - you can immediately understand the shape of a response rather than reading through documentation from scratch. This guide covers the most common patterns used by production APIs today, with real examples for each.</p>
@@ -376,8 +382,8 @@
                 Java/Spring Boot, Python, and Node.js/TypeScript, and the sole builder of JSON Keyper. My work is
                 integrating third-party APIs, building REST services, and moving JSON through data pipelines, and
                 I write these guides from the problems that work turns up - payloads that do not match their
-                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about.html">More about me and the project</a>,
-                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact.html">get in touch</a>.</p>
+                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact">get in touch</a>.</p>
             </div>
         </div>
     </article>
@@ -390,11 +396,11 @@
     <nav class="footer-links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/about.html">About</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>

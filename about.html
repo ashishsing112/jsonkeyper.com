@@ -4,18 +4,24 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
     <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <meta name="description" content="Who builds JSON Keyper and why: Ashish Singh, a back-end developer working in Java, Python, and Node.js, on the background behind the tool, how the guides are written, and how the site is funded.">
     <title>About | JSON Keyper</title>
-    <link rel="canonical" href="https://jsonkeyper.com/about.html">
+    <link rel="canonical" href="https://jsonkeyper.com/about">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="About JSON Keyper">
     <meta property="og:description" content="Who builds JSON Keyper and why: Ashish Singh, a back-end developer working in Java, Python, and Node.js, on the background behind the tool, how the guides are written, and how the site is funded.">
-    <meta property="og:url" content="https://jsonkeyper.com/about.html">
+    <meta property="og:url" content="https://jsonkeyper.com/about">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -52,7 +58,7 @@
           "@type": "ListItem",
           "position": 2,
           "name": "About",
-          "item": "https://jsonkeyper.com/about.html"
+          "item": "https://jsonkeyper.com/about"
         }
       ]
     }
@@ -61,15 +67,15 @@
     {
       "@context": "https://schema.org",
       "@type": "AboutPage",
-      "url": "https://jsonkeyper.com/about.html",
+      "url": "https://jsonkeyper.com/about",
       "mainEntity": {
         "@type": "Person",
-        "@id": "https://jsonkeyper.com/about.html#ashish-singh",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
         "name": "Ashish Singh",
         "jobTitle": "Back-end developer",
         "description": "Back-end developer with more than four years of professional experience in Java/Spring Boot, Python, and Node.js/TypeScript, and the builder of JSON Keyper.",
         "knowsAbout": ["JSON", "REST APIs", "API integration", "ETL and data pipelines", "Java", "Spring Boot", "Python", "Node.js", "TypeScript"],
-        "url": "https://jsonkeyper.com/about.html",
+        "url": "https://jsonkeyper.com/about",
         "alumniOf": {
           "@type": "CollegeOrUniversity",
           "name": "SRM Institute of Science and Technology"
@@ -91,9 +97,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/about">About</a></li>
                 </ul>
             </div>
         </div>
@@ -120,7 +126,7 @@
         <li><strong>Building REST services.</strong> Designing the JSON my own services return, and keeping the clients that consume it - typed or not - in step with it as it changes.</li>
         <li><strong>Data pipelines and ETL.</strong> Moving nested JSON into tables, where every array is a decision about rows, and one unexpected field can break a load.</li>
     </ul>
-    <p>Each of those shaped a part of the tool. The first is why it exists at all: before I can write parsing code for an unfamiliar response, I need a full list of what is in it. The second is why it generates <a href="/json-to-typescript.html">TypeScript types</a> that mark optional and nullable fields separately. The third is why the <a href="/json-flattener.html">flattener</a> can collapse array indices into a schema view that pastes straight into a mapping sheet.</p>
+    <p>Each of those shaped a part of the tool. The first is why it exists at all: before I can write parsing code for an unfamiliar response, I need a full list of what is in it. The second is why it generates <a href="/json-to-typescript">TypeScript types</a> that mark optional and nullable fields separately. The third is why the <a href="/json-flattener">flattener</a> can collapse array indices into a schema view that pastes straight into a mapping sheet.</p>
 
     <h2 class="mt-4 mb-3 heading">Where I've Worked</h2>
     <p>I started in software testing in 2020 and moved to development in November 2021. The four development roles since then have been in quite different domains, which is where most of the JSON problems on this site come from:</p>
@@ -136,10 +142,10 @@
     <h2 class="mt-4 mb-3 heading">Problems I've Had to Solve</h2>
     <p>The guides and features on this site come from a short list of problems I have hit in real systems and had to fix:</p>
     <ul>
-        <li><strong>An upstream API changing shape.</strong> A field renamed, removed, or retyped by a provider, discovered only when parsing or a data load broke. Flattening a response to its key paths and diffing it against the last known shape is the quickest way I know to see exactly what changed - see the <a href="/json-flattener.html">flattener</a>.</li>
-        <li><strong>Null versus missing.</strong> Code that treated an absent field and a <code>null</code> field as the same thing, or crashed on one of them. The <a href="/blog/null-missing-unknown-fields.html">null, missing, and unknown fields comparison</a> tests how Jackson, Pydantic, and Zod handle each case.</li>
-        <li><strong>Unknown-property failures.</strong> A deserializer failing on a new field an API had added without notice. The same comparison shows which defaults throw, and <a href="/blog/jackson-vs-gson-vs-moshi.html">choosing a JSON library on the JVM</a> covers how to configure it.</li>
-        <li><strong>Payloads too large for memory.</strong> A response or file big enough to exhaust memory or time out. <a href="/blog/processing-large-json-files.html">Processing large JSON files</a> measures what each approach actually costs.</li>
+        <li><strong>An upstream API changing shape.</strong> A field renamed, removed, or retyped by a provider, discovered only when parsing or a data load broke. Flattening a response to its key paths and diffing it against the last known shape is the quickest way I know to see exactly what changed - see the <a href="/json-flattener">flattener</a>.</li>
+        <li><strong>Null versus missing.</strong> Code that treated an absent field and a <code>null</code> field as the same thing, or crashed on one of them. The <a href="/blog/null-missing-unknown-fields">null, missing, and unknown fields comparison</a> tests how Jackson, Pydantic, and Zod handle each case.</li>
+        <li><strong>Unknown-property failures.</strong> A deserializer failing on a new field an API had added without notice. The same comparison shows which defaults throw, and <a href="/blog/jackson-vs-gson-vs-moshi">choosing a JSON library on the JVM</a> covers how to configure it.</li>
+        <li><strong>Payloads too large for memory.</strong> A response or file big enough to exhaust memory or time out. <a href="/blog/processing-large-json-files">Processing large JSON files</a> measures what each approach actually costs.</li>
     </ul>
 
     <h2 class="mt-4 mb-3 heading">Why I Built It</h2>
@@ -147,36 +153,36 @@
     <p>I also wanted to build something real on the front end, outside the server-side work I do every day. JSON Keyper is plain HTML, CSS, and JavaScript with no framework and no build step, which keeps it fast and means the whole tool can be read in about 600 lines of <a href="https://github.com/ashishsing112/jsonkeyper.com/blob/main/script.js" rel="noopener">script.js</a>.</p>
 
     <h2 class="mt-4 mb-3 heading">How the Site Has Grown</h2>
-    <p>The site has been online since October 2024, and it has grown the way most tools do - one missing case at a time. A few milestones, all recorded in the <a href="/changelog.html">changelog</a>:</p>
+    <p>The site has been online since October 2024, and it has grown the way most tools do - one missing case at a time. A few milestones, all recorded in the <a href="/changelog">changelog</a>:</p>
     <ul>
         <li><strong>October 2024</strong> - the first version: paste JSON, get a list of dot-notation key paths.</li>
         <li><strong>June 2026</strong> - a redesign, and the first guides on the <a href="/blog/">blog</a>.</li>
         <li><strong>August 2026</strong> - six output formats instead of one, array-index collapsing, structure statistics, and parse errors that give a line and column.</li>
-        <li><strong>September 2026</strong> - the Execute cURL tab for fetching live API responses, the four format pages with the tool built in, TypeScript output that distinguishes missing fields from <code>null</code> ones, and a <a href="/json-formatter.html">JSON formatter</a> that never changes a value.</li>
+        <li><strong>September 2026</strong> - the Execute cURL tab for fetching live API responses, the four format pages with the tool built in, TypeScript output that distinguishes missing fields from <code>null</code> ones, and a <a href="/json-formatter">JSON formatter</a> that never changes a value.</li>
     </ul>
     <p>The source code and every change to it are public on <a href="https://github.com/ashishsing112/jsonkeyper.com" rel="noopener">GitHub</a>.</p>
 
     <h2 class="mt-4 mb-3 heading">How I Write the Guides</h2>
     <p>There is a lot of JSON advice online that is repeated rather than checked. I try to hold the guides here to a few rules:</p>
     <ul>
-        <li><strong>Measure instead of asserting.</strong> The <a href="/blog/processing-large-json-files.html">large-files guide</a> reports peak memory for each approach instead of repeating that jq streams (plain jq does not). The <a href="/blog/json-vs-xml.html">JSON vs XML comparison</a> measures size and parse time, and its <a href="https://github.com/ashishsing112/jsonkeyper.com/tree/main/tools/json-vs-xml-bench" rel="noopener">scripts are in the repository</a> so you can rerun them.</li>
-        <li><strong>Say what it ran on.</strong> Where a guide reports behaviour or numbers, it names the versions and the setup - for example, the edge-case table in <a href="/blog/what-is-json.html">What is JSON?</a> was run in Node.js 24 and Python 3.12, so you can tell when a result may have changed.</li>
-        <li><strong>Say when the answer is "use something else".</strong> Every tool page has a limitations section, and the <a href="/blog/json-tools-for-developers.html">tools guide</a> discloses that JSON Keyper is mine and recommends other tools where they fit better.</li>
-        <li><strong>Correct in the open.</strong> When a guide is substantially revised, its date line says so and the change is listed in the <a href="/changelog.html">changelog</a>.</li>
+        <li><strong>Measure instead of asserting.</strong> The <a href="/blog/processing-large-json-files">large-files guide</a> reports peak memory for each approach instead of repeating that jq streams (plain jq does not). The <a href="/blog/json-vs-xml">JSON vs XML comparison</a> measures size and parse time, and its <a href="https://github.com/ashishsing112/jsonkeyper.com/tree/main/tools/json-vs-xml-bench" rel="noopener">scripts are in the repository</a> so you can rerun them.</li>
+        <li><strong>Say what it ran on.</strong> Where a guide reports behaviour or numbers, it names the versions and the setup - for example, the edge-case table in <a href="/blog/what-is-json">What is JSON?</a> was run in Node.js 24 and Python 3.12, so you can tell when a result may have changed.</li>
+        <li><strong>Say when the answer is "use something else".</strong> Every tool page has a limitations section, and the <a href="/blog/json-tools-for-developers">tools guide</a> discloses that JSON Keyper is mine and recommends other tools where they fit better.</li>
+        <li><strong>Correct in the open.</strong> When a guide is substantially revised, its date line says so and the change is listed in the <a href="/changelog">changelog</a>.</li>
     </ul>
-    <p>The guides follow the work: <a href="/blog/jackson-vs-gson-vs-moshi.html">choosing a JSON library on the JVM</a> and <a href="/blog/working-with-json-in-python.html">JSON in Python</a> from the service side, <a href="/blog/json-in-rest-apis.html">common REST API structures</a> and <a href="/blog/cors-explained.html">CORS</a> from the integration side, and <a href="/blog/processing-large-json-files.html">large files</a> and <a href="/blog/understanding-nested-json.html">nested data</a> from the pipeline side.</p>
+    <p>The guides follow the work: <a href="/blog/jackson-vs-gson-vs-moshi">choosing a JSON library on the JVM</a> and <a href="/blog/working-with-json-in-python">JSON in Python</a> from the service side, <a href="/blog/json-in-rest-apis">common REST API structures</a> and <a href="/blog/cors-explained">CORS</a> from the integration side, and <a href="/blog/processing-large-json-files">large files</a> and <a href="/blog/understanding-nested-json">nested data</a> from the pipeline side.</p>
 
     <h2 class="mt-4 mb-3 heading">How It Handles Your Data</h2>
-    <p>JSON you paste is parsed by JavaScript in your own browser tab and never sent anywhere - you can disconnect from the internet after the page loads and it keeps working. The Execute cURL tab is the one exception: browsers block cross-origin requests, so it routes your request through a proxy I run to reach the API you named. The proxy does not log or store anything. The <a href="/privacy.html">privacy policy</a> has the details, including what the site's analytics and advertising do.</p>
+    <p>JSON you paste is parsed by JavaScript in your own browser tab and never sent anywhere - you can disconnect from the internet after the page loads and it keeps working. The Execute cURL tab is the one exception: browsers block cross-origin requests, so it routes your request through a proxy I run to reach the API you named. The proxy does not log or store anything. The <a href="/privacy">privacy policy</a> has the details, including what the site's analytics and advertising do.</p>
 
     <h2 class="mt-4 mb-3 heading">What It Does Not Do</h2>
-    <p>The tool is deliberately narrow. Type inference describes the sample you paste, not the API's real contract. Very large documents can exhaust a browser tab, because the full path list is held in memory. And it checks that JSON parses, not that it matches a schema - the <a href="/blog/json-schema-guide.html">JSON Schema guide</a> covers that side.</p>
+    <p>The tool is deliberately narrow. Type inference describes the sample you paste, not the API's real contract. Very large documents can exhaust a browser tab, because the full path list is held in memory. And it checks that JSON parses, not that it matches a schema - the <a href="/blog/json-schema-guide">JSON Schema guide</a> covers that side.</p>
 
     <h2 class="mt-4 mb-3 heading">How the Site Is Funded</h2>
     <p>JSON Keyper is free and needs no account. It is supported by advertising and by anyone who chooses to <a href="https://github.com/sponsors/ashishsing112" rel="noopener">sponsor it on GitHub</a>. Neither affects what the guides recommend.</p>
 
     <h2 class="mt-4 mb-3 heading">Get in Touch</h2>
-    <p>If the tool gets a document wrong, or a guide has a mistake, I would like to know. Use the <a href="/contact.html">contact page</a>, email <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>, or open an issue on <a href="https://github.com/ashishsing112/jsonkeyper.com/issues" rel="noopener">GitHub</a>.</p>
+    <p>If the tool gets a document wrong, or a guide has a mistake, I would like to know. Use the <a href="/contact">contact page</a>, email <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>, or open an issue on <a href="https://github.com/ashishsing112/jsonkeyper.com/issues" rel="noopener">GitHub</a>.</p>
 
     <div class="author-box">
         <div class="author-avatar">AS</div>
@@ -198,11 +204,11 @@
     <nav class="footer-links">
         <a href="/">Home</a>
         <a href="/blog/">Blog</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-        <a href="/about.html">About</a>
-        <a href="/changelog.html">Changelog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
