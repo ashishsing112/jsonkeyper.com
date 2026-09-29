@@ -852,3 +852,10 @@ textarea.drag-active {
 .limitation-box p:last-child {
     margin-bottom: 0;
 }
+
+/* Note under the tool embedded on the format landing pages. */
+.tool-note {
+    margin: 12px 4px 0;
+    color: #777;
+    font-size: 13px;
+}

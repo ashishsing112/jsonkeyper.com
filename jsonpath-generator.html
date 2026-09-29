@@ -39,38 +39,6 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is the difference between dot notation and JSONPath?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Dot notation describes where a key sits in the document. JSONPath is a query language: expressions start with a $ root marker and can use wildcards, so a single expression can match many values at once."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "When are square brackets used instead of a dot?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A key that is not a bare identifier - one containing a dot, a space, a hyphen, or starting with a digit - is emitted in bracket-with-quotes form so the expression stays valid."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is my JSON uploaded to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Everything runs in your browser using JavaScript. Your JSON never leaves your machine."
-          }
-        }
-      ]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         {
@@ -118,109 +86,289 @@
     </ol>
 </nav>
 
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSONPath Expression Generator</h1>
+        <p class="mb-3 lead-copy">Paste a JSON document and get a JSONPath expression for every field in it. With <strong>Collapse array indices</strong> ticked, array positions become <code>[*]</code> wildcards; untick it to address each element by index. Keys that are not plain identifiers are quoted in bracket form automatically. Click <strong>Load this example</strong> to run it on the Kubernetes pod list below.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Input JSON</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
+                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                </div>
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Generate JSONPath</button>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="io-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <option value="paths">Key paths (dot notation)</option>
+                        <option value="typed">Key paths with value types</option>
+                        <option value="unique">Unique key names only</option>
+                        <option value="jsonpath" selected>JSONPath expressions</option>
+                        <option value="tree">Indented tree</option>
+                        <option value="typescript">TypeScript interface</option>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays" checked>
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+        <p class="tool-note">Runs entirely in your browser - the JSON you paste is never uploaded. To fetch a live API response from a curl command instead, use the <a href="/">full tool on the homepage</a>.</p>
+    </div>
+</section>
 
 <div class="container-shadow article-container">
     <article>
-        <h1 class="heading">JSONPath Expression Generator</h1>
-        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
-
         <div class="article-body">
-            <p>Paste a JSON document and get a JSONPath expression for every field it contains. Array positions can be emitted either as concrete indices or as a <code>[*]</code> wildcard, and keys that need quoting are written in bracket form automatically. Everything runs in your browser.</p>
-
-            <div class="cta-box">
-                <h3>Generate JSONPath expressions</h3>
-                <p>Opens the tool with the JSONPath output format already selected.</p>
-                <a href="/?format=jsonpath" class="btn btn-success btn-lg">Open the generator</a>
-            </div>
-
-            <h2>A worked example</h2>
-            <p>Given this order payload:</p>
+            <h2>A worked example: a Kubernetes pod list</h2>
+            <p>This is a trimmed <code>kubectl get pods -o json</code> response with two pods - a web server that is running, and a worker with a log-shipping sidecar that is stuck in <code>Pending</code> after four restarts. Pod lists are a good test for a JSONPath generator: they nest arrays inside arrays, and their labels use keys like <code>app.kubernetes.io/name</code> that break naive dot notation.</p>
             <pre><code>{
-  "user": {
-    "name": "Ada Lovelace",
-    "address": { "city": "London", "country": { "code": "GB" } },
-    "roles": ["admin", "engineer"]
-  },
-  "orders": [
-    { "orderId": "ord_1001", "total": 249.99 },
-    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "metadata": {
+        "name": "web-7d4b9c-x2k8p",
+        "namespace": "shop",
+        "labels": { "app.kubernetes.io/name": "web", "tier": "frontend" }
+      },
+      "spec": {
+        "nodeName": "node-a",
+        "containers": [
+          { "name": "web", "image": "shop/web:2.4.1", "ports": [{ "containerPort": 8080 }] }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.1.4.17",
+        "containerStatuses": [{ "name": "web", "ready": true, "restartCount": 0 }]
+      }
+    },
+    {
+      "metadata": {
+        "name": "worker-5f6c8-9qzv4",
+        "namespace": "shop",
+        "labels": { "app.kubernetes.io/name": "worker", "tier": "backend" }
+      },
+      "spec": {
+        "nodeName": "node-b",
+        "containers": [
+          { "name": "worker", "image": "shop/worker:2.4.1" },
+          { "name": "log-shipper", "image": "fluent/fluent-bit:3.1" }
+        ]
+      },
+      "status": {
+        "phase": "Pending",
+        "containerStatuses": [{ "name": "worker", "ready": false, "restartCount": 4 }]
+      }
+    }
   ]
 }</code></pre>
 
-            <p>With <strong>Collapse array indices</strong> enabled, you get wildcard expressions - one per distinct field:</p>
-            <pre><code>$.user
-$.user.name
-$.user.address
-$.user.address.city
-$.user.address.country
-$.user.address.country.code
-$.user.roles
-$.orders
-$.orders[*].orderId
-$.orders[*].total
-$.orders[*].giftMessage</code></pre>
+            <p>With indices collapsed, the generator returns one wildcard expression per distinct field:</p>
+            <pre><code>$.apiVersion
+$.kind
+$.items
+$.items[*].metadata
+$.items[*].metadata.name
+$.items[*].metadata.namespace
+$.items[*].metadata.labels
+$.items[*].metadata.labels['app.kubernetes.io/name']
+$.items[*].metadata.labels.tier
+$.items[*].spec
+$.items[*].spec.nodeName
+$.items[*].spec.containers
+$.items[*].spec.containers[*].name
+$.items[*].spec.containers[*].image
+$.items[*].spec.containers[*].ports
+$.items[*].spec.containers[*].ports[*].containerPort
+$.items[*].status
+$.items[*].status.phase
+$.items[*].status.podIP
+$.items[*].status.containerStatuses
+$.items[*].status.containerStatuses[*].name
+$.items[*].status.containerStatuses[*].ready
+$.items[*].status.containerStatuses[*].restartCount</code></pre>
 
-            <p>With collapsing turned off, each array element is addressed by its literal index instead:</p>
-            <pre><code>$.user
-$.user.name
-$.user.address
-$.user.address.city
-$.user.address.country
-$.user.address.country.code
-$.user.roles
-$.orders
-$.orders[0].orderId
-$.orders[0].total
-$.orders[1].orderId
-$.orders[1].total
-$.orders[1].giftMessage</code></pre>
+            <p>Three things in that list are worth a closer look.</p>
+            <ul>
+                <li><strong>The label key is quoted.</strong> <code>$.items[*].metadata.labels.app.kubernetes.io/name</code> would walk into a key called <code>app</code>, then <code>kubernetes</code>, and so on, and match nothing. The bracket form <code>['app.kubernetes.io/name']</code> reads one key whose name contains dots and a slash.</li>
+                <li><strong>Wildcards stack.</strong> <code>$.items[*].spec.containers[*].image</code> crosses two arrays, so it returns every image of every container of every pod - three values here, because the worker pod has a sidecar.</li>
+                <li><strong>Fields that exist on only some elements still appear.</strong> <code>podIP</code> is listed because the running pod has one. Evaluated against this document, it returns a single value, not two - a <code>Pending</code> pod has not been given an IP yet, and a wildcard query simply skips elements where the field is missing.</li>
+            </ul>
+            <p>Every expression above was evaluated against this document with two libraries - <code>jsonpath-plus</code> 11.1 and the RFC 9535 implementation <code>jsonpath-rfc9535</code> 1.3 - and both returned the same results.</p>
 
-            <p>The wildcard form is what you usually want when writing a query. The indexed form is more useful when you are inspecting one specific record and need the exact address of a value.</p>
+            <h2>Wildcards or literal indices?</h2>
+            <p>Untick <strong>Collapse array indices</strong> and each element gets its own address instead: <code>$.items[0].metadata.name</code>, <code>$.items[1].spec.containers[1].image</code>, and so on. Use the wildcard form when you are writing a query that should work on any response. Use the indexed form when you are debugging one specific record and need the exact location of a value - for instance, to confirm that it is the second container of the second pod that has the problem.</p>
+
+            <h2>Using the output with the tools you already have</h2>
+            <p>JSONPath has been around since 2007, but it was only standardised in February 2024 as RFC 9535. Most tools you will meet were written before that, and each speaks a slightly different dialect. The generated expressions use the most portable subset - dot members, quoted bracket members, <code>[*]</code>, and numeric indices - but the syntax around them differs:</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Tool</th><th>The same query</th><th>What changes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>JSONPath libraries</td><td><code>$.items[*].metadata.name</code></td><td>Nothing - use the generated expression as is.</td></tr>
+                        <tr><td>kubectl</td><td><code>kubectl get pods -o jsonpath='{.items[*].metadata.name}'</code></td><td>Wrapped in <code>{}</code>, and the leading <code>$</code> is optional.</td></tr>
+                        <tr><td>kubectl, dotted key</td><td><code>'{.items[*].metadata.labels.app\.kubernetes\.io/name}'</code></td><td>kubectl escapes dots in a key with a backslash rather than quoting it.</td></tr>
+                        <tr><td>jq</td><td><code>.items[].metadata.labels["app.kubernetes.io/name"]</code></td><td>jq is not JSONPath: no <code>$</code>, <code>[]</code> instead of <code>[*]</code>, and double quotes.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The jq column is worth checking for yourself - against the example above, that command prints <code>web</code> and <code>worker</code>, one per line.</p>
+
+            <h2>Adding a filter by hand</h2>
+            <p>A generator can tell you where fields are, but not which records you care about. For that you add a filter. To get the names of only the running pods:</p>
+            <pre><code># RFC 9535 syntax
+$.items[?@.status.phase == 'Running'].metadata.name
+
+# Older syntax, from the original 2007 JSONPath article
+$.items[?(@.status.phase == 'Running')].metadata.name</code></pre>
+            <p>Both return <code>["web-7d4b9c-x2k8p"]</code> in an RFC 9535 implementation. The trap is going the other way. Run the RFC form through <code>jsonpath-plus</code> 11.1, a popular JavaScript library that predates the standard, and it does not raise an error - it returns an empty array. A query that silently matches nothing looks exactly like data that has nothing to match, so if a filter comes back empty, try the parenthesised form before concluding the records are not there.</p>
 
             <h2>Dot notation vs JSONPath</h2>
-            <p>These are related but not the same thing, and the distinction matters:</p>
-            <ul>
-                <li><strong>Dot notation</strong> (<code>orders[0].total</code>) describes where a key sits in the document. It is a description of structure.</li>
-                <li><strong>JSONPath</strong> (<code>$.orders[*].total</code>) is a query language. The leading <code>$</code> marks the document root, and wildcards let one expression match many values at once.</li>
-            </ul>
-            <p>JSONPath is supported by libraries in most languages - <code>jsonpath</code> and <code>jsonpath-plus</code> for JavaScript, <code>jsonpath-ng</code> for Python - and appears in tools such as Kubernetes <code>kubectl -o jsonpath</code>, Azure CLI queries, and various API gateways.</p>
+            <p>These are related but not the same thing. Dot notation (<code>items[0].metadata.name</code>) describes where a value sits, and is what you write in JavaScript or Python source. JSONPath (<code>$.items[*].metadata.name</code>) is a query language: <code>$</code> marks the document root, and one expression can match many values at once. If you want accessor paths to paste into code rather than queries, use the <a href="/json-flattener.html">dot-notation flattener</a> instead.</p>
 
-            <h2>Keys that need bracket notation</h2>
-            <p>A key is only written after a dot when it is a bare identifier. Anything else - a key containing a dot, a space, or a hyphen, or one starting with a digit - is emitted in bracket-with-quotes form so the expression stays valid:</p>
-            <pre><code>$.user.name              a bare identifier
-$['user.name']           a key containing a literal dot
-$['first name']          a key containing a space
-$['2fa-enabled']         starts with a digit, contains a hyphen</code></pre>
-            <p>This matters because <code>$.user.name</code> and <code>$['user.name']</code> address completely different things. The first walks two levels down; the second reads a single key whose name happens to contain a dot.</p>
-
-            <h2>How to use it</h2>
-            <ol>
-                <li>Copy a JSON response from your API client or browser DevTools</li>
-                <li>Open the <a href="/?format=jsonpath">generator</a> - the JSONPath format is preselected</li>
-                <li>Paste into the left box, or drag a <code>.json</code> file onto it</li>
-                <li>Toggle <strong>Collapse array indices</strong> depending on whether you want <code>[*]</code> or literal indices</li>
-                <li>Click <strong>Extract Keys</strong>, then copy or download the result</li>
-            </ol>
+            <h2>How the generator decides when to quote a key</h2>
+            <p>A key is written after a dot only when it looks like an identifier: letters, digits, <code>_</code> and <code>$</code>, not starting with a digit. Anything else is written as <code>['key']</code>, with any single quote in the key escaped. That is stricter than RFC 9535 requires - the standard also accepts non-ASCII letters after a dot - but it keeps the output valid in older libraries that do not.</p>
+            <pre><code>$.metadata.name                          an identifier
+$.metadata.labels['app.kubernetes.io/name']   contains dots and a slash
+$.headers['content-type']                a hyphen
+$.scores['2fa']                          starts with a digit</code></pre>
 
             <h2>Other output formats</h2>
             <ul>
+                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - accessor paths for code and field mappings</li>
                 <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
-                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a></li>
                 <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a></li>
-                <li><a href="/?format=typed">Key paths with value types</a></li>
-                <li><a href="/?format=tree">Indented tree</a></li>
             </ul>
 
             <h2>Further reading</h2>
             <ul>
                 <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
-                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/processing-large-json-files.html">Processing large JSON files without running out of memory</a> - when a jq query needs <code>--stream</code></li>
                 <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a></li>
             </ul>
         </div>
     </article>
 </div>
 
+
+<script type="application/json" id="pageSample">
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "metadata": {
+        "name": "web-7d4b9c-x2k8p",
+        "namespace": "shop",
+        "labels": {
+          "app.kubernetes.io/name": "web",
+          "tier": "frontend"
+        }
+      },
+      "spec": {
+        "nodeName": "node-a",
+        "containers": [
+          {
+            "name": "web",
+            "image": "shop/web:2.4.1",
+            "ports": [
+              {
+                "containerPort": 8080
+              }
+            ]
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running",
+        "podIP": "10.1.4.17",
+        "containerStatuses": [
+          {
+            "name": "web",
+            "ready": true,
+            "restartCount": 0
+          }
+        ]
+      }
+    },
+    {
+      "metadata": {
+        "name": "worker-5f6c8-9qzv4",
+        "namespace": "shop",
+        "labels": {
+          "app.kubernetes.io/name": "worker",
+          "tier": "backend"
+        }
+      },
+      "spec": {
+        "nodeName": "node-b",
+        "containers": [
+          {
+            "name": "worker",
+            "image": "shop/worker:2.4.1"
+          },
+          {
+            "name": "log-shipper",
+            "image": "fluent/fluent-bit:3.1"
+          }
+        ]
+      },
+      "status": {
+        "phase": "Pending",
+        "containerStatuses": [
+          {
+            "name": "worker",
+            "ready": false,
+            "restartCount": 4
+          }
+        ]
+      }
+    }
+  ]
+}
+</script>
 </main>
 
 <footer>
@@ -232,10 +380,18 @@ $['2fa-enabled']         starts with a digit, contains a hyphen</code></pre>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
 
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
 <script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
 </body>
 </html>

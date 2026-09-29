@@ -144,30 +144,28 @@ function formatTree(nodes) {
     }).join('\n');
 }
 
-/* TypeScript interface generation. Objects inside an array are merged so that
-   a key missing from some elements is emitted as optional. */
+/* TypeScript interface generation. Every value seen at a position is kept, not
+   just the first, so that objects inside an array merge into one shape: a key
+   missing from some elements is emitted as optional, a key that is null in some
+   elements gains `| null`, and nested arrays pool their elements. */
 
-function mergeArrayObjects(items) {
-    const shape = {};
-    const counts = {};
+function mergeObjects(items) {
+    const values = {};
     for (const item of items) {
         for (const key of Object.keys(item)) {
-            counts[key] = (counts[key] || 0) + 1;
-            if (!(key in shape) || shape[key] === null || shape[key] === undefined) {
-                shape[key] = item[key];
-            }
+            (values[key] = values[key] || []).push(item[key]);
         }
     }
-    const optional = new Set(Object.keys(counts).filter(k => counts[k] < items.length));
-    return { shape: shape, optional: optional };
+    const optional = new Set(Object.keys(values).filter(k => values[k].length < items.length));
+    return { values: values, optional: optional };
 }
 
 function tsKeyName(key) {
     return isBareKey(key) ? key : JSON.stringify(key);
 }
 
-function tsObjectBody(shape, optional, indent) {
-    const keys = Object.keys(shape);
+function tsObjectBody(values, optional, indent) {
+    const keys = Object.keys(values);
     if (!keys.length) {
         return 'Record<string, never>';
     }
@@ -175,41 +173,50 @@ function tsObjectBody(shape, optional, indent) {
     const closePad = '  '.repeat(indent);
     const lines = keys.map(key => {
         const mark = optional.has(key) ? '?' : '';
-        return pad + tsKeyName(key) + mark + ': ' + tsType(shape[key], indent + 1) + ';';
+        return pad + tsKeyName(key) + mark + ': ' + tsAlternatives(values[key], indent + 1).join(' | ') + ';';
     });
     return '{\n' + lines.join('\n') + '\n' + closePad + '}';
 }
 
-function tsType(value, indent) {
-    const type = getType(value);
-    if (type === 'string' || type === 'number' || type === 'boolean') {
-        return type;
+function tsArray(items, indent) {
+    if (!items.length) {
+        return 'unknown[]';
     }
-    if (type === 'null') {
-        return 'null';
-    }
-    if (type === 'array') {
-        if (!value.length) {
-            return 'unknown[]';
+    const inner = tsAlternatives(items, indent);
+    return (inner.length === 1 ? inner[0] : '(' + inner.join(' | ') + ')') + '[]';
+}
+
+// The distinct types observed across a set of values at one position. Objects
+// merge into a single shape and arrays pool their elements, so a position
+// yields at most one object type and one array type.
+function tsAlternatives(values, indent) {
+    const objects = values.filter(v => getType(v) === 'object');
+    const arrays = values.filter(v => getType(v) === 'array');
+    const out = [];
+    for (const value of values) {
+        const type = getType(value);
+        if (type === 'string' || type === 'number' || type === 'boolean') {
+            out.push(type);
         }
-        if (value.every(item => getType(item) === 'object')) {
-            const merged = mergeArrayObjects(value);
-            return tsObjectBody(merged.shape, merged.optional, indent) + '[]';
-        }
-        const inner = dedupe(value.map(item => tsType(item, indent)));
-        return (inner.length === 1 ? inner[0] : '(' + inner.join(' | ') + ')') + '[]';
     }
-    if (type === 'object') {
-        return tsObjectBody(value, new Set(), indent);
+    if (objects.length) {
+        const merged = mergeObjects(objects);
+        out.push(tsObjectBody(merged.values, merged.optional, indent));
     }
-    return 'unknown';
+    if (arrays.length) {
+        out.push(tsArray([].concat(...arrays), indent));
+    }
+    if (values.some(v => v === null)) {
+        out.push('null');
+    }
+    return dedupe(out);
 }
 
 function formatTypeScript(root) {
     if (getType(root) === 'array') {
-        return 'type Root = ' + tsType(root, 0) + ';';
+        return 'type Root = ' + tsArray(root, 0) + ';';
     }
-    return 'interface Root ' + tsObjectBody(root, new Set(), 0);
+    return 'interface Root ' + tsObjectBody(mergeObjects([root]).values, new Set(), 0);
 }
 
 /* ---------------------------------------------------------------------------
@@ -494,8 +501,12 @@ const SAMPLE_JSON = {
     "meta": { "generatedAt": "2026-08-05T09:30:00Z", "version": "2.1" }
 };
 
+// Tool pages embed their own example as <script type="application/json"
+// id="pageSample">, so each page demonstrates the payload its text discusses.
 function loadSample() {
-    document.getElementById('textbox1').value = JSON.stringify(SAMPLE_JSON, null, 2);
+    const own = document.getElementById('pageSample');
+    const sample = own ? JSON.parse(own.textContent) : SAMPLE_JSON;
+    document.getElementById('textbox1').value = JSON.stringify(sample, null, 2);
     handleSubmit();
 }
 

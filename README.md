@@ -41,7 +41,10 @@ Alongside those:
 
 The TypeScript generator merges objects across an array and marks any key absent
 from some elements as optional, so a `giftMessage` present on only one of two
-orders is emitted as `giftMessage?: string`.
+orders is emitted as `giftMessage?: string`. A key that is present but `null` on
+some elements stays required and gains `| null` instead, and arrays nested in
+those elements pool their items, so an empty `labels: []` on one record does not
+hide the element type seen on another.
 
 ### Known limitations
 
@@ -68,16 +71,19 @@ curl-parser.js            Self-contained curl command string parser, no dependen
 curl-proxy.js             Execute cURL tab: proxy request/response UI, wired to curl-parser.js
 styles.css                All custom styling; Bootstrap 4.5.2 CSS is loaded from a CDN
 
-json-flattener.html       Landing page: dot-notation key paths
-json-to-typescript.html   Landing page: TypeScript interface generation
-jsonpath-generator.html   Landing page: JSONPath expressions
-json-tree-viewer.html     Landing page: indented structural tree
-                          Each deep-links into the tool via /?format=<name>
+json-flattener.html       Tool page: dot-notation key paths (payment webhook example)
+json-to-typescript.html   Tool page: TypeScript generation (issue-tracker example)
+jsonpath-generator.html   Tool page: JSONPath expressions (Kubernetes pod list example)
+json-tree-viewer.html     Tool page: indented structural tree (GeoJSON example)
+                          Each embeds the tool with its format preselected, and
+                          its own sample in <script id="pageSample">, which
+                          loadSample() prefers over the homepage sample
 
 about.html                Project background, capabilities, limitations, author
 contact.html              Contact form (composes a mailto:)
 privacy.html              Privacy policy
 terms.html                Terms of service
+changelog.html            User-facing change history, newest first
 404.html                  Not-found page; GitHub Pages serves it automatically
 blog/index.html           Article listing
 blog/*.html               Ten long-form guides on working with JSON

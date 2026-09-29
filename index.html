@@ -113,7 +113,7 @@
           "name": "Does the TypeScript interface generator handle optional fields?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, giftMessage appears on only one of the two orders, so it is generated as giftMessage?: string."
+            "text": "Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, giftMessage appears on only one of the two orders, so it is generated as giftMessage?: string. A key that is present but null on some elements is kept required and gains | null instead - the sample's trackingCode is generated as trackingCode: string | null."
           }
         },
         {
@@ -585,7 +585,7 @@ orders[].giftMessage        string</code></pre>
 
     <div class="faq-item">
         <h3>Does the TypeScript interface generator handle optional fields?</h3>
-        <p>Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, <code>giftMessage</code> appears on only one of the two orders, so it is generated as <code>giftMessage?: string</code>.</p>
+        <p>Yes. When an array contains several objects, JSON Keyper merges their shapes and marks any key that is absent from some elements with a question mark. In the built-in sample, <code>giftMessage</code> appears on only one of the two orders, so it is generated as <code>giftMessage?: string</code>. A key that is present but <code>null</code> on some elements stays required and gains <code>| null</code> instead - the sample's <code>trackingCode</code> is generated as <code>trackingCode: string | null</code>. The <a href="/json-to-typescript.html">JSON to TypeScript page</a> explains why that distinction matters.</p>
     </div>
 
     <div class="faq-item">
@@ -639,6 +639,7 @@ orders[].giftMessage        string</code></pre>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
