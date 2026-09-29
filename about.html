@@ -8,13 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
-    <meta name="description" content="Who builds JSON Keyper and why: a one-person, open-source JSON key extractor by back-end developer Ashish Singh, with how it handles your data and what it does not do.">
+    <meta name="description" content="Who builds JSON Keyper and why: Ashish Singh, a back-end developer working in Java, Python, and Node.js, on the background behind the tool, how the guides are written, and how the site is funded.">
     <title>About | JSON Keyper</title>
     <link rel="canonical" href="https://jsonkeyper.com/about.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JSON Keyper">
     <meta property="og:title" content="About JSON Keyper">
-    <meta property="og:description" content="Who builds JSON Keyper and why: a one-person, open-source JSON key extractor by back-end developer Ashish Singh, with how it handles your data and what it does not do.">
+    <meta property="og:description" content="Who builds JSON Keyper and why: Ashish Singh, a back-end developer working in Java, Python, and Node.js, on the background behind the tool, how the guides are written, and how the site is funded.">
     <meta property="og:url" content="https://jsonkeyper.com/about.html">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -23,7 +23,7 @@
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="About JSON Keyper">
-    <meta name="twitter:description" content="Who builds JSON Keyper and why: a one-person, open-source JSON key extractor by back-end developer Ashish Singh, with how it handles your data and what it does not do.">
+    <meta name="twitter:description" content="Who builds JSON Keyper and why: Ashish Singh, a back-end developer working in Java, Python, and Node.js, on the background behind the tool, how the guides are written, and how the site is funded.">
     <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -67,6 +67,8 @@
         "@id": "https://jsonkeyper.com/about.html#ashish-singh",
         "name": "Ashish Singh",
         "jobTitle": "Back-end developer",
+        "description": "Back-end developer with more than four years of professional experience in Java/Spring Boot, Python, and Node.js/TypeScript, and the builder of JSON Keyper.",
+        "knowsAbout": ["JSON", "REST APIs", "API integration", "ETL and data pipelines", "Java", "Spring Boot", "Python", "Node.js", "TypeScript"],
         "url": "https://jsonkeyper.com/about.html",
         "sameAs": ["https://github.com/ashishsing112"]
       }
@@ -105,42 +107,61 @@
 
 <div class="container-shadow about-container">
     <h1 class="heading">About JSON Keyper</h1>
-    <p>I'm Ashish Singh, a back-end developer. I built JSON Keyper because a large part of my working day is spent reading API responses I did not design, and I kept writing the same throwaway script to list every key path in them. This site is that script made public, plus the notes I have written up whenever a JSON problem cost me real time.</p>
-    <p>It is a one-person project. There is no company behind it and no team - when the contact page says someone will reply, that someone is me.</p>
+    <p>I'm Ashish Singh, a back-end developer, and I build and write everything on this site. JSON Keyper is a free tool for mapping the structure of JSON documents, plus a set of guides on the JSON problems I have spent real time on. It is a one-person project: there is no company behind it and no team, and when the contact page says someone will reply, that someone is me.</p>
 
-    <h2 class="mt-4 mb-3 heading">How It Started</h2>
-    <p>JSON Keyper began in October 2024 as a deliberate stretch: I wanted to build something useful on the front end, outside the server-side work I was comfortable with. The first version did one thing - paste JSON, get a list of dot-notation paths. Features have been added as I hit cases it did not handle: arrays that needed collapsing into a schema view, keys containing dots that broke dot notation, TypeScript output for bootstrapping API clients, and an Execute cURL tab for when the response is easier to fetch than to copy.</p>
-    <p>The source is public on <a href="https://github.com/ashishsing112/jsonkeyper.com" rel="noopener">GitHub</a>, and every change is listed on the <a href="/changelog.html">changelog</a>.</p>
-
-    <h2 class="mt-4 mb-3 heading">What the Tool Does</h2>
-    <p>Paste a JSON document and JSON Keyper walks the whole structure, however deeply it nests, and gives you every key path in it. The same analysis can be shown six ways:</p>
+    <h2 class="mt-4 mb-3 heading">My Background</h2>
+    <p>I have worked professionally as a back-end developer for more than four years, mostly in <strong>Java with Spring Boot</strong>, <strong>Python</strong>, and <strong>Node.js with TypeScript</strong>. Almost all of that work involves JSON, in three recurring shapes:</p>
     <ul>
-        <li><strong>Key paths</strong> in dot notation, optionally with array indices collapsed so <code>items[0].sku</code> and <code>items[1].sku</code> become a single <code>items[].sku</code> - see <a href="/json-flattener.html">Flatten JSON</a>.</li>
-        <li><strong>Key paths with value types</strong>, to spot an ID that arrives as a string before it causes a bug.</li>
-        <li><strong>Unique key names</strong>, for a field glossary or comparing two API versions.</li>
-        <li><strong>JSONPath expressions</strong> for jq, kubectl, and JSONPath libraries - see the <a href="/jsonpath-generator.html">JSONPath generator</a>.</li>
-        <li><strong>An indented tree</strong> for the shape at a glance - see the <a href="/json-tree-viewer.html">tree viewer</a>.</li>
-        <li><strong>A TypeScript type</strong> that merges records across an array, marking missing keys optional and null values nullable - see <a href="/json-to-typescript.html">JSON to TypeScript</a>.</li>
+        <li><strong>Integrating third-party APIs.</strong> Consuming responses I did not design, where the documentation describes one shape and the payload has another: fields that are <code>null</code> on some records and absent on others, IDs that arrive as strings, arrays that are empty exactly when you need an example.</li>
+        <li><strong>Building REST services.</strong> Designing the JSON my own services return, and keeping the clients that consume it - typed or not - in step with it as it changes.</li>
+        <li><strong>Data pipelines and ETL.</strong> Moving nested JSON into tables, where every array is a decision about rows, and one unexpected field can break a load.</li>
     </ul>
+    <p>Each of those shaped a part of the tool. The first is why it exists at all: before I can write parsing code for an unfamiliar response, I need a full list of what is in it. The second is why it generates <a href="/json-to-typescript.html">TypeScript types</a> that mark optional and nullable fields separately. The third is why the <a href="/json-flattener.html">flattener</a> can collapse array indices into a schema view that pastes straight into a mapping sheet.</p>
+
+    <h2 class="mt-4 mb-3 heading">Why I Built It</h2>
+    <p>For a long time my answer to "what fields are in this response?" was a throwaway script - a recursive function in whichever language I had open, rewritten each time because the last copy was in another project. Browser DevTools shows one record at a time; <code>jq</code> is excellent in a pipeline but awkward when you want types, collapsed arrays, and a result you can paste into a ticket. I wanted the script as a page: paste JSON, get every path, done.</p>
+    <p>I also wanted to build something real on the front end, outside the server-side work I do every day. JSON Keyper is plain HTML, CSS, and JavaScript with no framework and no build step, which keeps it fast and means the whole tool can be read in about 600 lines of <a href="https://github.com/ashishsing112/jsonkeyper.com/blob/main/script.js" rel="noopener">script.js</a>.</p>
+
+    <h2 class="mt-4 mb-3 heading">How the Site Has Grown</h2>
+    <p>The site has been online since October 2024, and it has grown the way most tools do - one missing case at a time. A few milestones, all recorded in the <a href="/changelog.html">changelog</a>:</p>
+    <ul>
+        <li><strong>October 2024</strong> - the first version: paste JSON, get a list of dot-notation key paths.</li>
+        <li><strong>June 2026</strong> - a redesign, and the first guides on the <a href="/blog/">blog</a>.</li>
+        <li><strong>August 2026</strong> - six output formats instead of one, array-index collapsing, structure statistics, and parse errors that give a line and column.</li>
+        <li><strong>September 2026</strong> - the Execute cURL tab for fetching live API responses, the four format pages with the tool built in, and TypeScript output that distinguishes missing fields from <code>null</code> ones.</li>
+    </ul>
+    <p>The source code and every change to it are public on <a href="https://github.com/ashishsing112/jsonkeyper.com" rel="noopener">GitHub</a>.</p>
+
+    <h2 class="mt-4 mb-3 heading">How I Write the Guides</h2>
+    <p>There is a lot of JSON advice online that is repeated rather than checked. I try to hold the guides here to a few rules:</p>
+    <ul>
+        <li><strong>Measure instead of asserting.</strong> The <a href="/blog/processing-large-json-files.html">large-files guide</a> reports peak memory for each approach instead of repeating that jq streams (plain jq does not). The <a href="/blog/json-vs-xml.html">JSON vs XML comparison</a> measures size and parse time, and its <a href="https://github.com/ashishsing112/jsonkeyper.com/tree/main/tools/json-vs-xml-bench" rel="noopener">scripts are in the repository</a> so you can rerun them.</li>
+        <li><strong>Say what it ran on.</strong> Where a guide reports behaviour or numbers, it names the versions and the setup - for example, the edge-case table in <a href="/blog/what-is-json.html">What is JSON?</a> was run in Node.js 24 and Python 3.12, so you can tell when a result may have changed.</li>
+        <li><strong>Say when the answer is "use something else".</strong> Every tool page has a limitations section, and the <a href="/blog/json-tools-for-developers.html">tools guide</a> discloses that JSON Keyper is mine and recommends other tools where they fit better.</li>
+        <li><strong>Correct in the open.</strong> When a guide is substantially revised, its date line says so and the change is listed in the <a href="/changelog.html">changelog</a>.</li>
+    </ul>
+    <p>The guides follow the work: <a href="/blog/jackson-vs-gson-vs-moshi.html">choosing a JSON library on the JVM</a> and <a href="/blog/working-with-json-in-python.html">JSON in Python</a> from the service side, <a href="/blog/json-in-rest-apis.html">common REST API structures</a> and <a href="/blog/cors-explained.html">CORS</a> from the integration side, and <a href="/blog/processing-large-json-files.html">large files</a> and <a href="/blog/understanding-nested-json.html">nested data</a> from the pipeline side.</p>
 
     <h2 class="mt-4 mb-3 heading">How It Handles Your Data</h2>
-    <p>JSON you paste is parsed by JavaScript in your own browser tab and never sent anywhere - you can disconnect from the internet after the page loads and it keeps working. The Execute cURL tab is the one exception: browsers block cross-origin requests, so it routes your request through a proxy I run to reach the API you named. The proxy does not log or store anything. The <a href="/privacy.html">privacy policy</a> has the details.</p>
+    <p>JSON you paste is parsed by JavaScript in your own browser tab and never sent anywhere - you can disconnect from the internet after the page loads and it keeps working. The Execute cURL tab is the one exception: browsers block cross-origin requests, so it routes your request through a proxy I run to reach the API you named. The proxy does not log or store anything. The <a href="/privacy.html">privacy policy</a> has the details, including what the site's analytics and advertising do.</p>
 
     <h2 class="mt-4 mb-3 heading">What It Does Not Do</h2>
-    <p>The tool is deliberately narrow. Type inference describes the sample you paste, not the API's real contract. Very large documents can exhaust a browser tab, because the full path list is held in memory - at that scale, a streaming tool is the right choice, and <a href="/blog/processing-large-json-files.html">this article</a> measures the options. And it checks that JSON parses, not that it matches a schema; the <a href="/blog/json-schema-guide.html">JSON Schema guide</a> covers that side.</p>
+    <p>The tool is deliberately narrow. Type inference describes the sample you paste, not the API's real contract. Very large documents can exhaust a browser tab, because the full path list is held in memory. And it checks that JSON parses, not that it matches a schema - the <a href="/blog/json-schema-guide.html">JSON Schema guide</a> covers that side.</p>
 
-    <h2 class="mt-4 mb-3 heading">How the Guides Are Written</h2>
-    <p>I write the guides on the <a href="/blog/">blog</a> myself, about problems I have run into. I try to show evidence rather than repeat advice: the large-files article measures peak memory for each approach instead of repeating that jq streams (plain jq does not). When a guide is substantially revised, its date line says so. If you find something wrong, please tell me so I can fix it.</p>
+    <h2 class="mt-4 mb-3 heading">How the Site Is Funded</h2>
+    <p>JSON Keyper is free and needs no account. It is supported by advertising and by anyone who chooses to <a href="https://github.com/sponsors/ashishsing112" rel="noopener">sponsor it on GitHub</a>. Neither affects what the guides recommend.</p>
 
-    <h2 class="mt-4 mb-3 heading">Who Writes This</h2>
+    <h2 class="mt-4 mb-3 heading">Get in Touch</h2>
+    <p>If the tool gets a document wrong, or a guide has a mistake, I would like to know. Use the <a href="/contact.html">contact page</a>, email <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>, or open an issue on <a href="https://github.com/ashishsing112/jsonkeyper.com/issues" rel="noopener">GitHub</a>.</p>
+
     <div class="author-box">
         <div class="author-avatar">AS</div>
         <div>
             <p class="author-name">Ashish Singh</p>
-            <p class="author-blurb">Back-end developer and the sole builder and writer of JSON Keyper.
-            Code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>; bug reports, corrections, and suggestions
-            are welcome through the <a href="/contact.html">contact page</a> or by email at
-            <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>.</p>
+            <p class="author-blurb">Back-end developer with more than four years of professional experience in Java/Spring Boot,
+            Python, and Node.js/TypeScript - integrating third-party APIs, building REST services, and moving
+            JSON through data pipelines. Sole builder and writer of JSON Keyper.
+            Code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>.</p>
         </div>
     </div>
 </div>
