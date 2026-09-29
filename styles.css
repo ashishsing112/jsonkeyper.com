@@ -859,3 +859,12 @@ textarea.drag-active {
     color: #777;
     font-size: 13px;
 }
+
+/* Authorship and last-updated line at the end of the format pages. */
+.page-maintainer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    color: #777;
+    font-size: 13px;
+}
