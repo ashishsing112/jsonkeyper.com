@@ -165,8 +165,8 @@ function renderCurlResponse(result) {
             '<span class="curl-status-badge ' + statusClass(result.status) + '">' +
                 escapeHtml(result.status) + ' ' + escapeHtml(result.statusText || '') +
             '</span>' +
-            (json ? '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="handleExtractFromCurl()">Extract Keys</button>' : '') +
-            '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="handleCopyCurlBody()">Copy body</button>' +
+            (json ? '<button type="button" class="btn btn-tool btn-sm" onclick="handleExtractFromCurl()">Extract Keys</button>' : '') +
+            '<button type="button" class="btn btn-tool btn-sm" onclick="handleCopyCurlBody()">Copy body</button>' +
         '</div>' +
         (headerRows ? '<div class="curl-response-headers">' + headerRows + '</div>' : '') +
         (binary ? '<p class="curl-binary-warning">This looks like binary content (' +

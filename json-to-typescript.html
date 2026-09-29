@@ -84,6 +84,16 @@
         </div>
     </nav>
 </header>
+<nav class="tool-strip" aria-label="JSON tools">
+    <div class="tool-strip-inner">
+        <a href="/">Key Extractor</a>
+        <a href="/json-formatter">Formatter</a>
+        <a href="/json-flattener">Flattener</a>
+        <a href="/jsonpath-generator">JSONPath</a>
+        <a href="/json-tree-viewer">Tree Viewer</a>
+        <a href="/json-to-typescript" class="active" aria-current="page">JSON to TypeScript</a>
+    </div>
+</nav>
 
 <main id="content">
 <nav class="breadcrumb-nav" aria-label="Breadcrumb">
@@ -95,14 +105,6 @@
 
 <section class="container-shadow" aria-labelledby="page-title">
     <div class="section">
-        <nav class="tool-switcher" aria-label="JSON tools">
-            <a href="/">Key Extractor</a>
-            <a href="/json-formatter">Formatter</a>
-            <a href="/json-flattener">Flattener</a>
-            <a href="/jsonpath-generator">JSONPath</a>
-            <a href="/json-tree-viewer">Tree Viewer</a>
-            <a href="/json-to-typescript" class="active" aria-current="page">JSON to TypeScript</a>
-        </nav>
         <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSON to TypeScript Interface Converter</h1>
         <p class="mb-3 lead-copy">Paste a JSON payload and get a TypeScript type back. Arrays of records are merged into one element type, a field missing from some records is marked optional with <code>?</code>, and a field that is <code>null</code> on some records gains <code>| null</code>. Click <strong>Load this example</strong> to run it on the issue list discussed below.</p>
         <div class="row">
@@ -112,15 +114,16 @@
                     <span class="io-hint">Paste, or drop a .json file here</span>
                 </div>
                 <div class="io-controls">
-                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
-                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <button onclick="loadSample()" class="btn btn-tool btn-sm" type="button">Load this example</button>
+                    <label for="fileInput" class="btn btn-tool btn-sm mb-0">Upload a file</label>
                     <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
-                    <span class="shortcut-hint">Tip: Ctrl + Enter runs</span>
+                    <button onclick="handleClear()" class="btn btn-tool btn-sm" type="button">Clear</button>
                 </div>
                 <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
                 <div id="errorBox" class="error-box" role="alert"></div>
-                <div class="button-row">
-                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Generate TypeScript</button>
+                <div class="action-row">
+                    <button onclick="handleSubmit()" class="btn btn-primary-action" type="button">Generate TypeScript</button>
+                    <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
                 </div>
             </div>
 
@@ -152,10 +155,9 @@
                     </div>
                 </div>
                 <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
-                <div class="output-actions">
-                    <button onclick="handleCopy()" class="btn copy-button btn-lg" type="button">Copy</button>
-                    <button onclick="handleDownload()" class="btn download-button btn-lg" type="button">Download</button>
-                    <button onclick="handleClear()" class="btn btn-danger btn-lg clear-button" type="button">Clear</button>
+                <div class="action-row action-row-end">
+                    <button onclick="handleCopy()" class="btn btn-tool" type="button">Copy</button>
+                    <button onclick="handleDownload()" class="btn btn-tool" type="button">Download</button>
                 </div>
             </div>
         </div>
