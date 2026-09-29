@@ -232,22 +232,24 @@
         </div>
     </nav>
 </header>
+<nav class="tool-strip" aria-label="JSON tools">
+    <div class="tool-strip-inner">
+        <a href="/" class="active" aria-current="page">Key Extractor</a>
+        <a href="/json-formatter">Formatter</a>
+        <a href="/json-flattener">Flattener</a>
+        <a href="/jsonpath-generator">JSONPath</a>
+        <a href="/json-tree-viewer">Tree Viewer</a>
+        <a href="/json-to-typescript">JSON to TypeScript</a>
+    </div>
+</nav>
 
 <main id="content">
 
 <section class="container-shadow" aria-labelledby="json-key-extractor-and-path-mapper">
     <div class="section" id="request">
-        <nav class="tool-switcher" aria-label="JSON tools">
-            <a href="/" class="active" aria-current="page">Key Extractor</a>
-            <a href="/json-formatter">Formatter</a>
-            <a href="/json-flattener">Flattener</a>
-            <a href="/jsonpath-generator">JSONPath</a>
-            <a href="/json-tree-viewer">Tree Viewer</a>
-            <a href="/json-to-typescript">JSON to TypeScript</a>
-        </nav>
         <div class="row">
             <div class="col-12">
-                <h1 class="mt-4 mb-2 heading" style="font-size: 1.8rem;" id="json-key-extractor-and-path-mapper">JSON Key Extractor and Path Mapper</h1>
+                <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="json-key-extractor-and-path-mapper">JSON Key Extractor and Path Mapper</h1>
                 <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface - or simply <a href="/json-formatter">pretty-print or minify</a> the JSON. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the Execute cURL tab fetches the response for you through a proxy.</p>
             </div>
         </div>
@@ -265,15 +267,16 @@
                         <span class="io-hint">Paste, or drop a .json file here</span>
                     </div>
                     <div class="io-controls">
-                        <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample JSON</button>
-                        <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                        <button onclick="loadSample()" class="btn btn-tool btn-sm" type="button">Load sample JSON</button>
+                        <label for="fileInput" class="btn btn-tool btn-sm mb-0">Upload a file</label>
                         <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
-                        <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                        <button onclick="handleClear()" class="btn btn-tool btn-sm" type="button">Clear</button>
                     </div>
                     <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
                     <div id="errorBox" class="error-box" role="alert"></div>
-                    <div class="button-row">
-                        <button onclick="handleSubmit()" class="btn extract-button btn-lg">Extract Keys</button>
+                    <div class="action-row">
+                        <button onclick="handleSubmit()" class="btn btn-primary-action" type="button">Extract Keys</button>
+                        <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
                     </div>
                 </div>
 
@@ -283,15 +286,15 @@
                         <span class="io-hint">Fetches a live response through a proxy</span>
                     </div>
                     <div class="io-controls">
-                        <button onclick="loadCurlSample()" class="btn btn-outline-secondary btn-sm" type="button">Load sample cURL</button>
-                        <button onclick="resetCurlPanel()" class="btn btn-outline-secondary btn-sm" type="button">Clear</button>
-                        <span class="shortcut-hint">Tip: Ctrl + Enter executes</span>
+                        <button onclick="loadCurlSample()" class="btn btn-tool btn-sm" type="button">Load sample cURL</button>
+                        <button onclick="resetCurlPanel()" class="btn btn-tool btn-sm" type="button">Clear</button>
                     </div>
                     <textarea id="curlInput" aria-label="cURL command" placeholder="curl https://api.example.com/users/1"></textarea>
                     <div id="curlErrorBox" class="error-box" role="alert"></div>
                     <div id="curlPreview" class="curl-preview" hidden></div>
-                    <div class="button-row">
-                        <button onclick="handleCurlExecute()" id="curlExecuteBtn" class="btn extract-button btn-lg">Execute</button>
+                    <div class="action-row">
+                        <button onclick="handleCurlExecute()" id="curlExecuteBtn" class="btn btn-primary-action" type="button">Execute</button>
+                        <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
                     </div>
                     <div id="curlResponsePanel" class="curl-response-panel" hidden></div>
                     <p class="curl-disclosure">Requests are sent through a Cloudflare Worker proxy to bypass browser CORS. The proxy does not log or store requests or responses - see the <a href="/privacy">privacy policy</a>.</p>
@@ -326,10 +329,9 @@
                     </div>
                 </div>
                 <textarea id="keysOutput" aria-label="Extracted keys" placeholder="Keys will appear here..." readonly></textarea>
-                <div class="output-actions">
-                    <button onclick="handleCopy()" class="btn copy-button btn-lg" type="button">Copy</button>
-                    <button onclick="handleDownload()" class="btn download-button btn-lg" type="button">Download</button>
-                    <button onclick="handleClear()" class="btn btn-danger btn-lg clear-button" type="button">Clear</button>
+                <div class="action-row action-row-end">
+                    <button onclick="handleCopy()" class="btn btn-tool" type="button">Copy</button>
+                    <button onclick="handleDownload()" class="btn btn-tool" type="button">Download</button>
                 </div>
             </div>
         </div>

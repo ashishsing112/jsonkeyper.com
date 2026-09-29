@@ -82,45 +82,58 @@ textarea {
     width: 100%;
 }
 
-.clear-button, .copy-button, .extract-button, .download-button {
-    padding: 15px 10px !important;
-    color: white !important;
+/* Buttons. One primary action per tool (solid green); every other control is a
+   quiet outline button, so colour means "this runs the tool" and nothing else. */
+.btn-primary-action {
+    padding: 9px 24px;
     border: none;
-    border-radius: 5px !important;
-    font-size: 16px !important;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    border-radius: 6px;
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.15s;
 }
 
-.extract-button {
-    display: block;
-    background-color: #4CAF50 !important;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
+.btn-primary-action:hover,
+.btn-primary-action:active {
+    background-color: #3d8b40;
+    color: #fff;
 }
 
-.copy-button:hover, .extract-button:hover {
-    background-color: #2c3e50 !important;
+.btn-tool {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #343a40;
+    transition: background-color 0.15s, border-color 0.15s;
 }
 
-.copy-button {
-    background-color: #4CAF50 !important;
-    width: 100%;
+.btn-tool:hover,
+.btn-tool:active {
+    border-color: #adb5bd;
+    background-color: #f1f3f5;
+    color: #212529;
 }
 
-.download-button {
-    background-color: #3498db !important;
-    width: 100%;
-}
-
-.download-button:hover {
-    background-color: #2c3e50 !important;
-}
-
-button:focus {
+button:focus,
+.btn-primary-action:focus,
+.btn-tool:focus {
     outline: none;
-    box-shadow: 0 0 5px #2980b9;
+    box-shadow: none;
+}
+
+/* Keyboard focus only: a mouse click leaves no ring behind. */
+.btn-primary-action:focus-visible,
+.btn-tool:focus-visible,
+.mode-tab:focus-visible,
+.tool-strip a:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.35);
+}
+
+.btn-tool:focus-visible {
+    border-color: #4CAF50;
 }
 
 /* Tool input/output panels */
@@ -164,10 +177,6 @@ textarea.drag-active {
 
 .error-box.show {
     display: block;
-}
-
-.button-row {
-    margin-top: 8px;
 }
 
 .shortcut-hint {
@@ -869,38 +878,55 @@ textarea.drag-active {
     font-size: 13px;
 }
 
-/* Tool switcher: one row of links across the top of every tool, so each tool
-   is one click from any other. Scrolls sideways on narrow screens. */
-.tool-switcher {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #eee;
-    scrollbar-width: thin;
+/* Tool strip: a row of tabs directly under the site header on every tool page,
+   so each tool is one click from any other. On narrow screens it scrolls
+   sideways, and the right edge fades to show there is more. */
+.tool-strip {
+    background-color: #fff;
+    border-bottom: 1px solid #e3e6ea;
 }
 
-.tool-switcher a {
+.tool-strip-inner {
+    display: flex;
+    gap: 4px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tool-strip-inner::-webkit-scrollbar {
+    display: none;
+}
+
+.tool-strip a {
     flex: 0 0 auto;
-    padding: 6px 14px;
-    border-radius: 16px;
-    background-color: #f1f3f5;
-    color: #495057;
+    padding: 13px 12px 11px;
+    border-bottom: 2px solid transparent;
+    color: #5a6570;
     font-size: 14px;
+    font-weight: 500;
     white-space: nowrap;
     text-decoration: none;
 }
 
-.tool-switcher a:hover {
-    background-color: #e2e6ea;
+.tool-strip a:hover {
+    color: #212529;
     text-decoration: none;
 }
 
-.tool-switcher a.active {
-    background-color: #4CAF50;
-    color: #fff;
+.tool-strip a.active {
+    border-bottom-color: #4CAF50;
+    color: #2e7d32;
     font-weight: 700;
+}
+
+@media (max-width: 991.98px) {
+    .tool-strip-inner {
+        -webkit-mask-image: linear-gradient(to right, #000 88%, transparent);
+        mask-image: linear-gradient(to right, #000 88%, transparent);
+    }
 }
 
 /* JSON in and out is code: a monospace face keeps indentation aligned. Output
@@ -925,16 +951,59 @@ textarea.drag-active {
     word-break: break-all;
 }
 
-/* Output buttons share the textarea's exact width. */
-.output-actions {
+/* The row under each textarea: the run button under the input, Copy and
+   Download under the output, level with each other. */
+.action-row {
     display: flex;
+    align-items: center;
     gap: 8px;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
-.output-actions .btn {
-    flex: 1 1 0;
-    min-width: 0;
+.action-row-end {
+    justify-content: flex-end;
+}
+
+.action-row .shortcut-hint {
+    margin-left: 4px;
+}
+
+.shortcut-hint kbd {
+    padding: 1px 5px;
+    border: 1px solid #d0d5da;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    box-shadow: none;
+    color: #555;
+    font-size: 11px;
+}
+
+@media (max-width: 575.98px) {
+    .action-row .btn-primary-action,
+    .action-row-end .btn-tool {
+        flex: 1 1 0;
+    }
+
+    .action-row .shortcut-hint {
+        display: none;
+    }
+
+    .stats-panel {
+        gap: 6px;
+    }
+
+    .stat-cell {
+        flex: 1 1 calc(33.333% - 6px);
+        padding: 8px 4px;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    .stat-label {
+        font-size: 11px;
+    }
 }
 
 /* Explanatory text under a tool: same card width as the tool above it, with
@@ -999,4 +1068,16 @@ textarea.drag-active {
     font-size: 11px;
     font-weight: 700;
     vertical-align: middle;
+}
+
+/* When the input and output columns stack, separate them. */
+@media (max-width: 991.98px) {
+    .section > .row > .col-lg-6 + .col-lg-6 {
+        margin-top: 28px;
+    }
+}
+
+/* Anchored headings (the header's Tools link) land with breathing room. */
+#tools {
+    scroll-margin-top: 16px;
 }

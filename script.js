@@ -726,7 +726,7 @@ const CARRY_KEY = 'jsonkeyper:carry';
 
 function carryInputOnToolSwitch() {
     document.addEventListener('click', function (e) {
-        const link = e.target.closest && e.target.closest('.tool-switcher a, .tool-card');
+        const link = e.target.closest && e.target.closest('.tool-strip a, .tool-card');
         const input = document.getElementById('textbox1');
         if (!link || !input || !input.value.trim()) {
             return;
