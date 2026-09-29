@@ -1,0 +1,7 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.jsonkeyper</groupId><artifactId>jackson3-check</artifactId><version>1</version>
+  <dependencies>
+    <dependency><groupId>tools.jackson.core</groupId><artifactId>jackson-databind</artifactId><version>3.2.3</version></dependency>
+  </dependencies>
+</project>

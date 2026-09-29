@@ -1,0 +1,15 @@
+[
+  ["valid",               {"id": 42, "name": "Ada", "note": "gift", "tags": ["a"]}],
+  ["optional missing",    {"id": 42, "name": "Ada", "tags": ["a"]}],
+  ["optional null",       {"id": 42, "name": "Ada", "note": null, "tags": ["a"]}],
+  ["required missing",    {"id": 42, "note": "gift", "tags": ["a"]}],
+  ["required null",       {"id": 42, "name": null, "note": "gift", "tags": ["a"]}],
+  ["number missing",      {"name": "Ada", "note": "gift", "tags": ["a"]}],
+  ["number null",         {"id": null, "name": "Ada", "note": "gift", "tags": ["a"]}],
+  ["unknown field",       {"id": 42, "name": "Ada", "note": "gift", "tags": ["a"], "coupon": "AUTUMN10"}],
+  ["number as string",    {"id": "42", "name": "Ada", "note": "gift", "tags": ["a"]}],
+  ["fractional number",   {"id": 42.7, "name": "Ada", "note": "gift", "tags": ["a"]}],
+  ["string as number",    {"id": 42, "name": 123, "note": "gift", "tags": ["a"]}],
+  ["array missing",       {"id": 42, "name": "Ada", "note": "gift"}],
+  ["array null",          {"id": 42, "name": "Ada", "note": "gift", "tags": null}]
+]

@@ -92,6 +92,9 @@
 
     <h2 class="mt-4 mb-3 heading" id="d2026-09-29"><time datetime="2026-09-29">29 September 2026</time></h2>
     <ul>
+        <li>New guide: <a href="/blog/null-missing-unknown-fields.html">Null, Missing, or Unknown</a> - thirteen mismatched payloads through Jackson 2, Jackson 3, Pydantic, and Zod, with the scripts to reproduce it.</li>
+        <li>Corrected <a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a>: its statements about unknown fields and checked exceptions were true of Jackson 2 only.</li>
+        <li>Added my work history and the problems behind the guides to the <a href="/about.html">About</a> page.</li>
         <li>New <a href="/json-formatter.html">JSON formatter</a>: pretty-print with a 2- or 4-space indent, or minify, from the same format list. It changes only whitespace, so large integer IDs and values like <code>12.50</code> come out exactly as pasted.</li>
         <li>A trailing comma in invalid JSON is now reported with its line and column, instead of a truncated browser message.</li>
         <li>The four tool pages - <a href="/json-to-typescript.html">JSON to TypeScript</a>, <a href="/jsonpath-generator.html">JSONPath generator</a>, <a href="/json-flattener.html">JSON flattener</a>, and <a href="/json-tree-viewer.html">tree viewer</a> - now run the tool directly on the page, each with its own worked example: an issue-tracker response, a Kubernetes pod list, a payment webhook, and a GeoJSON file.</li>
