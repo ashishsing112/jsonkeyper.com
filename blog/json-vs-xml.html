@@ -45,11 +45,12 @@
       "@type": "Article",
       "headline": "JSON vs XML: A Detailed Comparison",
       "datePublished": "2026-06-23",
-      "dateModified": "2026-08-05",
+      "dateModified": "2026-09-29",
       "author": {
         "@type": "Person",
         "name": "Ashish Singh",
-        "url": "https://jsonkeyper.com/about.html"
+        "url": "https://jsonkeyper.com/about.html",
+        "sameAs": ["https://github.com/ashishsing112"]
       },
       "publisher": {
         "@type": "Organization",
@@ -136,7 +137,7 @@
 <div class="container-shadow article-container">
     <article>
         <h1 class="heading">JSON vs XML: A Detailed Comparison</h1>
-        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated August 5, 2026 &middot; 10 min read</small></p>
+        <p class="text-muted article-meta"><small>By <a href="/about.html">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated September 29, 2026 &middot; 12 min read</small></p>
 
         <div class="article-body">
             <p>JSON and XML are both human-readable data formats used for storing and exchanging structured data. While JSON has become the dominant format for web APIs over the past decade, XML remains widely used in enterprise systems, document management, and certain protocol-heavy domains. Understanding the differences helps you choose the right format for your project and decode data from legacy systems.</p>
@@ -175,7 +176,24 @@
   &lt;/hobbies&gt;
 &lt;/person&gt;</code></pre>
 
-            <p>The JSON version is approximately 40% shorter than the XML version. For APIs handling millions of requests, this size difference translates directly into bandwidth and latency savings.</p>
+            <p>Minified, the JSON is 166 bytes and the XML is 278 - about 40% smaller. That figure gets quoted a lot, and it is true of the text. It is much less true of what actually crosses the network, as the measurements below show.</p>
+
+            <h2>Size, Measured - Before and After Compression</h2>
+            <p>To get past a single toy example, I generated one dataset of 50,000 orders - each with an ID, a total, a paid flag, a nested customer, and one to three line items - and wrote it out three ways: minified JSON, XML with every field as a child element, and XML with scalar fields as attributes (<code>&lt;item sku="SKU-0042" qty="2"/&gt;</code>). Same data, byte for byte, in each.</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Format</th><th>Raw size</th><th>vs JSON</th><th>gzip -9</th><th>vs JSON</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>JSON (minified)</td><td>7.81 MB</td><td>-</td><td>0.99 MB</td><td>-</td></tr>
+                        <tr><td>XML, element style</td><td>11.96 MB</td><td>+53%</td><td>1.05 MB</td><td>+7%</td></tr>
+                        <tr><td>XML, attribute style</td><td>7.96 MB</td><td>+2%</td><td>0.99 MB</td><td>+1%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Two things fall out of this. First, the size gap is mostly closing tags, and closing tags are exactly the kind of repetition gzip removes: a 53% raw difference shrinks to 7% on the wire. Since almost every HTTP API serves compressed responses, <strong>bandwidth is a weak argument for JSON</strong>. Second, attribute-style XML is almost exactly the size of JSON even before compression. How the XML is designed matters as much as which format you pick.</p>
+            <p>Where size does still matter is in memory, and in parsing - both of which work on the uncompressed text.</p>
 
             <h2>Verbosity and Readability</h2>
             <p>XML requires both an opening and closing tag for every element (<code>&lt;name&gt;Alice&lt;/name&gt;</code>), which leads to significant repetition. JSON uses punctuation (colons, commas, braces) instead of tags, which is more concise but may initially look unfamiliar to non-programmers.</p>
@@ -215,7 +233,7 @@
 
             <h2>Comments</h2>
             <p>XML supports comments: <code>&lt;!-- This is a comment --&gt;</code></p>
-            <p>JSON does not support comments at all. This is by design - Douglas Crockford deliberately left comments out of JSON to prevent configuration files from being used with "conditional comments" that made the format non-interoperable. If you need comments in configuration, formats like YAML or TOML are better choices.</p>
+            <p>JSON does not support comments at all. This was deliberate. Douglas Crockford has explained that he removed them because he saw people using comments to hold parsing directives, a practice that would have destroyed interoperability between parsers. If you need comments in configuration, formats like YAML or TOML are better choices.</p>
 
             <h2>Namespaces</h2>
             <p>XML has a powerful namespace system that allows combining elements from different vocabularies without naming conflicts:</p>
@@ -234,15 +252,27 @@
             </ul>
             <p>XSD is considered more powerful and precise, but JSON Schema is much easier to write and read.</p>
 
-            <h2>Parsing Performance</h2>
-            <p>JSON parsing is generally faster than XML parsing for several reasons:</p>
-            <ul>
-                <li>JSON is less verbose, so there is less text to read</li>
-                <li>JSON has no attributes to process separately from elements</li>
-                <li>JSON's type system eliminates string-to-type conversions</li>
-                <li>Browser JavaScript has highly optimised native JSON parsing</li>
-            </ul>
-            <p>For high-throughput applications processing millions of records, JSON typically wins on both parse speed and memory usage.</p>
+            <h2>Parsing Performance, Measured</h2>
+            <p>"JSON parses faster" is usually stated without numbers, so here are some. These parse the same three files from the size test. Python times are the median of five fresh processes (Python 3.12, standard-library <code>json</code> and <code>xml.etree.ElementTree</code>), with peak memory taken from <code>ru_maxrss</code>. Browser times are the median of nine runs of <code>JSON.parse</code> and <code>DOMParser</code> in Chromium 151. All on the same Linux machine.</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Task</th><th>Time</th><th>Peak memory</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Python: <code>json.loads</code></td><td>161 ms</td><td>83 MB</td></tr>
+                        <tr><td>Python: <code>ElementTree.fromstring</code>, element-style XML</td><td>395 ms</td><td>126 MB</td></tr>
+                        <tr><td>Python: <code>ElementTree.fromstring</code>, attribute-style XML</td><td>274 ms</td><td>110 MB</td></tr>
+                        <tr><td>Python: element-style XML parsed <em>and converted</em> to the same dicts <code>json.loads</code> returns</td><td>925 ms</td><td>159 MB</td></tr>
+                        <tr><td>Chromium: <code>JSON.parse</code></td><td>39 ms</td><td>-</td></tr>
+                        <tr><td>Chromium: <code>DOMParser</code>, element-style XML</td><td>452 ms</td><td>-</td></tr>
+                        <tr><td>Chromium: <code>DOMParser</code>, attribute-style XML</td><td>317 ms</td><td>-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The raw parse gap is real but moderate in Python - about 2.5 times. The number that matters more is the fourth row. <code>ElementTree</code> gives you a tree of elements whose text is all strings; before your code can use the data, it has to walk that tree, call <code>float()</code> on totals and <code>int()</code> on quantities, and turn <code>"true"</code> into a boolean. <code>json.loads</code> does all of that during parsing. Counting the conversion, the XML route took 5.7 times as long.</p>
+            <p>In the browser the gap is wider still: <code>JSON.parse</code> was about 12 times faster than <code>DOMParser</code>, which builds a full DOM with nodes for every element and text run. That is the practical reason JSON won in front-end work - not payload size, but the cost of turning bytes into objects your code can use.</p>
+            <p>Two caveats. This is one dataset shape, and record-oriented data like this plays to JSON's strengths; a document-shaped XML file with mixed text and markup has no natural JSON equivalent to compare against. And other XML parsers, such as <code>lxml</code> or a streaming SAX parser, have different speed and memory profiles from the ones measured here. The scripts that generated and parsed these files are in the <a href="https://github.com/ashishsing112/jsonkeyper.com/tree/main/tools/json-vs-xml-bench" rel="noopener">site's GitHub repository</a>, so you can run them against your own data before a format decision rests on it.</p>
 
             <h2>When to Use JSON</h2>
             <ul>
@@ -284,11 +314,11 @@
             <div class="author-avatar">AS</div>
             <div>
                 <p class="author-name">Ashish Singh</p>
-                <p class="author-blurb">Back-end developer and the builder of JSON Keyper. I spend most of my working
+                <p class="author-blurb">Back-end developer and the sole builder of JSON Keyper. I spend most of my working
                 day reading unfamiliar API responses, which is exactly the itch this tool was written to scratch.
                 I write these guides from the problems I actually hit - malformed payloads, keys that only appear
-                on some records, and structures too deep to eyeball. <a href="/about.html">More about the project</a>
-                or <a href="/contact.html">get in touch</a>.</p>
+                on some records, and structures too deep to eyeball. <a href="/about.html">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact.html">get in touch</a>.</p>
             </div>
         </div>
     </article>
@@ -305,6 +335,7 @@
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>

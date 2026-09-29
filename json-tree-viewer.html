@@ -39,46 +39,6 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does the tree view show array indices?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. The tree always collapses array indices, so an array of fifty objects contributes one branch describing the shape rather than fifty near-identical branches. If you need the literal index of a specific element, use the dot-notation key paths format instead."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What do the labels in brackets mean?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Each line ends with the JSON type of that key's value: object, array, string, number, boolean, or null. Because JSON itself does not distinguish integers from floats, every numeric value is reported as number."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is the tree view a JSON formatter?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. A formatter re-prints your data with indentation and keeps every value. The tree view discards values entirely and shows only the structure, which is what makes it readable for large documents where the values would drown out the shape."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is my JSON uploaded to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. The document is parsed in JavaScript inside your own browser tab. Your JSON is never transmitted, logged, or stored anywhere."
-          }
-        }
-      ]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         {
@@ -126,55 +86,148 @@
     </ol>
 </nav>
 
-<div class="container-shadow article-container">
-    <article>
-        <h1 class="heading">JSON Tree Viewer</h1>
-        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
-
-        <div class="article-body">
-            <p>See the shape of a JSON document at a glance. The tree view strips out every value and redraws the document as an indented outline of key names, each annotated with its type. It answers the question you actually have when an unfamiliar API response lands in front of you - <em>how is this thing organised?</em> - without making you scroll through hundreds of lines of data to work it out.</p>
-
-            <div class="cta-box">
-                <h3>View your JSON as a tree</h3>
-                <p>Opens the tool with the indented tree format already selected.</p>
-                <a href="/?format=tree" class="btn btn-success btn-lg">Open the tree viewer</a>
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSON Tree Viewer</h1>
+        <p class="mb-3 lead-copy">See the shape of a JSON document at a glance. The tree view drops every value and redraws the document as an indented outline of key names, each labelled with its type, so a response of thousands of lines reduces to the few dozen that describe its structure. Click <strong>Load this example</strong> to view the GeoJSON map data discussed below.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Input JSON</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
+                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                </div>
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Show Tree</button>
+                </div>
             </div>
 
-            <h2>A worked example</h2>
-            <p>Take the same order payload used elsewhere on this site:</p>
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="io-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <option value="paths">Key paths (dot notation)</option>
+                        <option value="typed">Key paths with value types</option>
+                        <option value="unique">Unique key names only</option>
+                        <option value="jsonpath">JSONPath expressions</option>
+                        <option value="tree" selected>Indented tree</option>
+                        <option value="typescript">TypeScript interface</option>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays">
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+        <p class="tool-note">Runs entirely in your browser - the JSON you paste is never uploaded. To fetch a live API response from a curl command instead, use the <a href="/">full tool on the homepage</a>.</p>
+    </div>
+</section>
+
+<div class="container-shadow article-container">
+    <article>
+        <div class="article-body">
+            <h2>A worked example: learning a format from its tree</h2>
+            <p>The tree view is at its best on a format you have not worked with before. Take GeoJSON, the standard format (RFC 7946) that mapping libraries such as Leaflet and Mapbox load. Here is a small file with two features - a point of interest and a walking route:</p>
             <pre><code>{
-  "user": {
-    "name": "Ada Lovelace",
-    "address": { "city": "London", "country": { "code": "GB" } },
-    "roles": ["admin", "engineer"]
-  },
-  "orders": [
-    { "orderId": "ord_1001", "total": 249.99 },
-    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
+  "type": "FeatureCollection",
+  "bbox": [-0.1419, 51.5007, -0.1246, 51.5081],
+  "features": [
+    {
+      "type": "Feature",
+      "id": "poi-17",
+      "geometry": { "type": "Point", "coordinates": [-0.1281, 51.5081] },
+      "properties": { "name": "Trafalgar Square", "category": "landmark", "step_free": true }
+    },
+    {
+      "type": "Feature",
+      "id": "route-4",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-0.1419, 51.5014], [-0.1332, 51.5031], [-0.1246, 51.5007]]
+      },
+      "properties": { "name": "The Mall to Westminster", "surface": "paved", "lit": true,
+                      "closures": [{ "from": "2026-11-09", "reason": "ceremony" }] }
+    }
   ]
 }</code></pre>
 
-            <p>As a tree, it becomes:</p>
-            <pre><code>user  (object)
-  name  (string)
-  address  (object)
-    city  (string)
-    country  (object)
-      code  (string)
-  roles  (array)
-orders  (array)
-  orderId  (string)
-  total  (number)
-  giftMessage  (string)</code></pre>
+            <p>As a tree:</p>
+            <pre><code>type  (string)
+bbox  (array)
+features  (array)
+  type  (string)
+  id  (string)
+  geometry  (object)
+    type  (string)
+    coordinates  (array)
+  properties  (object)
+    name  (string)
+    category  (string)
+    step_free  (boolean)
+    surface  (string)
+    lit  (boolean)
+    closures  (array)
+      from  (string)
+      reason  (string)</code></pre>
 
-            <p>Eleven lines describe the whole document. Indentation carries the nesting, so you can see immediately that <code>code</code> lives three levels deep inside <code>user</code>, and that <code>orders</code> is an array whose elements have three fields between them.</p>
+            <p>Seventeen lines, and the whole format is visible. A real map export with ten thousand features would produce much the same tree - a few more property names, perhaps - because the tree grows with the variety of the data, not its volume.</p>
+
+            <h2>What the tree tells you</h2>
+            <p>Reading that outline top to bottom, you can learn most of GeoJSON without opening the specification:</p>
+            <ul>
+                <li><strong>There is a fixed envelope.</strong> Both the collection and each feature carry a <code>type</code> string. That is how GeoJSON readers tell the levels apart.</li>
+                <li><strong><code>geometry</code> and <code>properties</code> are siblings.</strong> The shape of a feature lives in one object and everything else you know about it lives in the other - so your own data goes in <code>properties</code>, never alongside <code>geometry</code>.</li>
+                <li><strong><code>properties</code> is free-form.</strong> It mixes <code>category</code> and <code>step_free</code> from the point with <code>surface</code>, <code>lit</code>, and <code>closures</code> from the route. The tree merges every feature's properties into one branch, which is exactly what you want when you are asking "what attributes does this dataset use?"</li>
+                <li><strong>Nesting goes four levels deep</strong> at <code>features[].properties.closures[].from</code>. That is the depth your accessors, or your column mapping, will need to reach.</li>
+            </ul>
+
+            <h2>What the tree hides</h2>
+            <p>A structural view throws information away on purpose, and it is worth knowing what went.</p>
+            <ul>
+                <li><strong>Which element has which field.</strong> <code>surface</code> is in the tree, but only the route has it. The tree says a field <em>can</em> appear, not that it always does. The <a href="/json-flattener.html">dot-notation flattener</a> with literal indices shows the per-element truth.</li>
+                <li><strong>What is inside a plain array.</strong> <code>coordinates  (array)</code> is a leaf, because the tree only draws branches for object keys. It cannot show you that a Point's coordinates are a pair of numbers while a LineString's are a list of pairs.</li>
+            </ul>
+            <p>That second gap is the interesting one, and another format closes it. Switch the output to <strong>TypeScript interface</strong> and <code>coordinates</code> comes back as:</p>
+            <pre><code>coordinates: (number | number[])[];</code></pre>
+            <p>That is the type you get by pooling both features' coordinates - a mix of bare numbers and number arrays - and it is the tool's way of telling you that the same key holds different shapes depending on <code>geometry.type</code>. In GeoJSON that is by design; in an API you are integrating with, it is usually the first bug you would otherwise hit. The practical habit: <strong>use the tree to learn the shape, then switch formats to question the parts it flattened.</strong></p>
+            <p>One more thing the tree cannot tell you, because it is a convention rather than structure: GeoJSON writes positions as <code>[longitude, latitude]</code>, the opposite order to how most people say coordinates aloud. The sample's <code>-0.1281</code> is the longitude of central London.</p>
 
             <h2>Why array indices are always collapsed</h2>
-            <p>The tree is a structural view, so repeated array positions are merged before anything is drawn. The two orders in the sample above produce a single <code>orders</code> branch rather than one branch per element. For an array of fifty records that difference is the whole point - drawing fifty near-identical branches would bury the shape under repetition.</p>
-            <p>A side effect worth knowing: the branch is the <strong>union</strong> of the fields seen across all elements. <code>giftMessage</code> appears in the tree even though only the second order carries it. That is usually what you want from a structural view, but it does mean the tree tells you a field <em>can</em> appear, not that it appears on every record. When you need to know which specific element has which field, switch to <a href="/json-flattener.html">dot-notation key paths</a>, which keep the literal index.</p>
+            <p>The two features above produce one <code>features</code> branch, not two. For an array of five thousand features, drawing one branch per element would print the same seven lines five thousand times and bury the shape. So the tree always merges repeated array positions, and there is no option to turn that off - if you want per-element output, the other formats respect the <strong>Collapse array indices</strong> checkbox.</p>
 
             <h2>Tree view vs a JSON formatter</h2>
-            <p>These solve different problems and it is worth being clear about which one you need.</p>
             <div class="table-wrap">
                 <table class="reference-table">
                     <thead>
@@ -189,40 +242,23 @@ orders  (array)
                     </tbody>
                 </table>
             </div>
-            <p>A ten-thousand-line API response with a repetitive <code>results</code> array will still format to ten thousand lines. The same document usually reduces to a tree of a few dozen, because the size of a tree tracks the complexity of the schema rather than the volume of the data.</p>
+            <p>They work well together: use the tree to find where the field you care about lives, then look it up in the formatted document.</p>
 
-            <h2>Common uses</h2>
+            <h2>Good places to use it</h2>
             <ul>
-                <li><strong>Onboarding onto an unfamiliar API</strong> - understand the response shape before you write a single line of parsing code</li>
-                <li><strong>Checking nesting depth</strong> - find out how far down a field really sits before designing your accessors</li>
-                <li><strong>Reviewing a payload in a pull request</strong> - paste the tree into the description so reviewers see the shape without a wall of sample data</li>
-                <li><strong>Spotting structural drift</strong> - diff the tree of two API versions to see schema changes without the noise of changed values</li>
-                <li><strong>Explaining a structure to someone else</strong> - the outline reads well in a ticket, a design doc, or a chat message</li>
+                <li><strong>Pull request descriptions.</strong> Paste the tree of a new response so reviewers see its shape without scrolling through sample data.</li>
+                <li><strong>Structural drift.</strong> Save the tree of an API response today and diff it against next month's. Changed values do not show up, so every changed line is a schema change.</li>
+                <li><strong>Unfamiliar exports.</strong> Analytics dumps, config files, and data-portal downloads often come with thin documentation. The tree is a faster first read than any of them.</li>
             </ul>
 
             <h2>Reading the type labels</h2>
-            <p>Every line ends with the JSON type of that key's value - <code>object</code>, <code>array</code>, <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>null</code>. Two caveats apply:</p>
-            <ul>
-                <li><strong>All numbers are <code>number</code>.</strong> JSON does not distinguish integers from floats, so neither can the label.</li>
-                <li><strong><code>null</code> describes the sample, not the contract.</strong> A field that happens to be null in the document you pasted is labelled <code>null</code>, even though the API may return a string for it most of the time.</li>
-            </ul>
-            <p>If you want the full path to each key rather than an indented name, the <a href="/?format=typed">typed key paths format</a> gives you the same type information against complete dot-notation paths.</p>
-
-            <h2>How to use it</h2>
-            <ol>
-                <li>Copy a JSON response from your API client, browser DevTools, or a <code>.json</code> file</li>
-                <li>Open the <a href="/?format=tree">tree viewer</a> - the indented tree format is preselected</li>
-                <li>Paste into the left box, or drag the file straight onto it</li>
-                <li>Click <strong>Extract Keys</strong>, or press Ctrl + Enter</li>
-                <li>Copy the outline, or download it as a <code>.txt</code> file</li>
-            </ol>
+            <p>Each line ends with the JSON type of that key's value: <code>object</code>, <code>array</code>, <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>null</code>. All numbers are <code>number</code>, because JSON does not distinguish integers from floats. And a key whose value is <code>null</code> in your sample is labelled <code>null</code>, even if the API usually sends a string there - the label describes the document you pasted, not the contract behind it.</p>
 
             <h2>Other output formats</h2>
             <ul>
                 <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - one full path per line, indices kept or collapsed</li>
-                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
+                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a> - shows mixed shapes the tree cannot</li>
                 <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a></li>
-                <li><a href="/?format=unique">Unique key names only</a> - the distinct key vocabulary, sorted</li>
             </ul>
 
             <h2>Further reading</h2>
@@ -234,6 +270,69 @@ orders  (array)
         </div>
     </article>
 </div>
+
+
+<script type="application/json" id="pageSample">
+{
+  "type": "FeatureCollection",
+  "bbox": [
+    -0.1419,
+    51.5007,
+    -0.1246,
+    51.5081
+  ],
+  "features": [
+    {
+      "type": "Feature",
+      "id": "poi-17",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.1281,
+          51.5081
+        ]
+      },
+      "properties": {
+        "name": "Trafalgar Square",
+        "category": "landmark",
+        "step_free": true
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "route-4",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -0.1419,
+            51.5014
+          ],
+          [
+            -0.1332,
+            51.5031
+          ],
+          [
+            -0.1246,
+            51.5007
+          ]
+        ]
+      },
+      "properties": {
+        "name": "The Mall to Westminster",
+        "surface": "paved",
+        "lit": true,
+        "closures": [
+          {
+            "from": "2026-11-09",
+            "reason": "ceremony"
+          }
+        ]
+      }
+    }
+  ]
+}
+</script>
 </main>
 
 <footer>
@@ -245,10 +344,18 @@ orders  (array)
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
 
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
 <script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
 </body>
 </html>

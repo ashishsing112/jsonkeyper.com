@@ -39,38 +39,6 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does collapsing array indices do?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It merges repeated array positions into a single empty-bracket form and removes the resulting duplicates, so you get one line per distinct field rather than one line per record."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does flattening include intermediate container keys?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Objects and arrays appear as their own paths in addition to their children, so you can see the full shape rather than only the leaf values."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is my JSON uploaded to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Flattening runs entirely in your browser using JavaScript. Your JSON never leaves your machine."
-          }
-        }
-      ]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         {
@@ -118,108 +86,241 @@
     </ol>
 </nav>
 
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">Flatten JSON to Dot Notation</h1>
+        <p class="mb-3 lead-copy">Turn a nested JSON document into a flat list of key paths, one field per line. With <strong>Collapse array indices</strong> ticked you get the schema - every distinct field once. Untick it to see every field of every array element at its literal index. Click <strong>Load this example</strong> to flatten the payment webhook discussed below.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Input JSON</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
+                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                </div>
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Flatten JSON</button>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="io-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <option value="paths" selected>Key paths (dot notation)</option>
+                        <option value="typed">Key paths with value types</option>
+                        <option value="unique">Unique key names only</option>
+                        <option value="jsonpath">JSONPath expressions</option>
+                        <option value="tree">Indented tree</option>
+                        <option value="typescript">TypeScript interface</option>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays" checked>
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+        <p class="tool-note">Runs entirely in your browser - the JSON you paste is never uploaded. To fetch a live API response from a curl command instead, use the <a href="/">full tool on the homepage</a>.</p>
+    </div>
+</section>
 
 <div class="container-shadow article-container">
     <article>
-        <h1 class="heading">Flatten JSON to Dot Notation</h1>
-        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
-
         <div class="article-body">
-            <p>Turn a deeply nested JSON document into a flat list of key paths. Every field gets one line, written in dot notation with bracket notation for array positions. Useful when you need an inventory of what a payload actually contains - before writing parsing code, building a field mapping, or documenting a schema.</p>
-
-            <div class="cta-box">
-                <h3>Flatten your JSON</h3>
-                <p>Opens the tool with dot-notation key paths already selected.</p>
-                <a href="/?format=paths" class="btn btn-success btn-lg">Open the flattener</a>
-            </div>
-
-            <h2>A worked example</h2>
-            <p>Given this order payload:</p>
+            <h2>A worked example: mapping a webhook into a table</h2>
+            <p>The most common reason to flatten JSON is to get it into something with columns - a spreadsheet, a warehouse table, a CSV export. Take this payment webhook, modelled on the events that payment providers post to your server when a charge succeeds:</p>
             <pre><code>{
-  "user": {
-    "name": "Ada Lovelace",
-    "address": { "city": "London", "country": { "code": "GB" } },
-    "roles": ["admin", "engineer"]
-  },
-  "orders": [
-    { "orderId": "ord_1001", "total": 249.99 },
-    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
-  ]
+  "id": "evt_3Q9xKc",
+  "type": "payment.succeeded",
+  "created": 1759132800,
+  "data": {
+    "id": "pay_71AfZ",
+    "amount": 4200,
+    "currency": "eur",
+    "customer": { "id": "cus_88Tq", "email": "lena@example.com" },
+    "payment_method": {
+      "type": "card",
+      "card": { "brand": "visa", "last4": "4242", "exp_month": 12, "exp_year": 2028 }
+    },
+    "lines": [
+      { "sku": "TEA-01", "qty": 2, "unit_amount": 1500 },
+      { "sku": "MUG-03", "qty": 1, "unit_amount": 1200,
+        "discount": { "code": "AUTUMN10", "percent": 10 } }
+    ],
+    "refunds": [],
+    "metadata": { "order_ref": "A-10293", "campaign": "autumn" }
+  }
 }</code></pre>
 
-            <p>Flattened, with every array element at its literal index:</p>
-            <pre><code>user
-user.name
-user.address
-user.address.city
-user.address.country
-user.address.country.code
-user.roles
-orders
-orders[0].orderId
-orders[0].total
-orders[1].orderId
-orders[1].total
-orders[1].giftMessage</code></pre>
+            <p>Flattened with array indices collapsed, it becomes this inventory of 28 paths:</p>
+            <pre><code>id
+type
+created
+data
+data.id
+data.amount
+data.currency
+data.customer
+data.customer.id
+data.customer.email
+data.payment_method
+data.payment_method.type
+data.payment_method.card
+data.payment_method.card.brand
+data.payment_method.card.last4
+data.payment_method.card.exp_month
+data.payment_method.card.exp_year
+data.lines
+data.lines[].sku
+data.lines[].qty
+data.lines[].unit_amount
+data.lines[].discount
+data.lines[].discount.code
+data.lines[].discount.percent
+data.refunds
+data.metadata
+data.metadata.order_ref
+data.metadata.campaign</code></pre>
 
-            <p>And with <strong>Collapse array indices</strong> enabled, repeated positions merge into <code>[]</code> and duplicates drop out:</p>
-            <pre><code>user
-user.name
-user.address
-user.address.city
-user.address.country
-user.address.country.code
-user.roles
-orders
-orders[].orderId
-orders[].total
-orders[].giftMessage</code></pre>
+            <h2>Read the brackets first: they tell you how many tables you need</h2>
+            <p>Before mapping a single column, scan the collapsed list for <code>[]</code>. Every path that contains one lives inside an array, and an array means "any number of these per event". You cannot put those fields in the same row as the event without either duplicating the event or losing lines.</p>
+            <p>So this one payload splits cleanly into two tables:</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Table</th><th>One row per</th><th>Columns come from</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>payments</code></td><td>event</td><td>Every leaf path <em>without</em> <code>[]</code>: <code>id</code>, <code>data.amount</code>, <code>data.customer.email</code>, <code>data.payment_method.card.brand</code>, ...</td></tr>
+                        <tr><td><code>payment_lines</code></td><td>element of <code>data.lines</code></td><td>Every path under <code>data.lines[]</code>, plus the event <code>id</code> as a foreign key</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Nested objects that are <em>not</em> in an array - <code>customer</code>, <code>payment_method.card</code>, <code>metadata</code> - never need their own table. There is exactly one of each per event, so they flatten straight into columns like <code>customer_email</code> and <code>card_brand</code>.</p>
+            <p>Arrays nested inside arrays repeat the rule: a path with two <code>[]</code> needs a third table, keyed on both of its parents.</p>
 
-            <p>The collapsed view is the one you want when documenting a schema - it answers "what fields exist" rather than "what does this particular record contain". Notice that <code>giftMessage</code> still appears even though only the second order has it, so the collapsed list is the union of all fields seen.</p>
-
-            <h2>Why intermediate keys are included</h2>
-            <p>Container keys appear as their own lines alongside their children - <code>user.address</code> is listed as well as <code>user.address.city</code>. This is deliberate. Knowing that <code>address</code> is an object rather than a flat string is part of understanding the shape, and it makes the output usable as a structural inventory rather than only a list of leaves.</p>
-            <p>If you want the type at each position too, the <a href="/?format=typed">typed paths format</a> annotates every line with <code>object</code>, <code>array</code>, <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>null</code>.</p>
-
-            <h2>Common uses</h2>
+            <h2>Watch for fields the sample cannot show you</h2>
+            <p>Two lines in the output deserve suspicion rather than a column.</p>
             <ul>
-                <li><strong>Field mapping for ETL</strong> - get the complete source field list before writing a transformation</li>
-                <li><strong>Loading into a spreadsheet or relational table</strong> - flat paths become column names</li>
-                <li><strong>Comparing two API responses</strong> - diff the two flattened lists to see exactly which fields were added or removed between versions</li>
-                <li><strong>Documenting a payload</strong> - paste the collapsed output straight into a design doc or ticket</li>
-                <li><strong>Debugging a missing field</strong> - confirm whether a field is genuinely absent or just at a different path than you assumed</li>
+                <li><strong><code>data.refunds</code> has no children.</strong> The array was empty in this sample, so there is nothing to say what a refund looks like. It is still listed, which is the useful part: it tells you a <code>payment_refunds</code> table probably exists in your future, and that you need a sample with a refund in it before you can design it.</li>
+                <li><strong><code>data.lines[].discount</code> appears on one line item out of two.</strong> The collapsed list is the <em>union</em> of fields across elements, so it does not tell you which are always present. Untick <strong>Collapse array indices</strong> and the literal paths show it plainly - <code>data.lines[1].discount.code</code> exists, and there is no <code>data.lines[0].discount</code>. Make those columns nullable.</li>
             </ul>
+            <p>That first point is also why the flattener lists container keys like <code>data.refunds</code> and <code>data.customer</code> alongside the leaves. A leaf-only flatten loses empty arrays and empty objects without a trace. For comparison, the usual jq one-liner does exactly that:</p>
+            <pre><code>jq -r 'paths(scalars) | map(tostring) | join(".")' event.json</code></pre>
+            <p>On this payload it prints 23 paths and <code>data.refunds</code> is not among them, because an empty array contains no scalars. It also writes array positions as <code>data.lines.0.sku</code>, which is ambiguous with an object key named <code>"0"</code>. Fine for a quick look; not what you want to base a table design on.</p>
+
+            <h2>From paths to column names</h2>
+            <p>Dots are awkward in SQL identifiers and spreadsheet formulas, so most teams convert the path into a column name with a fixed rule. The one that stays readable and reversible is: drop the envelope prefix, then replace dots with underscores.</p>
+            <pre><code>data.amount                        -&gt; amount
+data.customer.email                -&gt; customer_email
+data.payment_method.card.last4     -&gt; payment_method_card_last4
+data.metadata.order_ref            -&gt; metadata_order_ref
+data.lines[].discount.code         -&gt; (payment_lines) discount_code</code></pre>
+            <p>Keep the full path somewhere - a comment on the column, or a mapping sheet - because the day the provider adds <code>data.customer.address.city</code>, you will want to see at a glance where it slots in. Switch the format to <strong>Key paths with value types</strong> to get the column types in the same pass: <code>created</code> and <code>data.amount</code> are numbers (a Unix timestamp and an amount in cents - neither is obvious from the name), while <code>card.last4</code> is a string, which is correct and matters, because <code>"0042"</code> as a number becomes <code>42</code>.</p>
+
+            <h2>Spotting changes between two versions</h2>
+            <p>Flattened output diffs well. Flatten last month's sample and this month's with the same settings, save both, and compare them:</p>
+            <pre><code>diff old-paths.txt new-paths.txt</code></pre>
+            <p>Because the collapsed list contains no values and no array positions, the only lines that differ are fields that were added or removed - exactly the list you need to update a mapping.</p>
 
             <h2>Keys containing dots</h2>
-            <p>If a key name contains a literal dot, dot-notation paths become ambiguous - <code>user.name</code> could mean a nested <code>name</code> under <code>user</code>, or a single key literally called <code>"user.name"</code>. When that distinction matters, use the <a href="/jsonpath-generator.html">JSONPath format</a> instead, which disambiguates by quoting such keys in brackets.</p>
-
-            <h2>How to use it</h2>
-            <ol>
-                <li>Copy a JSON response from your API client, DevTools, or a <code>.json</code> file</li>
-                <li>Open the <a href="/?format=paths">flattener</a> - dot-notation paths are preselected</li>
-                <li>Paste into the left box, or drag a file onto it</li>
-                <li>Toggle <strong>Collapse array indices</strong> depending on whether you want a schema view or a record view</li>
-                <li>Click <strong>Extract Keys</strong>, then copy or download the result</li>
-            </ol>
+            <p>If a key name itself contains a dot, dot notation becomes ambiguous: <code>metadata.order.ref</code> could be a nested field or a single key literally called <code>"order.ref"</code>. Webhook <code>metadata</code> objects are a common place for this, because their keys are chosen by whoever integrated with the API. When it matters, switch the format to <a href="/jsonpath-generator.html">JSONPath</a>, which writes such a key as <code>$.data.metadata['order.ref']</code>.</p>
 
             <h2>Other output formats</h2>
             <ul>
-                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a></li>
-                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a></li>
-                <li><a href="/?format=unique">Unique key names only</a> - just the distinct key names, no paths</li>
-                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a></li>
+                <li><a href="/json-to-typescript.html">Convert JSON to a TypeScript interface</a> - the same structure as a type, with optional and nullable fields marked</li>
+                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a> - query paths with <code>[*]</code> wildcards</li>
+                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a> - the shape without the full paths</li>
             </ul>
 
             <h2>Further reading</h2>
             <ul>
-                <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a></li>
-                <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
-                <li><a href="/blog/json-tools-for-developers.html">Best JSON tools for developers</a></li>
+                <li><a href="/blog/how-to-extract-json-keys.html">How to extract all keys from a JSON object</a> - the same job in JavaScript, Python, Ruby, and jq</li>
+                <li><a href="/blog/processing-large-json-files.html">Processing large JSON files</a> - inventorying the key paths of a file too big for a browser tab</li>
+                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
             </ul>
         </div>
     </article>
 </div>
 
+
+<script type="application/json" id="pageSample">
+{
+  "id": "evt_3Q9xKc",
+  "type": "payment.succeeded",
+  "created": 1759132800,
+  "data": {
+    "id": "pay_71AfZ",
+    "amount": 4200,
+    "currency": "eur",
+    "customer": {
+      "id": "cus_88Tq",
+      "email": "lena@example.com"
+    },
+    "payment_method": {
+      "type": "card",
+      "card": {
+        "brand": "visa",
+        "last4": "4242",
+        "exp_month": 12,
+        "exp_year": 2028
+      }
+    },
+    "lines": [
+      {
+        "sku": "TEA-01",
+        "qty": 2,
+        "unit_amount": 1500
+      },
+      {
+        "sku": "MUG-03",
+        "qty": 1,
+        "unit_amount": 1200,
+        "discount": {
+          "code": "AUTUMN10",
+          "percent": 10
+        }
+      }
+    ],
+    "refunds": [],
+    "metadata": {
+      "order_ref": "A-10293",
+      "campaign": "autumn"
+    }
+  }
+}
+</script>
 </main>
 
 <footer>
@@ -231,10 +332,18 @@ orders[].giftMessage</code></pre>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
 
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
 <script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
 </body>
 </html>

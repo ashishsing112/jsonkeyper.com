@@ -39,38 +39,6 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does the converter detect optional fields?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Objects inside an array are merged into a single shape, and any key that is missing from at least one element is marked optional with a question mark."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is my JSON uploaded to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. The conversion runs entirely in your browser using JavaScript. Your JSON never leaves your machine, so it is safe to paste production payloads."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens with an empty array?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "An empty array has no elements to infer a type from, so it is emitted as unknown[]. You will need to narrow the element type yourself."
-          }
-        }
-      ]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         {
@@ -118,98 +86,266 @@
     </ol>
 </nav>
 
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSON to TypeScript Interface Converter</h1>
+        <p class="mb-3 lead-copy">Paste a JSON payload and get a TypeScript type back. Arrays of records are merged into one element type, a field missing from some records is marked optional with <code>?</code>, and a field that is <code>null</code> on some records gains <code>| null</code>. Click <strong>Load this example</strong> to run it on the issue list discussed below.</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Input JSON</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
+                    <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                </div>
+                <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                <div id="errorBox" class="error-box" role="alert"></div>
+                <div class="button-row">
+                    <button onclick="handleSubmit()" class="btn extract-button btn-lg">Generate TypeScript</button>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="io-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <option value="paths">Key paths (dot notation)</option>
+                        <option value="typed">Key paths with value types</option>
+                        <option value="unique">Unique key names only</option>
+                        <option value="jsonpath">JSONPath expressions</option>
+                        <option value="tree">Indented tree</option>
+                        <option value="typescript" selected>TypeScript interface</option>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays">
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row p-1">
+                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+        <p class="tool-note">Runs entirely in your browser - the JSON you paste is never uploaded. To fetch a live API response from a curl command instead, use the <a href="/">full tool on the homepage</a>.</p>
+    </div>
+</section>
 
 <div class="container-shadow article-container">
     <article>
-        <h1 class="heading">JSON to TypeScript Interface Converter</h1>
-        <p class="text-muted"><small>Free, browser-based, no login required</small></p>
-
         <div class="article-body">
-            <p>Paste a JSON payload and get a TypeScript interface back. Nested objects become nested type literals, arrays of objects are merged into a single element shape, and any field that is absent from some elements is marked optional. The conversion happens entirely in your browser - your JSON is never uploaded anywhere.</p>
-
-            <div class="cta-box">
-                <h3>Convert JSON to TypeScript</h3>
-                <p>Opens the tool with the TypeScript output format already selected.</p>
-                <a href="/?format=typescript" class="btn btn-success btn-lg">Open the converter</a>
-            </div>
-
-            <h2>A worked example</h2>
-            <p>Take this trimmed-down order response, the kind of payload a typical e-commerce API returns:</p>
-            <pre><code>{
-  "user": {
-    "name": "Ada Lovelace",
-    "address": { "city": "London", "country": { "code": "GB" } },
-    "roles": ["admin", "engineer"]
+            <h2>A worked example: an issue tracker response</h2>
+            <p>This is two records from an issue-tracker API, shaped like the issue lists that GitHub and GitLab return and trimmed to the fields that matter here. The first issue is brand new - nobody is assigned, it has no labels or milestone, and it is still open. The second has been triaged, fixed by a pull request, and closed.</p>
+            <pre><code>[
+  {
+    "number": 1347,
+    "title": "Crash when the config file is empty",
+    "state": "open",
+    "user": { "login": "mkowalski", "id": 58213 },
+    "assignee": null,
+    "labels": [],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2026-09-14T08:12:44Z",
+    "closed_at": null
   },
-  "orders": [
-    { "orderId": "ord_1001", "total": 249.99 },
-    { "orderId": "ord_1002", "total": 15.50, "giftMessage": "Happy birthday" }
-  ]
-}</code></pre>
+  {
+    "number": 1342,
+    "title": "Add a --quiet flag",
+    "state": "closed",
+    "user": { "login": "tnguyen", "id": 90112 },
+    "assignee": { "login": "mkowalski", "id": 58213 },
+    "labels": [{ "name": "enhancement", "color": "a2eeef" }],
+    "milestone": { "title": "v2.4", "due_on": "2026-10-01T00:00:00Z" },
+    "comments": 3,
+    "created_at": "2026-09-02T16:40:03Z",
+    "closed_at": "2026-09-09T10:05:51Z",
+    "pull_request": { "url": "https://api.example.com/repos/acme/cli/pulls/1342" }
+  }
+]</code></pre>
 
             <p>The converter returns:</p>
-            <pre><code>interface Root {
+            <pre><code>type Root = {
+  number: number;
+  title: string;
+  state: string;
   user: {
-    name: string;
-    address: {
-      city: string;
-      country: {
-        code: string;
-      };
-    };
-    roles: string[];
+    login: string;
+    id: number;
   };
-  orders: {
-    orderId: string;
-    total: number;
-    giftMessage?: string;
+  assignee: {
+    login: string;
+    id: number;
+  } | null;
+  labels: {
+    name: string;
+    color: string;
   }[];
+  milestone: {
+    title: string;
+    due_on: string;
+  } | null;
+  comments: number;
+  created_at: string;
+  closed_at: string | null;
+  pull_request?: {
+    url: string;
+  };
+}[];</code></pre>
+
+            <p>Every line of that is earned from the data. <code>assignee</code>, <code>milestone</code>, and <code>closed_at</code> were <code>null</code> on one record and populated on the other, so each became a union with <code>null</code>. <code>labels</code> was empty on the first record, so its element type comes from the second. And <code>pull_request</code> exists on only one record, so it is optional.</p>
+
+            <h2>Optional and nullable are different things</h2>
+            <p>The example produces both <code>closed_at: string | null</code> and <code>pull_request?: {...}</code>, and the difference is not cosmetic. They describe two different API behaviours, and TypeScript makes you handle them differently:</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>In the JSON</th><th>Generated as</th><th>What it tells you</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Key present, value <code>null</code> on some records</td><td><code>closed_at: string | null</code></td><td>The API always sends the field and uses <code>null</code> for "no value yet". Check with <code>=== null</code>.</td></tr>
+                        <tr><td>Key missing from some records</td><td><code>pull_request?: {...}</code></td><td>The API omits the field entirely when it does not apply. Reading it gives <code>undefined</code>.</td></tr>
+                        <tr><td>Both, across records</td><td><code>field?: T | null</code></td><td>The API is inconsistent. Worth raising with whoever owns it.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Under <code>strict</code> mode the compiler holds you to it. With the type above, <code>issue.milestone.title</code> is a compile error - "'issue.milestone' is possibly 'null'" - and you have to write <code>issue.milestone?.title</code> or check first. That error is the reason to generate types at all: it is a bug in your code that the sample data has already told you about.</p>
+
+            <h2>Why one record is not enough</h2>
+            <p>Type inference can only describe values it has seen. Paste just the first issue on its own and the result is much less useful:</p>
+            <pre><code>interface Root {
+  number: number;
+  title: string;
+  state: string;
+  user: {
+    login: string;
+    id: number;
+  };
+  assignee: null;
+  labels: unknown[];
+  milestone: null;
+  comments: number;
+  created_at: string;
+  closed_at: null;
 }</code></pre>
+            <p><code>assignee: null</code> says the field can <em>only</em> be null, <code>labels: unknown[]</code> has nothing to infer from, and <code>pull_request</code> is missing entirely. None of that is wrong about the record you pasted - it is wrong about the API.</p>
+            <p>The practical rule: <strong>paste an array of several records, chosen to be different from each other.</strong> An open and a closed issue, a user with and without a profile photo, an order with and without a discount. Because every record in the array is merged, each extra record can only widen the type toward the truth. A single record describes that record and nothing more.</p>
 
-            <p>Two things worth noticing. First, <code>roles</code> became <code>string[]</code> rather than a tuple - the element types are unified. Second, <code>giftMessage</code> is marked <code>?</code> optional, because it appears on the second order but not the first. That optional-field detection is the part that is tedious to do by hand and easy to get wrong.</p>
+            <h2>Turning the output into code you would commit</h2>
+            <p>The generated type is deliberately one nested literal, so it pastes cleanly and can never refer to a name that does not exist. You do not need to split it by hand to get named types - TypeScript's indexed access types can pull every piece out of <code>Root</code>:</p>
+            <pre><code>type Issue = Root[number];
+type User = Issue['user'];
+type Label = Issue['labels'][number];
+type Milestone = NonNullable&lt;Issue['milestone']&gt;;</code></pre>
+            <p><code>Root[number]</code> means "the element type of this array", and <code>NonNullable</code> strips the <code>| null</code> when you want the populated shape. Rename <code>Root</code> to something like <code>IssueListResponse</code>, and when the API changes you can regenerate and paste over the one definition without touching the aliases. This exact snippet compiles under TypeScript 5 with <code>--strict</code>.</p>
+            <p>Two more edits are usually worth making by hand:</p>
+            <ul>
+                <li><strong>Narrow string enums.</strong> <code>state: string</code> is correct but loose. If the API documents the values, tighten it to <code>state: 'open' | 'closed'</code> so a typo in a comparison becomes a compile error.</li>
+                <li><strong>Leave dates as strings.</strong> JSON has no date type, so <code>created_at</code> arrives as an ISO 8601 string and is typed <code>string</code>. Resist changing it to <code>Date</code> - that would claim a conversion that <code>JSON.parse</code> never performs.</li>
+            </ul>
 
-            <h2>How optional detection works</h2>
-            <p>When the converter meets an array of objects, it does not emit a union of every distinct shape. Instead it merges them: the element type contains the union of all keys seen across every element, and a key is marked optional if it is missing from at least one of them.</p>
-            <p>This is almost always what you want from an API sample. A response containing three records where one lacks <code>deletedAt</code> tells you <code>deletedAt</code> is nullable in the schema, not that there are two different record types.</p>
-
-            <h2>How to use it</h2>
-            <ol>
-                <li>Copy a JSON response from your API client, browser DevTools, or a <code>.json</code> file</li>
-                <li>Open the <a href="/?format=typescript">converter</a> - the TypeScript format is preselected</li>
-                <li>Paste into the left box, or drag a <code>.json</code> file onto it</li>
-                <li>Click <strong>Extract Keys</strong> (or press Ctrl/Cmd + Enter)</li>
-                <li>Copy the interface, or download it as a file</li>
-            </ol>
+            <h2>Types are not validation</h2>
+            <p>TypeScript types are erased at compile time. If the API starts sending <code>"comments": "3"</code> as a string, nothing checks the response against your interface at runtime, and the wrong type flows through your code until something breaks further away. For data from a service you do not control, pair the type with a runtime check - a schema library such as Zod, or a JSON Schema validated with Ajv. The <a href="/blog/json-schema-guide.html">JSON Schema guide</a> covers the second approach.</p>
 
             <h2>Limitations worth knowing</h2>
             <ul>
-                <li><strong>Types are inferred from one sample.</strong> A field that is <code>null</code> in your sample is typed as <code>null</code> - widen it to <code>string | null</code> or whatever it should be. Feed the converter a representative payload.</li>
-                <li><strong>Empty arrays become <code>unknown[]</code>.</strong> There are no elements to infer from, so you will need to narrow the element type yourself.</li>
-                <li><strong>Numbers are all <code>number</code>.</strong> JSON does not distinguish integers from floats, so neither can the converter.</li>
-                <li><strong>The root type is named <code>Root</code>.</strong> Rename it to something meaningful for your codebase.</li>
-                <li><strong>Nested types are inlined, not extracted.</strong> If you want <code>Address</code> as its own named interface, split it out by hand.</li>
+                <li><strong>Types describe the sample, not the contract.</strong> A field that is <code>null</code> on every record you paste is typed as plain <code>null</code>, and a field that never appears cannot be generated at all.</li>
+                <li><strong>Empty arrays become <code>unknown[]</code></strong> when no record has any elements to infer from.</li>
+                <li><strong>Numbers are all <code>number</code>.</strong> JSON does not distinguish integers from floats, and IDs above 2<sup>53</sup> lose precision in <code>JSON.parse</code> before any type is involved.</li>
+                <li><strong>Strings are never narrowed to literal unions.</strong> Two records with <code>"state": "open"</code> and <code>"closed"</code> still give <code>string</code>, because the converter cannot know the list is complete.</li>
+                <li><strong>Keys that are not valid identifiers are quoted</strong>, so <code>"content-type"</code> becomes <code>"content-type": string</code>, which is valid TypeScript but needs bracket access in code.</li>
             </ul>
 
             <h2>Other output formats</h2>
-            <p>The same tool produces several other views of the same JSON:</p>
             <ul>
-                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - every key path as a flat list</li>
-                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a></li>
-                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a> - <code>$.orders[*].total</code> style queries</li>
-                <li><a href="/?format=typed">Key paths with value types</a> - paths annotated with the type at each position</li>
-                <li><a href="/?format=tree">Indented tree</a> - the hierarchy as a readable outline</li>
+                <li><a href="/json-flattener.html">Flatten JSON to dot notation</a> - every key path as a flat list, for field mappings</li>
+                <li><a href="/jsonpath-generator.html">Generate JSONPath expressions</a> - query paths for jq, kubectl, and JSONPath libraries</li>
+                <li><a href="/json-tree-viewer.html">View JSON as an indented tree</a> - the shape at a glance, without the values</li>
             </ul>
 
             <h2>Further reading</h2>
             <ul>
-                <li><a href="/blog/what-is-json.html">What is JSON? A complete beginner's guide</a></li>
                 <li><a href="/blog/json-schema-guide.html">JSON Schema: a practical guide to validating JSON</a></li>
+                <li><a href="/blog/json-in-rest-apis.html">Common JSON structures in REST APIs</a></li>
                 <li><a href="/blog/understanding-nested-json.html">Understanding nested JSON objects and arrays</a></li>
             </ul>
         </div>
     </article>
 </div>
 
+
+<script type="application/json" id="pageSample">
+[
+  {
+    "number": 1347,
+    "title": "Crash when the config file is empty",
+    "state": "open",
+    "user": {
+      "login": "mkowalski",
+      "id": 58213
+    },
+    "assignee": null,
+    "labels": [],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2026-09-14T08:12:44Z",
+    "closed_at": null
+  },
+  {
+    "number": 1342,
+    "title": "Add a --quiet flag",
+    "state": "closed",
+    "user": {
+      "login": "tnguyen",
+      "id": 90112
+    },
+    "assignee": {
+      "login": "mkowalski",
+      "id": 58213
+    },
+    "labels": [
+      {
+        "name": "enhancement",
+        "color": "a2eeef"
+      }
+    ],
+    "milestone": {
+      "title": "v2.4",
+      "due_on": "2026-10-01T00:00:00Z"
+    },
+    "comments": 3,
+    "created_at": "2026-09-02T16:40:03Z",
+    "closed_at": "2026-09-09T10:05:51Z",
+    "pull_request": {
+      "url": "https://api.example.com/repos/acme/cli/pulls/1342"
+    }
+  }
+]
+</script>
 </main>
 
 <footer>
@@ -221,10 +357,18 @@
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
         <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
         <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
     </nav>
 </footer>
 
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
 <script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
 </body>
 </html>

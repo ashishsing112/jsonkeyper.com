@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="description" content="Every user-facing change to JSON Keyper, newest first: new output formats, tool pages, fixes, and new and corrected guides.">
+    <title>Changelog | JSON Keyper</title>
+    <link rel="canonical" href="https://jsonkeyper.com/changelog.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="JSON Keyper Changelog">
+    <meta property="og:description" content="Every user-facing change to JSON Keyper, newest first: new output formats, tool pages, fixes, and new and corrected guides.">
+    <meta property="og:url" content="https://jsonkeyper.com/changelog.html">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSON Keyper Changelog">
+    <meta name="twitter:description" content="Every user-facing change to JSON Keyper, newest first: new output formats, tool pages, fixes, and new and corrected guides.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Changelog",
+          "item": "https://jsonkeyper.com/changelog.html"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy.html">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">Changelog</span></li>
+    </ol>
+</nav>
+
+
+<div class="container-shadow about-container">
+    <h1 class="heading">Changelog</h1>
+    <p>Every user-facing change to JSON Keyper, newest first. The full history, including every line of code, is in the <a href="https://github.com/ashishsing112/jsonkeyper.com/commits/main" rel="noopener">GitHub repository</a>. Found a bug? <a href="/contact.html">Tell me</a>.</p>
+
+    <h2 class="mt-4 mb-3 heading" id="d2026-09-29"><time datetime="2026-09-29">29 September 2026</time></h2>
+    <ul>
+        <li>The four tool pages - <a href="/json-to-typescript.html">JSON to TypeScript</a>, <a href="/jsonpath-generator.html">JSONPath generator</a>, <a href="/json-flattener.html">JSON flattener</a>, and <a href="/json-tree-viewer.html">tree viewer</a> - now run the tool directly on the page, each with its own worked example: an issue-tracker response, a Kubernetes pod list, a payment webhook, and a GeoJSON file.</li>
+        <li>TypeScript output now marks a field that is <code>null</code> on some records as <code>T | null</code> instead of taking the type of whichever record came first, and pools array elements across records, so an empty <code>labels: []</code> on one record no longer hides the element type seen on another.</li>
+        <li>Rewrote the <a href="/about.html">About</a> and <a href="/contact.html">Contact</a> pages, and corrected the <a href="/privacy.html">privacy policy</a>: Google Analytics sets first-party cookies, which the previous wording denied.</li>
+        <li>Revised <a href="/blog/json-vs-xml.html">JSON vs XML</a> with measured payload sizes and parse times, added a section on what JSON cannot represent to <a href="/blog/what-is-json.html">What is JSON?</a>, and made the <a href="/blog/json-tools-for-developers.html">JSON tools guide</a> recommend other tools on their merits.</li>
+        <li>Added this changelog.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-09-25"><time datetime="2026-09-25">25 September 2026</time></h2>
+    <ul>
+        <li>Added a Clear button to the Execute cURL panel, and documented the Execute cURL tab in the how-to section and the terms of service.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-09-23"><time datetime="2026-09-23">23 September 2026</time></h2>
+    <ul>
+        <li>New <strong>Execute cURL</strong> tab: paste a curl command and the tool fetches the live response through a proxy, then extracts its keys. See the <a href="/privacy.html#curl-proxy-feature">privacy policy</a> for what the proxy does and does not keep.</li>
+        <li>New guides: <a href="/blog/cors-explained.html">CORS explained</a>, <a href="/blog/processing-large-json-files.html">processing large JSON files</a> (with measured memory for jq and Python), and <a href="/blog/jackson-vs-gson-vs-moshi.html">Jackson vs Gson vs Moshi</a>.</li>
+        <li>Corrected earlier claims that plain <code>jq</code> streams large files. It does not; the large-files guide measures why.</li>
+        <li>Fixed misaligned input and output columns and a stray focus outline on the input tabs.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-09-22"><time datetime="2026-09-22">22 September 2026</time></h2>
+    <ul>
+        <li>Removed unused JavaScript libraries to speed up page loads, and added link previews for social sharing.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-08-24"><time datetime="2026-08-24">24 August 2026</time></h2>
+    <ul>
+        <li>Performance work on page layout stability.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-08-17"><time datetime="2026-08-17">17 August 2026</time></h2>
+    <ul>
+        <li>Added the four format pages, and <code>?format=</code> links that open the tool with an output format preselected.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-08-05"><time datetime="2026-08-05">5 August 2026</time></h2>
+    <ul>
+        <li>Six output formats instead of one: key paths, key paths with value types, unique key names, JSONPath, indented tree, and TypeScript interface.</li>
+        <li>Collapse array indices, structure statistics, a built-in sample, file upload and drag-and-drop, <kbd>Ctrl</kbd> + <kbd>Enter</kbd>, and download.</li>
+        <li>Parse errors now report the line and column of malformed JSON.</li>
+        <li>Rebuilt the homepage with a worked example, a path-notation reference, and a limitations section. Corrected blog dates that had been shown wrongly, and added author information.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-07-13"><time datetime="2026-07-13">13 July 2026</time></h2>
+    <ul>
+        <li>Expanded the existing guides.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2026-06-23"><time datetime="2026-06-23">23 June 2026</time></h2>
+    <ul>
+        <li>Redesigned the site and added the blog, with nine guides on JSON basics, nested data, REST APIs, JSON Schema, and Python.</li>
+    </ul>
+    <h2 class="mt-4 mb-3 heading" id="d2024-10-09"><time datetime="2024-10-09">9 October 2024</time></h2>
+    <ul>
+        <li>First version: paste JSON, get every key path in dot notation.</li>
+    </ul>
+</div>
+
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/about.html">About</a>
+        <a href="/changelog.html">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
