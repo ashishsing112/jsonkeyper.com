@@ -73,6 +73,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#tools">Tools</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/privacy">Privacy Policy</a></li>
@@ -98,6 +99,7 @@
 
     <h2 class="mt-4 mb-3 heading">No Data Storage</h2>
     <p>JSON Keyper does not store any user data. Any JSON you paste into the tool is processed entirely in your own browser and never leaves your machine. This means that I do not collect, store, or share pasted JSON. Your privacy is completely protected while using the paste-JSON flow.</p>
+    <p>One detail for completeness: when you switch from one tool to another with JSON already pasted, the JSON is held for a moment in your browser's <code>sessionStorage</code> so the next tool can pick it up. It stays in that browser tab, is never sent anywhere, and is deleted as soon as the next page reads it.</p>
 
     <h2 class="mt-4 mb-3 heading" id="curl-proxy-feature">cURL Proxy Feature</h2>
     <p>The <strong>Execute cURL</strong> tab works differently, because browsers block direct cross-origin requests. When you execute a curl command there, the parsed request (URL, method, headers, and body) is sent to a Cloudflare Worker I operate, which fetches the target API on your behalf and returns the response to your browser. This is the only feature on JSON Keyper that transmits data off your device.</p>

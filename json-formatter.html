@@ -74,6 +74,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/#tools">Tools</a></li>
                     <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
@@ -94,6 +95,14 @@
 
 <section class="container-shadow" aria-labelledby="page-title">
     <div class="section">
+        <nav class="tool-switcher" aria-label="JSON tools">
+            <a href="/">Key Extractor</a>
+            <a href="/json-formatter" class="active" aria-current="page">Formatter</a>
+            <a href="/json-flattener">Flattener</a>
+            <a href="/jsonpath-generator">JSONPath</a>
+            <a href="/json-tree-viewer">Tree Viewer</a>
+            <a href="/json-to-typescript">JSON to TypeScript</a>
+        </nav>
         <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSON Formatter: Pretty-Print and Minify JSON</h1>
         <p class="mb-3 lead-copy">Paste JSON to indent it for reading, or minify it back to one line. The formatter only changes whitespace: every number, string, and key comes out exactly as you pasted it, which is not true of most formatters. Malformed JSON is reported with its line and column. Click <strong>Load this example</strong> to format the minified API response discussed below.</p>
         <div class="row">
@@ -106,7 +115,7 @@
                     <button onclick="loadSample()" class="btn btn-outline-secondary btn-sm" type="button">Load this example</button>
                     <label for="fileInput" class="btn btn-outline-secondary btn-sm mb-0">Upload a file</label>
                     <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
-                    <span class="shortcut-hint">Tip: Ctrl + Enter extracts</span>
+                    <span class="shortcut-hint">Tip: Ctrl + Enter runs</span>
                 </div>
                 <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
                 <div id="errorBox" class="error-box" role="alert"></div>
@@ -143,22 +152,10 @@
                     </div>
                 </div>
                 <textarea id="keysOutput" aria-label="Output" placeholder="Output will appear here..." readonly></textarea>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="row p-1">
-                            <button onclick="handleCopy()" class="btn copy-button btn-lg">Copy</button>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="row p-1">
-                            <button onclick="handleDownload()" class="btn download-button btn-lg">Download</button>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="row p-1">
-                            <button onclick="handleClear()" class="btn btn-danger btn-lg w-100 clear-button">Clear</button>
-                        </div>
-                    </div>
+                <div class="output-actions">
+                    <button onclick="handleCopy()" class="btn copy-button btn-lg" type="button">Copy</button>
+                    <button onclick="handleDownload()" class="btn download-button btn-lg" type="button">Download</button>
+                    <button onclick="handleClear()" class="btn btn-danger btn-lg clear-button" type="button">Clear</button>
                 </div>
             </div>
         </div>
@@ -168,7 +165,7 @@
     </div>
 </section>
 
-<div class="container-shadow article-container">
+<div class="container-shadow article-container tool-article">
     <article>
         <div class="article-body">
             <h2>A worked example: a minified event feed</h2>

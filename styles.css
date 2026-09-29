@@ -167,7 +167,7 @@ textarea.drag-active {
 }
 
 .button-row {
-    padding: 4px;
+    margin-top: 8px;
 }
 
 .shortcut-hint {
@@ -344,7 +344,7 @@ textarea.drag-active {
     display: none;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 18px 4px 0;
+    margin: 18px 0 0;
 }
 
 .stats-panel.show {
@@ -855,7 +855,7 @@ textarea.drag-active {
 
 /* Note under the tool embedded on the format landing pages. */
 .tool-note {
-    margin: 12px 4px 0;
+    margin: 12px 0 0;
     color: #777;
     font-size: 13px;
 }
@@ -867,4 +867,136 @@ textarea.drag-active {
     border-top: 1px solid #e5e5e5;
     color: #777;
     font-size: 13px;
+}
+
+/* Tool switcher: one row of links across the top of every tool, so each tool
+   is one click from any other. Scrolls sideways on narrow screens. */
+.tool-switcher {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #eee;
+    scrollbar-width: thin;
+}
+
+.tool-switcher a {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    border-radius: 16px;
+    background-color: #f1f3f5;
+    color: #495057;
+    font-size: 14px;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.tool-switcher a:hover {
+    background-color: #e2e6ea;
+    text-decoration: none;
+}
+
+.tool-switcher a.active {
+    background-color: #4CAF50;
+    color: #fff;
+    font-weight: 700;
+}
+
+/* JSON in and out is code: a monospace face keeps indentation aligned. Output
+   does not wrap, so formatted JSON and long paths keep their shape; minified
+   output is one line, so it wraps instead (see syncControls in script.js). */
+#textbox1,
+#keysOutput,
+#curlInput {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    line-height: 1.55;
+    tab-size: 4;
+}
+
+#keysOutput {
+    white-space: pre;
+    overflow-x: auto;
+}
+
+#keysOutput.wrap-lines {
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+/* Output buttons share the textarea's exact width. */
+.output-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.output-actions .btn {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Explanatory text under a tool: same card width as the tool above it, with
+   the text held to a readable line length. */
+.tool-article {
+    max-width: 1100px;
+}
+
+.tool-article .article-body {
+    max-width: 780px;
+}
+
+.article-body > h2:first-child {
+    margin-top: 0;
+}
+
+/* Homepage tool directory. */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.tool-card {
+    display: block;
+    padding: 14px 16px;
+    border: 1px solid #e3e6ea;
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.tool-card:hover,
+.tool-card:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.15);
+    color: inherit;
+    text-decoration: none;
+}
+
+.tool-card-title {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.tool-card-text {
+    display: block;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.tool-card-badge {
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background-color: #eaf6ea;
+    color: #2e7d32;
+    font-size: 11px;
+    font-weight: 700;
+    vertical-align: middle;
 }
