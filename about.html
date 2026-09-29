@@ -70,7 +70,11 @@
         "description": "Back-end developer with more than four years of professional experience in Java/Spring Boot, Python, and Node.js/TypeScript, and the builder of JSON Keyper.",
         "knowsAbout": ["JSON", "REST APIs", "API integration", "ETL and data pipelines", "Java", "Spring Boot", "Python", "Node.js", "TypeScript"],
         "url": "https://jsonkeyper.com/about.html",
-        "sameAs": ["https://github.com/ashishsing112"]
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "SRM Institute of Science and Technology"
+        },
+        "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
       }
     }
     </script>
@@ -118,6 +122,26 @@
     </ul>
     <p>Each of those shaped a part of the tool. The first is why it exists at all: before I can write parsing code for an unfamiliar response, I need a full list of what is in it. The second is why it generates <a href="/json-to-typescript.html">TypeScript types</a> that mark optional and nullable fields separately. The third is why the <a href="/json-flattener.html">flattener</a> can collapse array indices into a schema view that pastes straight into a mapping sheet.</p>
 
+    <h2 class="mt-4 mb-3 heading">Where I've Worked</h2>
+    <p>I started in software testing in 2020 and moved to development in November 2021. The four development roles since then have been in quite different domains, which is where most of the JSON problems on this site come from:</p>
+    <ul>
+        <li><strong>Public sector (2025 - present).</strong> I build Java EE services (EJB, JAX-RS on WildFly) for a government platform, owning features from the specification through the database, the API, and the UI.</li>
+        <li><strong>SAP Labs India (2024 - 2025).</strong> SAP Commerce Cloud (Hybris) checkout and pricing: coupon-expiry validation, and discount calculations that had to agree with SAP's pricing engine as basket contents changed.</li>
+        <li><strong>Lentra AI (2023 - 2024).</strong> Spring Boot microservices for credit-card onboarding and loan decisioning, integrating third-party eKYC and OTP services. I added Resilience4j circuit breakers and fallbacks for when those providers failed, mock responses for their timeouts in test environments, and Kafka events feeding a transaction-monitoring dashboard.</li>
+        <li><strong>EduNext Technologies (2021 - 2023).</strong> Spring Boot REST APIs and JSP for a school ERP used by more than 600 schools, including the APIs behind its mobile apps, and the LearnOTest online test platform.</li>
+        <li><strong>QA InfoTech (2020).</strong> Software test engineer: writing and running test scenarios and regression-testing fixes before release.</li>
+    </ul>
+    <p>I have a B.Tech in Information Technology from SRM Institute of Science and Technology (2019), and certifications in Java 17, testing with JUnit, and SQL. The full history is on <a href="https://www.linkedin.com/in/ashishsinghdeveloper/" rel="noopener">LinkedIn</a>.</p>
+
+    <h2 class="mt-4 mb-3 heading">Problems I've Had to Solve</h2>
+    <p>The guides and features on this site come from a short list of problems I have hit in real systems and had to fix:</p>
+    <ul>
+        <li><strong>An upstream API changing shape.</strong> A field renamed, removed, or retyped by a provider, discovered only when parsing or a data load broke. Flattening a response to its key paths and diffing it against the last known shape is the quickest way I know to see exactly what changed - see the <a href="/json-flattener.html">flattener</a>.</li>
+        <li><strong>Null versus missing.</strong> Code that treated an absent field and a <code>null</code> field as the same thing, or crashed on one of them. The <a href="/blog/null-missing-unknown-fields.html">null, missing, and unknown fields comparison</a> tests how Jackson, Pydantic, and Zod handle each case.</li>
+        <li><strong>Unknown-property failures.</strong> A deserializer failing on a new field an API had added without notice. The same comparison shows which defaults throw, and <a href="/blog/jackson-vs-gson-vs-moshi.html">choosing a JSON library on the JVM</a> covers how to configure it.</li>
+        <li><strong>Payloads too large for memory.</strong> A response or file big enough to exhaust memory or time out. <a href="/blog/processing-large-json-files.html">Processing large JSON files</a> measures what each approach actually costs.</li>
+    </ul>
+
     <h2 class="mt-4 mb-3 heading">Why I Built It</h2>
     <p>For a long time my answer to "what fields are in this response?" was a throwaway script - a recursive function in whichever language I had open, rewritten each time because the last copy was in another project. Browser DevTools shows one record at a time; <code>jq</code> is excellent in a pipeline but awkward when you want types, collapsed arrays, and a result you can paste into a ticket. I wanted the script as a page: paste JSON, get every path, done.</p>
     <p>I also wanted to build something real on the front end, outside the server-side work I do every day. JSON Keyper is plain HTML, CSS, and JavaScript with no framework and no build step, which keeps it fast and means the whole tool can be read in about 600 lines of <a href="https://github.com/ashishsing112/jsonkeyper.com/blob/main/script.js" rel="noopener">script.js</a>.</p>
@@ -128,7 +152,7 @@
         <li><strong>October 2024</strong> - the first version: paste JSON, get a list of dot-notation key paths.</li>
         <li><strong>June 2026</strong> - a redesign, and the first guides on the <a href="/blog/">blog</a>.</li>
         <li><strong>August 2026</strong> - six output formats instead of one, array-index collapsing, structure statistics, and parse errors that give a line and column.</li>
-        <li><strong>September 2026</strong> - the Execute cURL tab for fetching live API responses, the four format pages with the tool built in, and TypeScript output that distinguishes missing fields from <code>null</code> ones.</li>
+        <li><strong>September 2026</strong> - the Execute cURL tab for fetching live API responses, the four format pages with the tool built in, TypeScript output that distinguishes missing fields from <code>null</code> ones, and a <a href="/json-formatter.html">JSON formatter</a> that never changes a value.</li>
     </ul>
     <p>The source code and every change to it are public on <a href="https://github.com/ashishsing112/jsonkeyper.com" rel="noopener">GitHub</a>.</p>
 
@@ -161,7 +185,8 @@
             <p class="author-blurb">Back-end developer with more than four years of professional experience in Java/Spring Boot,
             Python, and Node.js/TypeScript - integrating third-party APIs, building REST services, and moving
             JSON through data pipelines. Sole builder and writer of JSON Keyper.
-            Code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>.</p>
+            Code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>; career on
+            <a href="https://www.linkedin.com/in/ashishsinghdeveloper/" rel="noopener">LinkedIn</a>.</p>
         </div>
     </div>
 </div>
