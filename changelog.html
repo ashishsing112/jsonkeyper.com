@@ -100,6 +100,9 @@
 
     <h2 class="mt-4 mb-3 heading" id="d2026-09-30"><time datetime="2026-09-30">30 September 2026</time></h2>
     <ul>
+        <li>New page: <a href="/execute-curl">Run a cURL Command Online</a>, covering which curl options work, what the API receives through the proxy, and every limit.</li>
+        <li>More curl commands work, and each sends exactly what curl itself would: <code>-u</code> (Basic auth), <code>-A</code>, <code>-e</code>, <code>-b</code> (cookies), <code>-G</code>, <code>-I</code>, <code>--json</code>, and properly encoded <code>--data-urlencode</code>. Options that read local files now explain why they cannot work, instead of failing with a misleading error.</li>
+        <li>Requests from the cURL runner now carry a <code>User-Agent</code> identifying JSON Keyper when the command sets none, as curl does, because some APIs - GitHub's among them - refuse requests without one.</li>
         <li>New <a href="/json-diff">JSON Diff</a>: compare two documents by value, by structure - with breaking changes flagged - or as a JSON Patch. Array items are matched by their ID, key order is ignored, and numbers are compared exactly as written.</li>
         <li>A Sponsor link now sits at the end of the header, and the footer link reads "Sponsor on GitHub". JSON Keyper stays free, with no accounts.</li>
     </ul>
