@@ -382,6 +382,11 @@ JsonMapper mapper = JsonMapper.builder()
             which fields are optional and which are nullable. Either is a faster way to find out
             what the API actually sends than reading its documentation.</p>
 
+            <p>When a provider ships a new version, compare an old response with a new one in
+            <a href="/json-diff">JSON Diff</a>. Its <strong>Structure</strong> view flags exactly
+            the changes this article tested - a field that became nullable, became optional,
+            changed type, or disappeared - before any of your parsing code meets them.</p>
+
             <h2>Reproduce it</h2>
             <p>The thirteen cases are one JSON file, <code>cases.json</code>, and each library
             has a short script that reads it. The Java checks are built with Maven, the Python

@@ -5,8 +5,8 @@ key path it contains - including keys buried inside nested objects and arrays -
 rendered as dot notation, JSONPath, an indented tree, or a generated TypeScript
 type; or pretty-print and minify it without changing a single value.
 
-Six tools share one engine: Key Extractor (the homepage), Formatter, Flattener,
-JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside them is a blog
+Seven tools share one engine: Key Extractor (the homepage), Formatter, Diff,
+Flattener, JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside them is a blog
 of tested, long-form guides on working with JSON.
 
 Live at **[jsonkeyper.com](https://jsonkeyper.com)**.
@@ -54,6 +54,14 @@ some elements stays required and gains `| null` instead, and arrays nested in
 those elements pool their items, so an empty `labels: []` on one record does not
 hide the element type seen on another.
 
+JSON Diff (`/json-diff`, code in `diff.js`) compares two documents three ways:
+a list of added, removed, and changed values; a structure diff that flags
+breaking changes (a field removed, retyped, newly nullable, or newly optional);
+and an RFC 6902 JSON Patch. Key order is ignored, array items are paired by an
+identifying field (`id`, `uuid`, `sku`, ...) when every item has a unique one,
+and a small parser keeps number literals and duplicate keys, so numbers are
+compared exactly as written.
+
 The formatted and minified outputs never re-serialise: `formatJsonText` walks the
 original text and changes only whitespace outside strings, so integers above
 2^53, trailing zeros such as `12.50`, key order, and duplicate keys survive
@@ -88,6 +96,7 @@ that rewrites an old `.html` address in the address bar with
 ```
 index.html                Tool plus reference content, FAQ, and structured data
 script.js                 Traversal, output formatters, and UI wiring (no dependencies)
+diff.js                   JSON Diff: preserving parser, value/structure diff, JSON Patch, page UI
 nav.js                    Navbar collapse toggle, loaded by every page
 curl-parser.js            Self-contained curl command string parser, no dependencies
 curl-proxy.js             Execute cURL tab: proxy request/response UI, wired to curl-parser.js
@@ -98,6 +107,7 @@ json-to-typescript.html   Tool page: TypeScript generation (issue-tracker exampl
 jsonpath-generator.html   Tool page: JSONPath expressions (Kubernetes pod list example)
 json-tree-viewer.html     Tool page: indented structural tree (GeoJSON example)
 json-formatter.html       Tool page: pretty-print and minify (event feed example)
+json-diff.html            Tool page: two-document diff (payouts API v1 vs v2 example)
                           Each embeds the tool with its format preselected, and
                           its own sample in <script id="pageSample">, which
                           loadSample() loads verbatim in place of the homepage
@@ -120,14 +130,15 @@ CNAME                     Custom domain for GitHub Pages
 
 tools/serve.py            Local server that resolves clean URLs like GitHub Pages
 tools/check-sitemap.py    Reports sitemap lastmod values older than the file's last commit
+tools/diff-tests/         Tests for diff.js: node tools/diff-tests/test.js
 tools/json-vs-xml-bench/  Reproduces the measurements in blog/json-vs-xml.html
 tools/model-mismatch/     Reproduces blog/null-missing-unknown-fields.html in
                           Jackson 2 and 3, Pydantic, and Zod (see its README)
 ```
 
 There is no build step, no bundler, and no package manifest - the files served
-are the files in the repository. The homepage and the five tool pages load
-`script.js`; the homepage also loads `curl-parser.js` and `curl-proxy.js` for the
+are the files in the repository. The homepage and the six tool pages load
+`script.js`; the diff page also loads `diff.js`; the homepage also loads `curl-parser.js` and `curl-proxy.js` for the
 Execute cURL tab; every page loads `nav.js`. Bootstrap's CSS is still used from
 a CDN, but its JavaScript, jQuery, and Popper were removed because the navbar
 toggle was the only behaviour that depended on them.
@@ -172,8 +183,9 @@ Issues and pull requests are welcome. A few conventions worth knowing:
 - **Keep dates honest.** Article `datePublished` / `dateModified` values, visible
   bylines, and sitemap `lastmod` entries must reflect when the content was
   actually written.
-- **Test the tool before opening a PR.** `script.js` exposes plain functions, so
-  the formatters can be exercised directly under Node without a browser.
+- **Test the tool before opening a PR.** `script.js` and `diff.js` expose plain
+  functions, so they can be exercised directly under Node without a browser. Run
+  `node tools/diff-tests/test.js` after touching `diff.js`.
 
 ## License
 

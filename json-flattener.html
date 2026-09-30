@@ -88,6 +88,7 @@
     <div class="tool-strip-inner">
         <a href="/">Key Extractor</a>
         <a href="/json-formatter">Formatter</a>
+        <a href="/json-diff">Diff</a>
         <a href="/json-flattener" class="active" aria-current="page">Flattener</a>
         <a href="/jsonpath-generator">JSONPath</a>
         <a href="/json-tree-viewer">Tree Viewer</a>
@@ -265,6 +266,7 @@ data.lines[].discount.code         -&gt; (payment_lines) discount_code</code></p
             <p>Flattened output diffs well. Flatten last month's sample and this month's with the same settings, save both, and compare them:</p>
             <pre><code>diff old-paths.txt new-paths.txt</code></pre>
             <p>Because the collapsed list contains no values and no array positions, the only lines that differ are fields that were added or removed - exactly the list you need to update a mapping.</p>
+            <p>To skip the save-and-diff step, paste both samples into <a href="/json-diff">JSON Diff</a>. Its <strong>Structure</strong> view gives the same list of added and removed fields directly, and also flags fields whose type changed or that became nullable.</p>
 
             <h2>Keys containing dots</h2>
             <p>If a key name itself contains a dot, dot notation becomes ambiguous: <code>metadata.order.ref</code> could be a nested field or a single key literally called <code>"order.ref"</code>. Webhook <code>metadata</code> objects are a common place for this, because their keys are chosen by whoever integrated with the API. When it matters, switch the format to <a href="/jsonpath-generator">JSONPath</a>, which writes such a key as <code>$.data.metadata['order.ref']</code>.</p>

@@ -28,7 +28,7 @@
     <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
     <meta property="og:locale" content="en_US">
     <meta property="article:published_time" content="2026-06-23">
-    <meta property="article:modified_time" content="2026-09-29">
+    <meta property="article:modified_time" content="2026-09-30">
     <meta property="article:author" content="Ashish Singh">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="JSON Tools for Developers: What to Use for Each Job">
@@ -51,7 +51,7 @@
       "@type": "Article",
       "headline": "JSON Tools for Developers: What to Use for Each Job",
       "datePublished": "2026-06-23",
-      "dateModified": "2026-09-29",
+      "dateModified": "2026-09-30",
       "author": {
         "@type": "Person",
         "@id": "https://jsonkeyper.com/about#ashish-singh",
@@ -146,7 +146,7 @@
 <div class="container-shadow article-container">
     <article>
         <h1 class="heading">JSON Tools for Developers: What to Use for Each Job</h1>
-        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated September 29, 2026 &middot; 9 min read</small></p>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated September 30, 2026 &middot; 9 min read</small></p>
 
         <div class="article-body">
             <p>Working with JSON is a daily activity for most developers, and having the right tools significantly reduces the time spent navigating, validating, and transforming JSON data. This guide covers the best JSON tools across different categories - browser-based utilities, command-line tools, code editor extensions, and API clients - with practical advice on when to reach for each one.</p>
@@ -256,6 +256,9 @@ diff &lt;(jq -S . file1.json) &lt;(jq -S . file2.json)</code></pre>
             <h3>VS Code Diff</h3>
             <p>In VS Code: right-click a file in the Explorer and choose "Select for Compare", then right-click the second file and "Compare with Selected". Works for JSON files out of the box.</p>
 
+            <h3>JSON Keyper's JSON Diff</h3>
+            <p><em>Disclosure: this is this site's own tool.</em> <a href="/json-diff">JSON Diff</a> compares two documents in the browser, ignoring key order and matching array items by their ID, and has a structure view that flags breaking changes such as a field that changed type or became nullable. Use it for reading the differences between two API responses; use <code>jq -S</code> with <code>diff</code> when you need an exit code in a script.</p>
+
             <h2>Category 6: Code Editor Extensions for JSON</h2>
             <p>Several VS Code extensions significantly improve the JSON development experience:</p>
             <ul>
@@ -286,7 +289,7 @@ diff &lt;(jq -S . file1.json) &lt;(jq -S . file2.json)</code></pre>
                     <tr><td>Validate JSON syntax quickly</td><td>Browser console / VS Code</td></tr>
                     <tr><td>Validate against a schema</td><td>Ajv (JS) or jsonschema (Python)</td></tr>
                     <tr><td>Explore and test API endpoints</td><td>Postman or Insomnia</td></tr>
-                    <tr><td>Diff two JSON files</td><td>jq + diff or VS Code diff</td></tr>
+                    <tr><td>Diff two JSON files</td><td>jq + diff in scripts; VS Code diff for files in a repo; JSON Diff (this site) to read changes between two API responses</td></tr>
                     <tr><td>Transform JSON in a pipeline</td><td>jq or jmespath</td></tr>
                     <tr><td>Generate TypeScript types from JSON</td><td>Paste JSON as Code (VS Code)</td></tr>
                 </tbody>

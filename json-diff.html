@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="Compare two JSON documents by value or by structure. Flags breaking changes, matches array items by ID, ignores key order, compares numbers exactly, and exports a JSON Patch. Runs in your browser.">
+    <link rel="canonical" href="https://jsonkeyper.com/json-diff">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="JSON Diff - Compare Two JSON Files Online, Including Breaking Changes">
+    <meta property="og:description" content="Compare two JSON documents by value or by structure. Flags breaking changes, matches array items by ID, ignores key order, compares numbers exactly, and exports a JSON Patch. Runs in your browser.">
+    <meta property="og:url" content="https://jsonkeyper.com/json-diff">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSON Diff - Compare Two JSON Files Online, Including Breaking Changes">
+    <meta name="twitter:description" content="Compare two JSON documents by value or by structure. Flags breaking changes, matches array items by ID, ignores key order, compares numbers exactly, and exports a JSON Patch. Runs in your browser.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <title>JSON Diff - Compare Two JSON Files Online, Including Breaking Changes | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "JSON Diff",
+          "item": "https://jsonkeyper.com/json-diff"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/#tools">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<nav class="tool-strip" aria-label="JSON tools">
+    <div class="tool-strip-inner">
+        <a href="/">Key Extractor</a>
+        <a href="/json-formatter">Formatter</a>
+        <a href="/json-diff" class="active" aria-current="page">Diff</a>
+        <a href="/json-flattener">Flattener</a>
+        <a href="/jsonpath-generator">JSONPath</a>
+        <a href="/json-tree-viewer">Tree Viewer</a>
+        <a href="/json-to-typescript">JSON to TypeScript</a>
+    </div>
+</nav>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">JSON Diff</span></li>
+    </ol>
+</nav>
+
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">JSON Diff: Compare Two JSON Documents</h1>
+        <p class="mb-3 lead-copy">Paste two versions of a JSON document to see what changed - by value, or by structure, with the changes that can break code that reads the data flagged. Key order is ignored, array items are matched by their <code>id</code>, and numbers are compared exactly as written. Click <strong>Load example</strong> to compare the two API responses discussed below.</p>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Original</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="loadDiffExample()" class="btn btn-tool btn-sm" type="button">Load example</button>
+                    <label for="diffFileA" class="btn btn-tool btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="diffFileA" accept=".json,.txt,application/json" onchange="handleDiffFile(event, 'diffOriginal')" hidden>
+                    <button onclick="clearDiffSide('diffOriginal')" class="btn btn-tool btn-sm" type="button">Clear</button>
+                </div>
+                <textarea id="diffOriginal" aria-label="Original JSON" placeholder="Paste the original JSON here..."></textarea>
+                <div id="diffOriginalError" class="error-box" role="alert"></div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Modified</span>
+                    <span class="io-hint">Paste, or drop a .json file here</span>
+                </div>
+                <div class="io-controls">
+                    <button onclick="swapDiffSides()" class="btn btn-tool btn-sm" type="button" title="Swap Original and Modified">&#8646; Swap sides</button>
+                    <label for="diffFileB" class="btn btn-tool btn-sm mb-0">Upload a file</label>
+                    <input type="file" id="diffFileB" accept=".json,.txt,application/json" onchange="handleDiffFile(event, 'diffModified')" hidden>
+                    <button onclick="clearDiffSide('diffModified')" class="btn btn-tool btn-sm" type="button">Clear</button>
+                </div>
+                <textarea id="diffModified" aria-label="Modified JSON" placeholder="Paste the modified JSON here..."></textarea>
+                <div id="diffModifiedError" class="error-box" role="alert"></div>
+            </div>
+        </div>
+
+        <div class="diff-options">
+            <label for="diffArrayMatch" class="control-label">Match array items</label>
+            <select id="diffArrayMatch" class="form-control form-control-sm output-select">
+                <option value="auto" selected>By ID field, when every item has one</option>
+                <option value="index">By position</option>
+            </select>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="diffNumericEquality">
+                <label class="custom-control-label" for="diffNumericEquality">Treat <code>12.50</code> and <code>12.5</code> as equal</label>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button onclick="runDiff()" class="btn btn-primary-action" type="button">Compare</button>
+            <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+        </div>
+
+        <div id="diffResults" class="diff-results" hidden>
+            <div id="diffSummary" class="diff-summary" aria-live="polite"></div>
+            <div id="diffNotice" class="diff-notice" hidden></div>
+            <div class="input-mode-toggle diff-views" role="tablist" aria-label="Result view">
+                <button type="button" class="mode-tab active" role="tab" aria-selected="true" data-view="changes" onclick="setDiffView('changes')">Changes</button>
+                <button type="button" class="mode-tab" role="tab" aria-selected="false" data-view="structure" onclick="setDiffView('structure')">Structure</button>
+                <button type="button" class="mode-tab" role="tab" aria-selected="false" data-view="patch" onclick="setDiffView('patch')">JSON Patch</button>
+            </div>
+            <div id="diffFilters" class="diff-filters">
+                <span class="control-label">Show</span>
+                <label><input type="checkbox" data-kind="added" checked onchange="renderDiff()"> Added</label>
+                <label><input type="checkbox" data-kind="removed" checked onchange="renderDiff()"> Removed</label>
+                <label><input type="checkbox" data-kind="changed" checked onchange="renderDiff()"> Changed</label>
+            </div>
+            <div id="diffView" class="diff-view"></div>
+            <div class="action-row action-row-end">
+                <button onclick="copyDiff()" class="btn btn-tool" type="button">Copy</button>
+                <button onclick="downloadDiff()" class="btn btn-tool" type="button">Download</button>
+            </div>
+        </div>
+
+        <p class="tool-note">Runs entirely in your browser - neither document is uploaded.</p>
+    </div>
+</section>
+
+<div class="container-shadow article-container tool-article">
+    <article>
+        <div class="article-body">
+            <h2>A worked example: an API that changed under you</h2>
+            <p>Here is the kind of comparison the tool is for. The first document is a page of payouts from a payments API, as your integration was written against it. The second is the same endpoint after the provider shipped a new version:</p>
+            <pre><code>// Original
+{
+  "object": "list",
+  "data": [
+    { "id": "po_1001", "amount": 12050, "currency": "eur", "status": "paid",
+      "arrival_date": "2026-09-26", "method": "standard", "failure_code": null },
+    { "id": "po_1002", "amount": 8000, "currency": "eur", "status": "in_transit",
+      "arrival_date": "2026-09-30", "method": "instant", "failure_code": null }
+  ],
+  "has_more": false
+}
+
+// Modified
+{
+  "object": "list",
+  "url": "/v2/payouts",
+  "data": [
+    { "id": "po_1003", "amount": "45.00", "currency": "eur", "status": "pending",
+      "arrival_date": null, "destination": { "type": "bank_account", "last4": "6789" } },
+    { "id": "po_1001", "amount": "120.50", "currency": "eur", "status": "paid",
+      "arrival_date": "2026-09-26", "destination": { "type": "bank_account", "last4": "6789" },
+      "failure_code": null },
+    { "id": "po_1002", "amount": "80.00", "currency": "eur", "status": "paid",
+      "arrival_date": "2026-09-30", "destination": { "type": "card", "last4": "4242" },
+      "failure_code": null }
+  ],
+  "has_more": true
+}</code></pre>
+
+            <h3>The Structure view: what broke</h3>
+            <p>Most of the time the first question is not "which values differ" but "will my code still work". The <strong>Structure</strong> view answers it by comparing the shape of the two documents - every field path, the types seen there, and whether it is always present - and ignoring the values entirely:</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Field</th><th>Change</th><th>Detail</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>data[].amount</code></td><td><strong>Type changed</strong> (breaking)</td><td>number &rarr; string</td></tr>
+                        <tr><td><code>data[].arrival_date</code></td><td><strong>Became nullable</strong> (breaking)</td><td>string &rarr; string | null</td></tr>
+                        <tr><td><code>data[].failure_code</code></td><td><strong>Became optional</strong> (breaking)</td><td>missing from some elements</td></tr>
+                        <tr><td><code>data[].method</code></td><td><strong>Field removed</strong> (breaking)</td><td>string</td></tr>
+                        <tr><td><code>data[].destination</code></td><td>Field added</td><td>object</td></tr>
+                        <tr><td><code>url</code></td><td>Field added</td><td>string</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Four breaking changes, and each maps to a specific failure. <code>amount</code> switched from integer cents (<code>12050</code>) to a decimal string (<code>"120.50"</code>), so arithmetic on it now concatenates or fails to parse. <code>arrival_date</code> can be <code>null</code> for pending payouts, so date parsing needs a guard. <code>failure_code</code> is sometimes absent rather than null - the difference the <a href="/blog/null-missing-unknown-fields">null, missing, and unknown fields comparison</a> shows matters to Jackson, Pydantic, and Zod. And <code>method</code> is gone. The two added fields are safe: code that does not know about them simply does not read them.</p>
+            <p>The rules are deliberately simple: a removed field, a changed type, a field that can newly be <code>null</code>, and a field that is newly missing from some records are breaking. An added field, or one that is no longer null or no longer missing, is safe. Because the shape comes from the samples you paste, the more records each side contains, the more accurate the verdict.</p>
+
+            <h3>The Changes view: what differs</h3>
+            <p>The <strong>Changes</strong> view lists every value that was added, removed, or changed - ten here:</p>
+            <pre><code>~ data[id="po_1001"].amount       12050 &rarr; "120.50"
+- data[id="po_1001"].method       "standard"
++ data[id="po_1001"].destination  {"type":"bank_account","last4":"6789"}
+~ data[id="po_1002"].amount       8000 &rarr; "80.00"
+~ data[id="po_1002"].status       "in_transit" &rarr; "paid"
+- data[id="po_1002"].method       "instant"
++ data[id="po_1002"].destination  {"type":"card","last4":"4242"}
++ data[id="po_1003"]              {"id":"po_1003","amount":"45.00",...}
+~ has_more                        false &rarr; true
++ url                             "/v2/payouts"</code></pre>
+            <p>Look at the paths: <code>data[id="po_1001"]</code>, not <code>data[0]</code>. The new payout <code>po_1003</code> arrived at the <em>top</em> of the list, which pushed the other two down a position. Compared position by position, <code>data[0]</code> would be <code>po_1001</code> against <code>po_1003</code> - and every field of both records would be reported as changed. Matched by <code>id</code>, the tool sees one new record and a few real changes to the existing ones.</p>
+
+            <h2>Matching array items by ID</h2>
+            <p>When every element of an array, on both sides, is an object with the same identifying field holding unique values, items are paired by that field instead of by position. The tool checks <code>id</code>, <code>_id</code>, <code>uuid</code>, <code>guid</code>, <code>key</code>, <code>code</code>, <code>sku</code>, <code>slug</code>, and <code>name</code>, in that order, uses the first that qualifies, and tells you which it picked. If no field qualifies - IDs repeat, or some items lack one - it falls back to position for that array.</p>
+            <p>For the example above the difference is large: <strong>10 changes</strong> matched by <code>id</code>, against <strong>16</strong> compared by position, where the new record's fields are reported as changes to <code>po_1001</code> and every record after it shifts by one. Switch <strong>Match array items</strong> to <em>By position</em> when the order itself is what you care about - a ranked list, or a sequence of steps.</p>
+
+            <h2>Why a text diff gets JSON wrong</h2>
+            <p>JSON is text, so it is tempting to reach for <code>diff</code> or your editor's compare view. The trouble is that text diffs see formatting, and JSON's meaning ignores it. I measured both failure modes on the example files:</p>
+            <ul>
+                <li><strong>Same data, different formatting.</strong> Re-serialising the original with sorted keys and a 4-space indent - which is what a different JSON library on the server might do - changes nothing about the data. <code>diff -u</code> reports <strong>28 changed lines</strong>. JSON Diff reports <strong>0 changes</strong>.</li>
+                <li><strong>Real changes, normalised first.</strong> The usual command-line fix is to sort keys with jq before diffing: <code>diff &lt;(jq -S . a.json) &lt;(jq -S . b.json)</code>. That removes the key-order noise, but it still compares arrays line by line, so with the new record at the top it prints <strong>32 lines</strong> pairing <code>po_1003</code>'s fields against <code>po_1001</code>'s. JSON Diff reports the <strong>10 changes</strong> above, each against the right record.</li>
+            </ul>
+            <p>The jq recipe is still the right tool in a script or a CI job, where you want a plain exit code. For reading the differences yourself, a structural diff is faster and harder to misread.</p>
+
+            <h2>Numbers are compared exactly</h2>
+            <p>Like the <a href="/json-formatter">JSON formatter</a>, the diff never lets <code>JSON.parse</code> near your numbers. JavaScript would round <code>1839274619283746817</code> and <code>1839274619283746818</code> to the same value, so a diff built on <code>JSON.parse</code> would say two different IDs are equal. This tool compares the digits as written, so it reports the change.</p>
+            <p>The same exactness means <code>12.50</code> and <code>12.5</code> are reported as different by default, because the documents are. When you only care about numeric value - comparing output from two JSON libraries, for instance - tick <strong>Treat 12.50 and 12.5 as equal</strong>. That comparison is done on the decimal digits too, so it never makes two different large integers equal.</p>
+            <p>If a document contains the same key twice, the tool uses the last value, as <code>JSON.parse</code> does, and tells you where the duplicate is - two layers of a system can disagree about which value is real.</p>
+
+            <h2>JSON Patch output</h2>
+            <p>The <strong>JSON Patch</strong> view expresses the differences as an <a href="https://www.rfc-editor.org/rfc/rfc6902" rel="noopener">RFC 6902</a> patch: a list of <code>add</code>, <code>remove</code>, and <code>replace</code> operations that turns the original into the modified document.</p>
+            <pre><code>[
+  { "op": "add", "path": "/url", "value": "/v2/payouts" },
+  { "op": "remove", "path": "/data/0/method" },
+  ...
+]</code></pre>
+            <p>A patch addresses array elements by position, as the standard requires, so this view always compares arrays by position regardless of the matching setting. The tool's test suite applies generated patches to thousands of random document pairs and checks that each one reproduces the modified document exactly.</p>
+
+            <h2>What it does not do</h2>
+            <ul>
+                <li><strong>No text-level diff inside strings.</strong> A changed string is shown as the old and new value, not as a character-by-character highlight.</li>
+                <li><strong>No three-way merge.</strong> It compares two documents; it does not reconcile two sets of changes against a common base.</li>
+                <li><strong>No <code>move</code> operations in the patch.</strong> A reordered array produces <code>replace</code> operations, which are correct but longer than a patch with moves would be.</li>
+                <li><strong>Not built for very large files.</strong> Both documents are held in memory in your browser tab; file uploads are capped at 5 MB each.</li>
+            </ul>
+
+            <h2>Other tools</h2>
+            <ul>
+                <li><a href="/json-formatter">JSON Formatter</a> - pretty-print both documents before reading them side by side</li>
+                <li><a href="/json-flattener">JSON Flattener</a> - one line per field path, for a quick inventory of either side</li>
+                <li><a href="/json-to-typescript">JSON to TypeScript</a> - generate the type for the new shape once you have seen what changed</li>
+            </ul>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/blog/null-missing-unknown-fields">Null, missing, or unknown</a> - how Jackson, Pydantic, and Zod react to exactly these breaking changes</li>
+                <li><a href="/blog/json-in-rest-apis">Common JSON structures in REST APIs</a></li>
+                <li><a href="/blog/json-schema-guide">JSON Schema: a practical guide</a> - writing the contract down, so changes are caught before they ship</li>
+            </ul>
+
+            <p class="page-maintainer">Written and maintained by <a href="/about">Ashish Singh</a> &middot; Last updated <time datetime="2026-09-30">September 30, 2026</time> &middot; <a href="/changelog">Changelog</a> &middot; Found a problem with this page? <a href="/contact">Tell me</a>.</p>
+        </div>
+    </article>
+</div>
+
+<script type="application/json" id="diffExample">
+{
+  "original": {"object":"list","data":[{"id":"po_1001","amount":12050,"currency":"eur","status":"paid","arrival_date":"2026-09-26","method":"standard","failure_code":null},{"id":"po_1002","amount":8000,"currency":"eur","status":"in_transit","arrival_date":"2026-09-30","method":"instant","failure_code":null}],"has_more":false},
+  "modified": {"object":"list","url":"/v2/payouts","data":[{"id":"po_1003","amount":"45.00","currency":"eur","status":"pending","arrival_date":null,"destination":{"type":"bank_account","last4":"6789"}},{"id":"po_1001","amount":"120.50","currency":"eur","status":"paid","arrival_date":"2026-09-26","destination":{"type":"bank_account","last4":"6789"},"failure_code":null},{"id":"po_1002","amount":"80.00","currency":"eur","status":"paid","arrival_date":"2026-09-30","destination":{"type":"card","last4":"4242"},"failure_code":null}],"has_more":true}
+}
+</script>
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+    </nav>
+</footer>
+
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
+<script src="/diff.js" defer></script>
+</body>
+</html>
