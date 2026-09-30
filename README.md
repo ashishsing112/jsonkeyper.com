@@ -3,11 +3,12 @@
 A free, browser-based set of JSON tools. Paste any JSON document and get every
 key path it contains - including keys buried inside nested objects and arrays -
 rendered as dot notation, JSONPath, an indented tree, or a generated TypeScript
-type; or pretty-print and minify it without changing a single value.
+type; pretty-print and minify it without changing a single value; or compare two
+versions of it and see which changes would break the code that reads it.
 
 Seven tools share one engine: Key Extractor (the homepage), Formatter, Diff,
-Flattener, JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside them is a blog
-of tested, long-form guides on working with JSON.
+Flattener, JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside
+them is a blog of tested, long-form guides on working with JSON.
 
 Live at **[jsonkeyper.com](https://jsonkeyper.com)**.
 
@@ -43,9 +44,12 @@ Alongside those:
   than a generic failure.
 - **Copy or download** - to the clipboard, or as `json-keys.txt` (`.ts` for the
   TypeScript format, `formatted.json` for the formatted and minified outputs).
+  JSON Diff downloads a Markdown report (`json-diff.md`) or the patch
+  (`json-patch.json`).
 - **Moving between tools** - a tab strip under the header on every tool page, and
   a "JSON Tools" directory on the homepage. JSON already pasted comes along: it is
   parked in `sessionStorage` for that tab, read once by the next tool, and deleted.
+  On JSON Diff it arrives as the Original, ready for the second document.
 
 The TypeScript generator merges objects across an array and marks any key absent
 from some elements as optional, so a `giftMessage` present on only one of two
@@ -81,6 +85,9 @@ These are deliberate, and documented on the site itself:
 - It validates that JSON *parses*; it does not validate against a JSON Schema.
 - Execute cURL only reaches public `http`/`https` URLs on ports 80 and 443, times
   out after 5 seconds, and rejects responses over 2 MB.
+- JSON Diff compares two documents; it does not merge three. Changed strings are
+  shown whole rather than character by character, and the patch uses `replace`
+  rather than `move` for reordered arrays, which is correct but longer.
 
 ## URLs
 
@@ -107,11 +114,14 @@ json-to-typescript.html   Tool page: TypeScript generation (issue-tracker exampl
 jsonpath-generator.html   Tool page: JSONPath expressions (Kubernetes pod list example)
 json-tree-viewer.html     Tool page: indented structural tree (GeoJSON example)
 json-formatter.html       Tool page: pretty-print and minify (event feed example)
-json-diff.html            Tool page: two-document diff (payouts API v1 vs v2 example)
-                          Each embeds the tool with its format preselected, and
-                          its own sample in <script id="pageSample">, which
-                          loadSample() loads verbatim in place of the homepage
-                          sample (a parse/stringify round trip would alter it)
+                          Each of the five above embeds the tool with its format
+                          preselected, and its own sample in <script
+                          id="pageSample">, which loadSample() loads verbatim in
+                          place of the homepage sample (a parse/stringify round
+                          trip would alter it)
+json-diff.html            Tool page: two-document diff with its own two-input UI
+                          (diff.js); its payouts API v1/v2 example is in <script
+                          id="diffExample">
 
 about.html                Author background and work history, how the guides are written
 contact.html              Contact form (composes a mailto:)
@@ -138,10 +148,11 @@ tools/model-mismatch/     Reproduces blog/null-missing-unknown-fields.html in
 
 There is no build step, no bundler, and no package manifest - the files served
 are the files in the repository. The homepage and the six tool pages load
-`script.js`; the diff page also loads `diff.js`; the homepage also loads `curl-parser.js` and `curl-proxy.js` for the
-Execute cURL tab; every page loads `nav.js`. Bootstrap's CSS is still used from
-a CDN, but its JavaScript, jQuery, and Popper were removed because the navbar
-toggle was the only behaviour that depended on them.
+`script.js`; the diff page also loads `diff.js`, and the homepage also loads
+`curl-parser.js` and `curl-proxy.js` for the Execute cURL tab; every page loads
+`nav.js`. Bootstrap's CSS is still used from a CDN, but its JavaScript, jQuery,
+and Popper were removed because the navbar toggle was the only behaviour that
+depended on them.
 
 The homepage's Execute cURL tab sends the parsed request to a Cloudflare Worker
 (`jsonkeyper-worker`, deployed separately - not in this repository) that proxies
@@ -186,6 +197,11 @@ Issues and pull requests are welcome. A few conventions worth knowing:
 - **Test the tool before opening a PR.** `script.js` and `diff.js` expose plain
   functions, so they can be exercised directly under Node without a browser. Run
   `node tools/diff-tests/test.js` after touching `diff.js`.
+
+## Support
+
+JSON Keyper is free, with no accounts. If it saves you time, you can
+[sponsor it on GitHub](https://github.com/sponsors/ashishsing112).
 
 ## License
 
