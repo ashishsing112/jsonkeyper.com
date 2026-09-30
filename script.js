@@ -727,7 +727,8 @@ const CARRY_KEY = 'jsonkeyper:carry';
 function carryInputOnToolSwitch() {
     document.addEventListener('click', function (e) {
         const link = e.target.closest && e.target.closest('.tool-strip a, .tool-card');
-        const input = document.getElementById('textbox1');
+        // The diff page's Original box plays the part of the input elsewhere.
+        const input = document.getElementById('textbox1') || document.getElementById('diffOriginal');
         if (!link || !input || !input.value.trim()) {
             return;
         }
@@ -740,6 +741,10 @@ function carryInputOnToolSwitch() {
 }
 
 function restoreCarriedInput() {
+    const input = document.getElementById('textbox1') || document.getElementById('diffOriginal');
+    if (!input) {
+        return;
+    }
     let carried = null;
     try {
         carried = sessionStorage.getItem(CARRY_KEY);
@@ -747,10 +752,15 @@ function restoreCarriedInput() {
     } catch (err) {
         return;
     }
-    const input = document.getElementById('textbox1');
-    if (carried && input && !input.value) {
+    if (carried && !input.value) {
         input.value = carried;
-        handleSubmit();
+        if (input.id === 'textbox1') {
+            handleSubmit();
+        } else {
+            // A diff needs both sides: keep the carried JSON as Original and
+            // put the cursor where the other document goes.
+            document.getElementById('diffModified').focus();
+        }
     }
 }
 

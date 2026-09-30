@@ -127,6 +127,7 @@
                     <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
                     <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item nav-sponsor"><a class="nav-link sponsor-link" href="https://github.com/sponsors/ashishsing112" rel="noopener" aria-label="Sponsor JSON Keyper on GitHub"><span class="sponsor-heart" aria-hidden="true">&hearts;</span> Sponsor</a></li>
                 </ul>
             </div>
         </div>
@@ -382,6 +383,11 @@ JsonMapper mapper = JsonMapper.builder()
             which fields are optional and which are nullable. Either is a faster way to find out
             what the API actually sends than reading its documentation.</p>
 
+            <p>When a provider ships a new version, compare an old response with a new one in
+            <a href="/json-diff">JSON Diff</a>. Its <strong>Structure</strong> view flags exactly
+            the changes this article tested - a field that became nullable, became optional,
+            changed type, or disappeared - before any of your parsing code meets them.</p>
+
             <h2>Reproduce it</h2>
             <p>The thirteen cases are one JSON file, <code>cases.json</code>, and each library
             has a short script that reads it. The Java checks are built with Maven, the Python
@@ -427,7 +433,7 @@ JsonMapper mapper = JsonMapper.builder()
         <a href="/terms">Terms of Service</a>
         <a href="/about">About</a>
         <a href="/changelog">Changelog</a>
-        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener">&hearts; Sponsor</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener"><span aria-hidden="true">&hearts;</span> Sponsor on GitHub</a>
     </nav>
 </footer>
 

@@ -37,7 +37,16 @@ footer {
 }
 
 .footer-links a.footer-sponsor {
-    color: #ffd6de;
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+.footer-links a.footer-sponsor:hover {
+    background-color: rgba(255, 255, 255, 0.26);
+    text-decoration: none;
 }
 
 nav {
@@ -934,7 +943,9 @@ textarea.drag-active {
    output is one line, so it wraps instead (see syncControls in script.js). */
 #textbox1,
 #keysOutput,
-#curlInput {
+#curlInput,
+#diffOriginal,
+#diffModified {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     font-size: 13px;
     line-height: 1.55;
@@ -1080,4 +1091,229 @@ textarea.drag-active {
 /* Anchored headings (the header's Tools link) land with breathing room. */
 #tools {
     scroll-margin-top: 16px;
+}
+
+/* JSON Diff */
+.diff-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin-top: 14px;
+}
+
+.diff-options .output-select {
+    flex: 0 1 320px;
+}
+
+.diff-results {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #eee;
+}
+
+.diff-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.diff-chip {
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 14px;
+}
+
+.chip-added { background-color: #e8f5e9; color: #1b5e20; }
+.chip-removed { background-color: #fdecea; color: #8b2b20; }
+.chip-changed { background-color: #fff4e0; color: #7a4b00; }
+.chip-breaking { background-color: #f1f3f5; color: #343a40; }
+
+.diff-summary-note {
+    margin-left: 4px;
+    color: #777;
+    font-size: 13px;
+}
+
+.diff-notice {
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-left: 4px solid #f0ad4e;
+    border-radius: 4px;
+    background-color: #fff8ec;
+    color: #6b4a00;
+    font-size: 14px;
+}
+
+.diff-views {
+    margin-bottom: 10px;
+}
+
+.diff-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.diff-filters label {
+    margin: 0;
+}
+
+.diff-view {
+    max-height: 520px;
+    overflow: auto;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+.diff-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+}
+
+.diff-item {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 6px 12px;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.diff-item:last-child {
+    border-bottom: none;
+}
+
+.diff-added { background-color: #f3faf3; }
+.diff-removed { background-color: #fdf4f3; }
+.diff-changed { background-color: #fffaf0; }
+
+.diff-sign {
+    flex: 0 0 1ch;
+    font-weight: 700;
+    text-align: center;
+}
+
+.diff-added .diff-sign { color: #2e7d32; }
+.diff-removed .diff-sign { color: #c62828; }
+.diff-changed .diff-sign { color: #b26a00; }
+
+.diff-path {
+    flex: 0 0 auto;
+    max-width: 45%;
+    padding: 0;
+    background: none;
+    color: #2c3e50;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.diff-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: #444;
+    overflow-wrap: anywhere;
+}
+
+.diff-before { color: #a33a2e; text-decoration: line-through; text-decoration-color: rgba(163, 58, 46, 0.4); }
+.diff-removed .diff-before { text-decoration: none; }
+.diff-after { color: #1b5e20; }
+.diff-arrow { color: #999; }
+
+.diff-type {
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background-color: #fff0d9;
+    color: #7a4b00;
+    font-size: 11px;
+}
+
+.diff-badge {
+    margin-left: 4px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background-color: #fdecea;
+    color: #8b2b20;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.diff-structure {
+    margin: 0;
+}
+
+.diff-view .table-wrap {
+    margin: 0;
+}
+
+.diff-empty {
+    margin: 0;
+    padding: 14px;
+    color: #666;
+}
+
+.diff-patch {
+    margin: 0;
+    padding: 12px 14px;
+    border: none;
+    background-color: #fff;
+    font-size: 13px;
+    white-space: pre;
+}
+
+@media (max-width: 575.98px) {
+    .diff-item {
+        flex-wrap: wrap;
+        gap: 2px 8px;
+    }
+
+    .diff-path {
+        max-width: calc(100% - 2ch);
+    }
+
+    .diff-value {
+        flex-basis: 100%;
+        padding-left: calc(1ch + 8px);
+    }
+}
+
+/* Sponsor link: a quiet outlined pill at the end of the header nav, so it is
+   findable without competing with the tools. */
+.navbar .sponsor-link {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 4px 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    color: #fff !important;
+    line-height: 1.4;
+    transition: background-color 0.15s;
+}
+
+.navbar .sponsor-link:hover,
+.navbar .sponsor-link:focus-visible {
+    background-color: rgba(255, 255, 255, 0.15);
+    text-decoration: none;
+}
+
+.sponsor-heart {
+    color: #ffc2d1;
+}
+
+@media (max-width: 991.98px) {
+    .navbar .nav-sponsor {
+        margin: 6px 0 4px;
+    }
+
+    .navbar .sponsor-link {
+        margin-left: 0;
+    }
 }
