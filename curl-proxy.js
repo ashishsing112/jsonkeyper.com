@@ -8,6 +8,19 @@
 const CURL_WORKER_URL = 'https://jsonkeyper-worker.ashishsing112.workers.dev/api/proxy';
 const CURL_SAMPLE = 'curl https://jsonplaceholder.typicode.com/users/1';
 
+// curl always sends a User-Agent, and some APIs (GitHub's among them) reject
+// requests without one. When the command does not set its own, send an honest,
+// identifiable one. It is shown in the request preview like any other header.
+const CURL_DEFAULT_USER_AGENT = 'JSONKeyper/1.0 (+https://jsonkeyper.com/execute-curl)';
+
+function withDefaultUserAgent(parsed) {
+    const headers = Object.assign({}, parsed.headers);
+    if (!Object.keys(headers).some(k => k.toLowerCase() === 'user-agent')) {
+        headers['User-Agent'] = CURL_DEFAULT_USER_AGENT;
+    }
+    return Object.assign({}, parsed, { headers: headers });
+}
+
 let lastCurlResponseBody = null;
 let curlAbortController = null;
 
@@ -220,7 +233,7 @@ async function handleCurlExecute() {
 
     let parsed;
     try {
-        parsed = window.parseCurlCommand(input);
+        parsed = withDefaultUserAgent(window.parseCurlCommand(input));
     } catch (e) {
         showCurlError('Could not parse your curl command: ' + e.message);
         return;
@@ -272,6 +285,10 @@ async function handleCurlExecute() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Links can open the cURL tab directly: /?mode=curl
+    if (new URLSearchParams(window.location.search).get('mode') === 'curl') {
+        setInputMode('curl');
+    }
     const curlInput = document.getElementById('curlInput');
     if (curlInput) {
         curlInput.addEventListener('keydown', function (e) {

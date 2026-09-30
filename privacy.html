@@ -105,6 +105,7 @@
     <h2 class="mt-4 mb-3 heading" id="curl-proxy-feature">cURL Proxy Feature</h2>
     <p>The <strong>Execute cURL</strong> tab works differently, because browsers block direct cross-origin requests. When you execute a curl command there, the parsed request (URL, method, headers, and body) is sent to a Cloudflare Worker I operate, which fetches the target API on your behalf and returns the response to your browser. This is the only feature on JSON Keyper that transmits data off your device.</p>
     <p>The Worker does not log or persist requests or responses - it has no database and no storage, and each request is handled statelessly. It only reaches public <code>http</code> and <code>https</code> addresses (it refuses localhost and other private/internal addresses), enforces a 5-second timeout, and caps responses at 2 MB. If you paste a cURL command containing a bearer token, API key, or other credential in its headers or body, that credential is included in the request sent through the Worker to reach the API you specified - avoid pasting commands containing credentials for services you do not trust this feature with.</p>
+    <p>Unless your command sets its own, the request carries the header <code>User-Agent: JSONKeyper/1.0 (+https://jsonkeyper.com/execute-curl)</code>, because some APIs refuse requests without one. It identifies this tool, not you. The <a href="/execute-curl">cURL runner page</a> lists everything the target API receives.</p>
 
     <h2 class="mt-4 mb-3 heading">Google Analytics</h2>
     <p>This site uses Google Analytics to measure usage, such as which pages are viewed, for how long, and from which country and type of device. I use it to see which tools and guides are useful and which are not. Google Analytics sets cookies (named <code>_ga</code> and <code>_ga_*</code>) that assign your browser a random identifier, so it can tell a returning visitor from a new one; it does not tell me your name or email address, and the JSON you paste is never sent to it. Google's processing of this data is described in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use its services</a>. You can opt out using the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.</p>
@@ -120,7 +121,7 @@
     <p>This website contains links to external websites. I am not responsible for the privacy practices of these other sites. Please review their privacy policies before providing them with your personal information.</p>
 
     <h2 class="mt-4 mb-3 heading">Policy Updates</h2>
-    <p>I may update this Privacy Policy from time to time, for example when a feature changes what data leaves your browser. This policy was last updated on September 29, 2026.</p>
+    <p>I may update this Privacy Policy from time to time, for example when a feature changes what data leaves your browser. This policy was last updated on September 30, 2026.</p>
 
     <h2 class="mt-4 mb-3 heading">Contact</h2>
     <p>If you have any questions about these privacy practices, please reach out via the <a href="/contact">contact page</a> or email me at <a href="mailto:admin@jsonkeyper.com">admin@jsonkeyper.com</a>.</p>
