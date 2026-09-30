@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="Run a curl command online: paste it, see the live status, headers, and body, then extract every JSON key or generate a TypeScript type. Free, with public URLs, a 5-second timeout, and 2 MB limit.">
+    <link rel="canonical" href="https://jsonkeyper.com/execute-curl">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="Free Online cURL Executor - Paste a Curl Command and Inspect the JSON Response">
+    <meta property="og:description" content="Run a curl command online: paste it, see the live status, headers, and body, then extract every JSON key or generate a TypeScript type. Free, with public URLs, a 5-second timeout, and 2 MB limit.">
+    <meta property="og:url" content="https://jsonkeyper.com/execute-curl">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Online cURL Executor - Paste a Curl Command and Inspect the JSON Response">
+    <meta name="twitter:description" content="Run a curl command online: paste it, see the live status, headers, and body, then extract every JSON key or generate a TypeScript type. Free, with public URLs, a 5-second timeout, and 2 MB limit.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <title>Free Online cURL Executor - Paste a Curl Command and Inspect the JSON Response | JSON Keyper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Run a cURL Command Online",
+          "item": "https://jsonkeyper.com/execute-curl"
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can I run a curl command online without installing curl?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes - paste the command above and click Execute. Your browser parses it and a proxy makes the request, so there is nothing to install. The response is shown with its status and headers, and JSON responses can be mapped, typed, formatted, or compared with the other tools."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does my command work in the terminal but fail here?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The usual reasons, in order: the API is on localhost or a private network, which the proxy refuses; it uses a non-standard port; it only accepts allowlisted IP addresses; it rate-limits by IP and the proxy's shared address is over the limit; or it takes longer than 5 seconds. The proxy's error message, or the API's own response, says which."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it support POST requests with a JSON body?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Use -X POST with -d '{\"key\": \"value\"}' and a Content-Type: application/json header, or curl's --json '{\"key\": \"value\"}' shorthand, which sets both headers for you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my request logged?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The proxy has no database and no storage; it forwards the request, returns the response, and keeps nothing. JSON you paste into the other tools never leaves your browser at all."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/#tools">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item nav-sponsor"><a class="nav-link sponsor-link" href="https://github.com/sponsors/ashishsing112" rel="noopener" aria-label="Sponsor JSON Keyper on GitHub"><span class="sponsor-heart" aria-hidden="true">&hearts;</span> Sponsor</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<nav class="tool-strip" aria-label="JSON tools">
+    <div class="tool-strip-inner">
+        <a href="/">Key Extractor</a>
+        <a href="/execute-curl" class="active" aria-current="page">Run cURL</a>
+        <a href="/json-formatter">Formatter</a>
+        <a href="/json-diff">Diff</a>
+        <a href="/json-flattener">Flattener</a>
+        <a href="/jsonpath-generator">JSONPath</a>
+        <a href="/json-tree-viewer">Tree Viewer</a>
+        <a href="/json-to-typescript">JSON to TypeScript</a>
+    </div>
+</nav>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><span aria-current="page">Run a cURL Command</span></li>
+    </ol>
+</nav>
+
+<section class="container-shadow" aria-labelledby="page-title">
+    <div class="section" id="request">
+        <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="page-title">Run a cURL Command Online</h1>
+        <p class="mb-3 lead-copy">Paste a curl command and this free tool runs it for you, then shows the live response - status, headers, and body. Click <strong>Extract Keys</strong> on a JSON response to map every field in it, see each value's type, or generate a TypeScript type. Nothing to install: the request goes through a small proxy, described honestly below, with its limits.</p>
+
+        <div class="input-mode-toggle" role="tablist" aria-label="Input source">
+            <button type="button" id="modeTabJson" class="mode-tab" role="tab" aria-selected="false" onclick="setInputMode('json')">Paste JSON</button>
+            <button type="button" id="modeTabCurl" class="mode-tab active" role="tab" aria-selected="true" onclick="setInputMode('curl')">Execute cURL</button>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div id="jsonModePanel" hidden>
+                    <div class="io-label">
+                        <span>Input JSON</span>
+                        <span class="io-hint">Paste, or drop a .json file here</span>
+                    </div>
+                    <div class="io-controls">
+                        <button onclick="loadSample()" class="btn btn-tool btn-sm" type="button">Load sample JSON</button>
+                        <label for="fileInput" class="btn btn-tool btn-sm mb-0">Upload a file</label>
+                        <input type="file" id="fileInput" accept=".json,.txt,application/json" onchange="handleFileInput(event)" hidden>
+                        <button onclick="handleClear()" class="btn btn-tool btn-sm" type="button">Clear</button>
+                    </div>
+                    <textarea id="textbox1" aria-label="Input JSON" placeholder="Paste your JSON here, or drag a .json file onto this box..."></textarea>
+                    <div id="errorBox" class="error-box" role="alert"></div>
+                    <div class="action-row">
+                        <button onclick="handleSubmit()" class="btn btn-primary-action" type="button">Extract Keys</button>
+                        <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+                    </div>
+                </div>
+
+                <div id="curlModePanel">
+                    <div class="io-label">
+                        <span>cURL command</span>
+                        <span class="io-hint">Fetches a live response through a proxy</span>
+                    </div>
+                    <div class="io-controls">
+                        <button onclick="loadCurlSample()" class="btn btn-tool btn-sm" type="button">Load sample cURL</button>
+                        <button onclick="resetCurlPanel()" class="btn btn-tool btn-sm" type="button">Clear</button>
+                    </div>
+                    <textarea id="curlInput" aria-label="cURL command" placeholder="curl https://api.example.com/users/1"></textarea>
+                    <div id="curlErrorBox" class="error-box" role="alert"></div>
+                    <div id="curlPreview" class="curl-preview" hidden></div>
+                    <div class="action-row">
+                        <button onclick="handleCurlExecute()" id="curlExecuteBtn" class="btn btn-primary-action" type="button">Execute</button>
+                        <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+                    </div>
+                    <div id="curlResponsePanel" class="curl-response-panel" hidden></div>
+                    <p class="curl-disclosure">Requests are sent through a Cloudflare Worker proxy to bypass browser CORS. The proxy does not log or store requests or responses - see the <a href="/privacy">privacy policy</a>.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="io-label">
+                    <span>Output</span>
+                    <span class="io-hint" id="outputCount">0 lines</span>
+                </div>
+                <div class="io-controls">
+                    <label for="outputFormat" class="control-label">Format</label>
+                    <select id="outputFormat" class="form-control form-control-sm output-select">
+                        <optgroup label="Map the keys">
+                            <option value="paths">Key paths (dot notation)</option>
+                            <option value="typed">Key paths with value types</option>
+                            <option value="unique">Unique key names only</option>
+                            <option value="jsonpath">JSONPath expressions</option>
+                            <option value="tree">Indented tree</option>
+                            <option value="typescript">TypeScript interface</option>
+                        </optgroup>
+                        <optgroup label="Format the JSON">
+                            <option value="pretty2">Formatted JSON (2-space indent)</option>
+                            <option value="pretty4">Formatted JSON (4-space indent)</option>
+                            <option value="minified">Minified JSON</option>
+                        </optgroup>
+                    </select>
+                    <div class="custom-control custom-checkbox collapse-toggle">
+                        <input type="checkbox" class="custom-control-input" id="collapseArrays">
+                        <label class="custom-control-label" for="collapseArrays">Collapse array indices</label>
+                    </div>
+                </div>
+                <textarea id="keysOutput" aria-label="Extracted keys" placeholder="Keys will appear here..." readonly></textarea>
+                <div class="action-row action-row-end">
+                    <button onclick="handleCopy()" class="btn btn-tool" type="button">Copy</button>
+                    <button onclick="handleDownload()" class="btn btn-tool" type="button">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="statsPanel" class="stats-panel" aria-live="polite"></div>
+    </div>
+</section>
+
+<div class="container-shadow article-container tool-article">
+    <article>
+        <div class="article-body">
+            <h2>How it works</h2>
+            <ol>
+                <li><strong>Paste a curl command</strong> - from API documentation, your terminal history, or your browser's DevTools (<em>Copy as cURL</em> on any request in the Network tab). Multi-line commands with <code>\</code> or <code>^</code> continuations are fine.</li>
+                <li><strong>Check what will be sent.</strong> The command is parsed in your browser first, and a preview shows the method, URL, every header, and the body exactly as they will go out.</li>
+                <li><strong>Execute.</strong> The request is sent to a small proxy - a Cloudflare Worker - which calls the API from the server side and hands the response back: status, headers, and body.</li>
+                <li><strong>Inspect the JSON.</strong> Click <strong>Extract Keys</strong> on a JSON response to map every field in it. From there, switch the output to typed paths, JSONPath, a tree, a TypeScript type, or formatted JSON, or open the same response in any other tool from the tabs above - it comes with you.</li>
+            </ol>
+
+            <h2>A worked example</h2>
+            <p>Click <strong>Load sample cURL</strong> above and <strong>Execute</strong>. The command fetches one user from JSONPlaceholder, a free public test API:</p>
+            <pre><code>curl https://jsonplaceholder.typicode.com/users/1</code></pre>
+            <p>It comes back <code>200 OK</code> with 24 response headers, including <code>content-type: application/json; charset=utf-8</code>. <strong>Extract Keys</strong> then turns the body into 18 key paths. With the format set to <em>Key paths with value types</em>:</p>
+            <pre><code>id                   number
+name                 string
+username             string
+email                string
+address              object
+address.street       string
+address.suite        string
+address.city         string
+address.zipcode      string
+address.geo          object
+address.geo.lat      string
+address.geo.lng      string
+phone                string
+website              string
+company              object
+company.name         string
+company.catchPhrase  string
+company.bs           string</code></pre>
+            <p>One line is worth a second look: <code>address.geo.lat</code> is a <strong>string</strong>, not a number. The coordinates arrive as <code>"-37.3159"</code>, so any code that does arithmetic on them has to convert first. That is exactly the kind of detail that is easy to miss reading the raw response and obvious in a typed list. Switch the format to <em>TypeScript interface</em> and the same fact is written into the type as <code>lat: string;</code>, ready to paste into a client.</p>
+
+            <h2>Which curl options work</h2>
+            <p>The command is parsed in your browser, and it is parsed the way curl parses it: every behaviour in the table below was checked by sending the same command with curl 8.5 and with this page to a local echo server, and comparing what arrived. The tests are in the <a href="https://github.com/ashishsing112/jsonkeyper.com/tree/main/tools/curl-tests" rel="noopener">site's repository</a>.</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Option</th><th>What it does here</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>-X</code>, <code>--request</code></td><td>Sets the method: <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code>, and so on</td></tr>
+                        <tr><td><code>-H</code>, <code>--header</code></td><td>Adds a header. An explicit header always wins over the shorthand options below</td></tr>
+                        <tr><td><code>-d</code>, <code>--data</code>, <code>--data-binary</code>, <code>--data-raw</code></td><td>Sends a body and makes the request a <code>POST</code>; repeated <code>-d</code> values are joined with <code>&amp;</code></td></tr>
+                        <tr><td><code>--data-urlencode</code></td><td>URL-encodes the value exactly as curl does (spaces become <code>+</code>)</td></tr>
+                        <tr><td><code>--json</code></td><td>Sends a JSON body with <code>Content-Type</code> and <code>Accept</code> set to <code>application/json</code></td></tr>
+                        <tr><td><code>-G</code>, <code>--get</code></td><td>Moves the <code>-d</code> data into the query string of a <code>GET</code></td></tr>
+                        <tr><td><code>-I</code>, <code>--head</code></td><td>Sends a <code>HEAD</code> request - useful for checking headers alone</td></tr>
+                        <tr><td><code>-u</code>, <code>--user</code></td><td>Basic authentication, sent as an <code>Authorization: Basic</code> header</td></tr>
+                        <tr><td><code>-A</code>, <code>-e</code>, <code>-b</code></td><td>Set <code>User-Agent</code>, <code>Referer</code>, and cookies (<code>-b "name=value"</code>)</td></tr>
+                        <tr><td><code>-s</code>, <code>-S</code>, <code>-L</code>, <code>-k</code>, <code>-v</code>, <code>-o</code>, <code>-m</code>, <code>-w</code>, <code>--compressed</code></td><td>Accepted and ignored: they change how curl prints or saves the response, not the request</td></tr>
+                        <tr><td><code>-F</code>, <code>-T</code>, <code>-d @file</code>, <code>-b cookies.txt</code></td><td>Refused with an explanation: they read files from your disk, which a web page cannot do</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Where curl would reject a command - <code>--header=value</code> instead of <code>--header value</code>, for instance - this page rejects it too, rather than sending something your terminal would not.</p>
+
+            <h2>What the API receives</h2>
+            <p>Because the request is made by the proxy, not by your browser, the API sees a slightly different client than it would from your terminal. There are no hidden changes, but four differences are worth knowing:</p>
+            <ul>
+                <li><strong>Your headers, exactly as written.</strong> Nothing from your browser is added - no cookies, no browser headers, no <code>Origin</code>. Cloudflare's network adds only transport headers such as <code>accept-encoding</code> and <code>x-forwarded-proto</code>.</li>
+                <li><strong>A <code>User-Agent</code>, if you did not set one.</strong> curl always sends one, and some APIs refuse requests without it: without one, GitHub's API answers <em>"Request forbidden by administrative rules. Please make sure your request has a User-Agent header"</em>. So the page sends <code>JSONKeyper/1.0 (+https://jsonkeyper.com/execute-curl)</code> unless your command sets its own with <code>-A</code> or <code>-H</code>. It appears in the request preview like any other header.</li>
+                <li><strong>A Cloudflare IP address, not yours.</strong> APIs that only accept requests from allowlisted IP addresses will refuse it.</li>
+                <li><strong>A shared IP address.</strong> Rate limits on unauthenticated requests are usually counted per IP, and this one is shared with other traffic. Testing GitHub's public API this way returned <em>"API rate limit exceeded for 172.70.219.7"</em> after only a couple of requests from this page. If an API gives you a token for higher limits, send it with <code>-H "Authorization: ..."</code>.</li>
+            </ul>
+            <p>You can see all of this for yourself: execute <code>curl https://postman-echo.com/headers</code> and the response lists every header the target received.</p>
+
+            <h2>Limits</h2>
+            <p>The proxy is deliberately narrow, so it cannot be used to reach anything it should not. These limits are enforced by the proxy itself, and the messages below are the ones it returns:</p>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Limit</th><th>Detail</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Public addresses only</td><td><code>localhost</code> and private or reserved IP ranges are refused: <em>"Blocked: private or reserved IP addresses are not allowed."</em></td></tr>
+                        <tr><td><code>http</code> and <code>https</code> on ports 80 and 443</td><td>Anything else is refused: <em>"Blocked: non-standard ports are not allowed."</em></td></tr>
+                        <tr><td>5-second timeout</td><td>A slower API gets a <code>504</code>; a test against an endpoint that waits 7 seconds failed at 5.07 seconds</td></tr>
+                        <tr><td>2 MB responses</td><td>Larger responses are refused with a <code>413</code></td></tr>
+                        <tr><td>Redirects are followed</td><td>You see the final response, not the <code>3xx</code></td></tr>
+                        <tr><td>Text responses</td><td>Binary content - images, PDFs - is decoded as text and will look garbled</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Is it safe to paste an API key?</h2>
+            <p>Anything in the command - including an <code>Authorization</code> header or a key in the URL - passes through the proxy on its way to the API. The proxy does not log or store requests or responses; it has no database and no storage, and each request is handled and forgotten. The <a href="/privacy#curl-proxy-feature">privacy policy</a> covers this in full.</p>
+            <p>That said, the safest habit with any online tool is the same: use a test key, a read-only key, or a short-lived token, and never a production secret. When a request needs a key you would not paste anywhere, run curl in your own terminal and paste the response into the <a href="/">JSON key extractor</a> instead - nothing leaves your browser that way.</p>
+
+            <h2>When to run curl yourself instead</h2>
+            <ul>
+                <li><strong>The API is on your machine or network</strong> - <code>localhost</code>, a staging server behind a VPN, a service on your LAN. The proxy cannot reach any of them, by design.</li>
+                <li><strong>It is slow or large</strong> - over 5 seconds or 2 MB. For large files, the <a href="/blog/processing-large-json-files">large JSON guide</a> measures what jq and Python cost.</li>
+                <li><strong>The API only accepts known IP addresses.</strong></li>
+                <li><strong>You are scripting it.</strong> <code>curl ... | jq</code> in a terminal or CI job gives you exit codes and repeatability that a web page does not.</li>
+            </ul>
+            <p>In all of these cases the rest of the site still works: save the response, and paste it into any of the tools.</p>
+
+            <h2>What it is good for</h2>
+            <ul>
+                <li><strong>Exploring an unfamiliar API</strong> - run the example from its documentation and get the full map of the response in one step, instead of reading hundreds of lines of JSON.</li>
+                <li><strong>Checking the documentation is right</strong> - compare the fields the docs promise with the key paths the live API actually returns.</li>
+                <li><strong>Generating types from a live response</strong> - execute, extract, and switch to <a href="/json-to-typescript">TypeScript</a>.</li>
+                <li><strong>Comparing two environments</strong> - run the same command against staging and production, and paste the two responses into <a href="/json-diff">JSON Diff</a> to see exactly which fields differ, and whether any change would break a client.</li>
+                <li><strong>Reading response headers</strong> - content type, caching, and rate-limit headers are all shown with the body; <code>-I</code> fetches the headers alone.</li>
+            </ul>
+
+            <h2>Why a proxy is needed at all</h2>
+            <p>A web page cannot simply call another site's API: browsers block the response unless the API opts in with CORS headers, and most do not. That is why curl works in your terminal and the same request fails from JavaScript on a web page. The proxy makes the request from a server, where CORS does not apply, and returns the result with the headers the browser needs. <a href="/blog/cors-explained">Why your browser blocks API calls</a> explains CORS in full, including what a proxy like this one does and does not change.</p>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>Can I run a curl command online without installing curl?</h3>
+                <p>Yes - paste the command above and click <strong>Execute</strong>. Your browser parses it and a proxy makes the request, so there is nothing to install. The response is shown with its status and headers, and JSON responses can be mapped, typed, formatted, or compared with the other tools.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why does my command work in the terminal but fail here?</h3>
+                <p>The usual reasons, in order: the API is on <code>localhost</code> or a private network, which the proxy refuses; it uses a non-standard port; it only accepts allowlisted IP addresses; it rate-limits by IP and the proxy's shared address is over the limit; or it takes longer than 5 seconds. The proxy's error message, or the API's own response, says which.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does it support POST requests with a JSON body?</h3>
+                <p>Yes. Use <code>-X POST</code> with <code>-d '{"key": "value"}'</code> and a <code>Content-Type: application/json</code> header, or curl's <code>--json '{"key": "value"}'</code> shorthand, which sets both headers for you.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my request logged?</h3>
+                <p>No. The proxy has no database and no storage; it forwards the request, returns the response, and keeps nothing. JSON you paste into the other tools never leaves your browser at all.</p>
+            </div>
+
+            <h2>Other tools</h2>
+            <ul>
+                <li><a href="/">JSON Key Extractor</a> - the same tool, starting from JSON you paste</li>
+                <li><a href="/json-to-typescript">JSON to TypeScript</a> - a type from a live response, with optional and nullable fields marked</li>
+                <li><a href="/json-diff">JSON Diff</a> - compare two responses by value or by structure</li>
+                <li><a href="/json-formatter">JSON Formatter</a> - pretty-print a response without changing a value</li>
+            </ul>
+
+            <p class="page-maintainer">Written and maintained by <a href="/about">Ashish Singh</a> &middot; Last updated <time datetime="2026-09-30">September 30, 2026</time> &middot; <a href="/changelog">Changelog</a> &middot; Found a problem with this page? <a href="/contact">Tell me</a>.</p>
+        </div>
+    </article>
+</div>
+
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener"><span aria-hidden="true">&hearts;</span> Sponsor on GitHub</a>
+    </nav>
+</footer>
+
+<div class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast">
+    <div class="d-flex">
+        <div class="toast-body" id="toast-body"></div>
+    </div>
+</div>
+
+<script src="/nav.js" defer></script>
+<script src="/script.js" defer></script>
+<script src="/curl-parser.js" defer></script>
+<script src="/curl-proxy.js" defer></script>
+</body>
+</html>

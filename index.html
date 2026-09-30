@@ -14,12 +14,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
-    <meta name="description" content="Free online JSON key extractor. Paste any JSON and get every key path in dot notation, JSONPath, or a generated TypeScript interface - with value types, structure stats, and array collapsing. Pasted JSON never leaves your browser.">
+    <meta name="description" content="Free online JSON key extractor. Paste JSON, or run a curl command against a live API, and get every key path in dot notation, JSONPath, or a TypeScript interface - with value types and structure stats.">
     <link rel="canonical" href="https://jsonkeyper.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JSON Keyper">
-    <meta property="og:title" content="JSON Keyper - Free Online JSON Key Extractor and Path Mapper">
-    <meta property="og:description" content="Free online JSON key extractor. Paste any JSON and get every key path in dot notation, JSONPath, or a generated TypeScript interface - with value types, structure stats, and array collapsing. Pasted JSON never leaves your browser.">
+    <meta property="og:title" content="JSON Keyper - Free Online JSON Key Extractor and cURL Runner">
+    <meta property="og:description" content="Free online JSON key extractor. Paste JSON, or run a curl command against a live API, and get every key path in dot notation, JSONPath, or a TypeScript interface - with value types and structure stats.">
     <meta property="og:url" content="https://jsonkeyper.com/">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -27,10 +27,10 @@
     <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="JSON Keyper - Free Online JSON Key Extractor and Path Mapper">
-    <meta name="twitter:description" content="Free online JSON key extractor. Paste any JSON and get every key path in dot notation, JSONPath, or a generated TypeScript interface - with value types, structure stats, and array collapsing. Pasted JSON never leaves your browser.">
+    <meta name="twitter:title" content="JSON Keyper - Free Online JSON Key Extractor and cURL Runner">
+    <meta name="twitter:description" content="Free online JSON key extractor. Paste JSON, or run a curl command against a live API, and get every key path in dot notation, JSONPath, or a TypeScript interface - with value types and structure stats.">
     <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
-    <title>JSON Keyper - Free Online JSON Key Extractor and Path Mapper</title>
+    <title>JSON Keyper - Free Online JSON Key Extractor and cURL Runner</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
@@ -236,6 +236,7 @@
 <nav class="tool-strip" aria-label="JSON tools">
     <div class="tool-strip-inner">
         <a href="/" class="active" aria-current="page">Key Extractor</a>
+        <a href="/execute-curl">Run cURL</a>
         <a href="/json-formatter">Formatter</a>
         <a href="/json-diff">Diff</a>
         <a href="/json-flattener">Flattener</a>
@@ -252,7 +253,7 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="mt-2 mb-2 heading" style="font-size: 1.8rem;" id="json-key-extractor-and-path-mapper">JSON Key Extractor and Path Mapper</h1>
-                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface - or simply <a href="/json-formatter">pretty-print or minify</a> the JSON. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the Execute cURL tab fetches the response for you through a proxy.</p>
+                <p class="mb-3 lead-copy">Paste a JSON object below to get every key path it contains, including keys buried inside nested objects and arrays. Switch the output between dot notation, value-annotated paths, JSONPath expressions, a nested tree, or a generated TypeScript interface - or simply <a href="/json-formatter">pretty-print or minify</a> the JSON. JSON you paste is processed entirely in your browser and never leaves this tab. To inspect a live API instead, the <strong>Execute cURL</strong> tab <a href="/execute-curl">runs a curl command online</a> and fetches the response for you through a proxy.</p>
             </div>
         </div>
 
@@ -344,11 +345,15 @@
 
 <section class="container-shadow mt-3" aria-labelledby="tools" id="tools-section">
     <h2 class="heading mb-2" id="tools">JSON Tools</h2>
-    <p class="mb-3">Seven tools, one engine. Each runs entirely in your browser, and the JSON you have pasted comes with you when you switch between them.</p>
+    <p class="mb-3">Eight tools, one engine. Each runs entirely in your browser, and the JSON you have pasted comes with you when you switch between them.</p>
     <div class="tool-grid">
         <a class="tool-card" href="/">
             <span class="tool-card-title">Key Extractor <span class="tool-card-badge">This page</span></span>
             <span class="tool-card-text">Every key path in a JSON document, as dot notation, typed paths, or unique names. Fetch a live API with a curl command.</span>
+        </a>
+        <a class="tool-card" href="/execute-curl">
+            <span class="tool-card-title">Run cURL</span>
+            <span class="tool-card-text">Paste a curl command and see the live response - status, headers, and body - then map, type, or format the JSON it returns.</span>
         </a>
         <a class="tool-card" href="/json-formatter">
             <span class="tool-card-title">JSON Formatter</span>
@@ -529,7 +534,7 @@ orders[].giftMessage        string</code></pre>
     <h2 class="heading mb-3" id="how-to-use-json-keyper">How to Use JSON Keyper</h2>
     <div class="how-to-step">
         <span class="step-number">1</span>
-        <div><strong>Add your JSON</strong> - paste an object or API response into the left box, drag a <code>.json</code> file onto it, or click <strong>Load sample JSON</strong> to try the tool with a realistic order payload. To fetch a live response instead, switch to the <strong>Execute cURL</strong> tab, paste a curl command, and click <strong>Execute</strong>. That request goes through a proxy to get around browser CORS, and it is the only part of the tool that sends anything off your machine.</div>
+        <div><strong>Add your JSON</strong> - paste an object or API response into the left box, drag a <code>.json</code> file onto it, or click <strong>Load sample JSON</strong> to try the tool with a realistic order payload. To fetch a live response instead, switch to the <strong>Execute cURL</strong> tab, paste a curl command, and click <strong>Execute</strong>. That request goes through a proxy to get around browser CORS, and it is the only part of the tool that sends anything off your machine - <a href="/execute-curl">how the cURL runner works, and its limits</a>.</div>
     </div>
     <div class="how-to-step">
         <span class="step-number">2</span>
@@ -612,7 +617,7 @@ orders[].giftMessage        string</code></pre>
         <li><strong>Keys containing dots.</strong> Dot-notation output is ambiguous for these. Switch to JSONPath, which quotes them.</li>
         <li><strong>Not a validator.</strong> The tool checks that your JSON parses, but it does not check it against a JSON Schema. For that, see our <a href="/blog/json-schema-guide">guide to JSON Schema validation</a>.</li>
         <li><strong>Formatting does not sort keys or repair JSON.</strong> The formatted and minified outputs change whitespace only. They keep key order, and they report invalid JSON rather than guessing a fix.</li>
-        <li><strong>Live fetches are limited.</strong> The Execute cURL tab only reaches public <code>http</code> and <code>https</code> addresses on the standard ports, gives up after 5 seconds, and rejects responses over 2 MB. It cannot reach <code>localhost</code> or your internal network, and binary responses come back garbled. Any token or API key in the command passes through the proxy, so paste the response instead if that matters to you. For internal or slow APIs, run curl yourself and paste the output.</li>
+        <li><strong>Live fetches are limited.</strong> The Execute cURL tab only reaches public <code>http</code> and <code>https</code> addresses on the standard ports, gives up after 5 seconds, and rejects responses over 2 MB. It cannot reach <code>localhost</code> or your internal network, and binary responses come back garbled. Any token or API key in the command passes through the proxy, so paste the response instead if that matters to you. For internal or slow APIs, run curl yourself and paste the output. The <a href="/execute-curl">cURL runner page</a> lists every supported option and limit.</li>
         <li><strong>Not a store or host.</strong> JSON Keyper does not save your JSON or give it a URL. Everything is parsed in the browser and gone when you close the tab. If you need JSON hosted at a shareable endpoint, you want a JSON storage service, not this tool.</li>
     </ul>
 </section>
@@ -663,7 +668,7 @@ orders[].giftMessage        string</code></pre>
 
     <div class="faq-item">
         <h3>Can I fetch JSON from an API directly, instead of pasting it?</h3>
-        <p>Yes. Switch to the <strong>Execute cURL</strong> tab, paste a curl command, and JSON Keyper sends it through a Cloudflare Worker proxy to bypass the browser's CORS restrictions. The proxy fetches the response and hands it back to the page, where you can extract keys from it just like pasted JSON. It only reaches public <code>http</code> and <code>https</code> URLs, times out after 5 seconds, and caps responses at 2 MB; it does not log or store requests or responses.</p>
+        <p>Yes. Switch to the <strong>Execute cURL</strong> tab, paste a curl command, and JSON Keyper sends it through a Cloudflare Worker proxy to bypass the browser's CORS restrictions. The proxy fetches the response and hands it back to the page, where you can extract keys from it just like pasted JSON. It only reaches public <code>http</code> and <code>https</code> URLs, times out after 5 seconds, and caps responses at 2 MB; it does not log or store requests or responses. <a href="/execute-curl">Run a curl command</a> covers which curl options work and exactly what the API receives.</p>
     </div>
 </section>
 
@@ -676,6 +681,7 @@ orders[].giftMessage        string</code></pre>
         <li><a href="/json-flattener">Flatten JSON to Dot Notation</a> - collapsed vs expanded array indices, and when each view is the right one.</li>
         <li><a href="/jsonpath-generator">JSONPath Expression Generator</a> - wildcards, bracket notation, and how JSONPath differs from plain dot notation.</li>
         <li><a href="/json-tree-viewer">JSON Tree Viewer</a> - the structure as an indented outline, and why the tree always collapses array indices.</li>
+        <li><a href="/execute-curl">Run a cURL Command Online</a> - which curl options work, what the API receives through the proxy, and every limit.</li>
         <li><a href="/json-formatter">JSON Formatter</a> - pretty-print or minify without changing a single value, and why most formatters cannot promise that.</li>
         <li><a href="/json-diff">JSON Diff</a> - compare two documents by value or structure, with breaking changes flagged and array items matched by ID.</li>
     </ul>
@@ -706,9 +712,9 @@ orders[].giftMessage        string</code></pre>
     </div>
     <p class="mt-3 mb-2"><strong>Recent changes</strong> (full history in the <a href="/changelog">changelog</a>):</p>
     <ul class="reading-list">
+        <li><strong>September 30, 2026</strong> - a <a href="/execute-curl">cURL runner page</a>, and curl commands now support <code>-u</code>, <code>-G</code>, <code>--json</code>, <code>-b</code>, and more, exactly as curl sends them.</li>
         <li><strong>September 30, 2026</strong> - <a href="/json-diff">JSON Diff</a>: compare two documents by value or structure, with breaking changes flagged.</li>
         <li><strong>September 29, 2026</strong> - a new guide testing how <a href="/blog/null-missing-unknown-fields">Jackson, Pydantic, and Zod handle null, missing, and unknown fields</a>, and a <a href="/json-formatter">JSON formatter</a> that never changes a value.</li>
-        <li><strong>September 29, 2026</strong> - the format pages now run the tool themselves, and TypeScript output marks fields that are <code>null</code> on some records as <code>T | null</code>.</li>
     </ul>
     <p class="mb-2">JSON Keyper has no accounts and no paywall. If it saves you time, you can <a href="https://github.com/sponsors/ashishsing112" rel="noopener">support the project on GitHub Sponsors</a>.</p>
     <p class="mb-0">Found a document the tool handles wrongly? <a href="/contact">Tell me</a>, or open an issue on <a href="https://github.com/ashishsing112/jsonkeyper.com/issues" rel="noopener">GitHub</a>.</p>

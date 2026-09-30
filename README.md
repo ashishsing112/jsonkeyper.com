@@ -6,8 +6,8 @@ rendered as dot notation, JSONPath, an indented tree, or a generated TypeScript
 type; pretty-print and minify it without changing a single value; or compare two
 versions of it and see which changes would break the code that reads it.
 
-Seven tools share one engine: Key Extractor (the homepage), Formatter, Diff,
-Flattener, JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside
+Eight tools share one engine: Key Extractor (the homepage), Run cURL, Formatter,
+Diff, Flattener, JSONPath Generator, Tree Viewer, and JSON to TypeScript. Alongside
 them is a blog of tested, long-form guides on working with JSON.
 
 Live at **[jsonkeyper.com](https://jsonkeyper.com)**.
@@ -40,6 +40,11 @@ Alongside those:
   picker, or load the built-in sample. `Ctrl` / `Cmd` + `Enter` runs the tool.
 - **Execute cURL** - paste a curl command to fetch a live API response through a
   CORS proxy, preview the status, headers, and body, then extract keys from it.
+  It has its own page, `/execute-curl`, and is also a tab on the homepage
+  (`/?mode=curl` opens it). The parser handles `-X`, `-H`, `-d` and its
+  variants, `--data-urlencode`, `--json`, `-G`, `-I`, `-u`, `-A`, `-e`, and `-b`,
+  sending what curl 8.5 sends; options that read local files are refused with
+  an explanation. A default `User-Agent` is added when the command sets none.
 - **Useful parse errors** - reports the line and column of malformed JSON rather
   than a generic failure.
 - **Copy or download** - to the clipboard, or as `json-keys.txt` (`.ts` for the
@@ -119,6 +124,8 @@ json-formatter.html       Tool page: pretty-print and minify (event feed example
                           id="pageSample">, which loadSample() loads verbatim in
                           place of the homepage sample (a parse/stringify round
                           trip would alter it)
+execute-curl.html         Tool page: the Execute cURL tab opened by default, with the
+                          proxy's options, behaviour, and limits documented
 json-diff.html            Tool page: two-document diff with its own two-input UI
                           (diff.js); its payouts API v1/v2 example is in <script
                           id="diffExample">
@@ -141,15 +148,16 @@ CNAME                     Custom domain for GitHub Pages
 tools/serve.py            Local server that resolves clean URLs like GitHub Pages
 tools/check-sitemap.py    Reports sitemap lastmod values older than the file's last commit
 tools/diff-tests/         Tests for diff.js: node tools/diff-tests/test.js
+tools/curl-tests/         Tests for curl-parser.js, checked against real curl
 tools/json-vs-xml-bench/  Reproduces the measurements in blog/json-vs-xml.html
 tools/model-mismatch/     Reproduces blog/null-missing-unknown-fields.html in
                           Jackson 2 and 3, Pydantic, and Zod (see its README)
 ```
 
 There is no build step, no bundler, and no package manifest - the files served
-are the files in the repository. The homepage and the six tool pages load
-`script.js`; the diff page also loads `diff.js`, and the homepage also loads
-`curl-parser.js` and `curl-proxy.js` for the Execute cURL tab; every page loads
+are the files in the repository. The homepage and the seven tool pages load
+`script.js`; the diff page also loads `diff.js`, and the homepage and
+`/execute-curl` also load `curl-parser.js` and `curl-proxy.js`; every page loads
 `nav.js`. Bootstrap's CSS is still used from a CDN, but its JavaScript, jQuery,
 and Popper were removed because the navbar toggle was the only behaviour that
 depended on them.
@@ -196,7 +204,8 @@ Issues and pull requests are welcome. A few conventions worth knowing:
   actually written.
 - **Test the tool before opening a PR.** `script.js` and `diff.js` expose plain
   functions, so they can be exercised directly under Node without a browser. Run
-  `node tools/diff-tests/test.js` after touching `diff.js`.
+  `node tools/diff-tests/test.js` after touching `diff.js`, and
+  `node tools/curl-tests/test.js` after touching `curl-parser.js`.
 
 ## Support
 

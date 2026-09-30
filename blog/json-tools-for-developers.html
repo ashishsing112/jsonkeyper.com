@@ -245,6 +245,7 @@ http GET api.example.com/data > response.json</code></pre>
             <h3>curl</h3>
             <p><code>curl</code> is available everywhere and useful for scripting, but its output is not JSON-formatted by default. Pipe to <code>jq</code> for readability:</p>
             <pre><code>curl -s https://api.example.com/users/1 | jq '.'</code></pre>
+            <p>When you cannot install curl, or want to look at a response rather than script it, a curl command can also be run in the browser. <em>Disclosure: this is this site's own tool.</em> <a href="/execute-curl">JSON Keyper's cURL runner</a> sends the command through a proxy and maps the JSON that comes back; it only reaches public URLs and gives up after 5 seconds, so it complements a local curl rather than replacing it.</p>
 
             <h2>Category 5: JSON Diff Tools</h2>
             <p>When debugging API changes or comparing configurations, you need to see exactly what changed between two JSON documents.</p>
