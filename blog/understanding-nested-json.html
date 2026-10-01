@@ -307,6 +307,7 @@ function flatten(obj, prefix = '', result = {}) {
 
 const flat = flatten(data.user.profile);
 // { "name": "Alice", "location.city": "London", "location.country": "UK", ... }</code></pre>
+            <p>To see the result before writing any code, you can <a href="/json-flattener">flatten nested JSON online</a>: paste a document and get one dot-notation path per field, with array indices kept or collapsed.</p>
 
             <h2>JSONPath: Querying Nested JSON</h2>
             <p>JSONPath is a query language for JSON, similar to XPath for XML. It lets you extract values from nested structures using a path expression without writing custom traversal code:</p>
@@ -316,7 +317,7 @@ const flat = flatten(data.user.profile);
                 <li><code>$.user.orders[0].items[*].product</code> - all products in first order</li>
                 <li><code>$.user.orders[?(@.status == 'shipped')].id</code> - IDs of shipped orders</li>
             </ul>
-            <p>Libraries implementing JSONPath are available for JavaScript (<code>jsonpath</code> npm package), Python (<code>jsonpath-ng</code>), and most other languages.</p>
+            <p>Libraries implementing JSONPath are available for JavaScript (<code>jsonpath</code> npm package), Python (<code>jsonpath-ng</code>), and most other languages. To get a starting expression for every field in a document, paste it into the <a href="/jsonpath-generator">JSONPath generator</a>.</p>
 
             <h2>Common Pitfalls with Nested JSON</h2>
             <ul>

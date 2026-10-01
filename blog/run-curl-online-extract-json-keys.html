@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="Three real APIs run through an online curl runner, every JSON key extracted: columnar weather data, a JSON POST, and a search whose first page gives a wrong type.">
+    <title>How to Run a cURL Command Online and Extract JSON Keys | JSON Keyper Blog</title>
+    <link rel="canonical" href="https://jsonkeyper.com/blog/run-curl-online-extract-json-keys">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="How to Run a cURL Command Online and Extract JSON Keys">
+    <meta property="og:description" content="Three real APIs run through an online curl runner, every JSON key extracted: columnar weather data, a JSON POST, and a search whose first page gives a wrong type.">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/run-curl-online-extract-json-keys">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-10-01">
+    <meta property="article:modified_time" content="2026-10-01">
+    <meta property="article:author" content="Ashish Singh">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Run a cURL Command Online and Extract JSON Keys">
+    <meta name="twitter:description" content="Three real APIs run through an online curl runner, every JSON key extracted: columnar weather data, a JSON POST, and a search whose first page gives a wrong type.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How to Run a cURL Command Online and Extract JSON Keys",
+      "datePublished": "2026-10-01",
+      "dateModified": "2026-10-01",
+      "author": {
+        "@type": "Person",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
+        "name": "Ashish Singh",
+        "jobTitle": "Back-end developer",
+        "url": "https://jsonkeyper.com/about",
+        "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Keyper",
+        "url": "https://jsonkeyper.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jsonkeyper.com/og-image.png"
+        }
+      },
+      "description": "Three real APIs run through an online curl runner, every JSON key extracted: columnar weather data, a JSON POST, and a search whose first page gives a wrong type.",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://jsonkeyper.com/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jsonkeyper.com/blog/run-curl-online-extract-json-keys"
+      },
+      "url": "https://jsonkeyper.com/blog/run-curl-online-extract-json-keys",
+      "inLanguage": "en"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://jsonkeyper.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How to Run a cURL Command Online and Extract JSON Keys",
+          "item": "https://jsonkeyper.com/blog/run-curl-online-extract-json-keys"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#tools">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item nav-sponsor"><a class="nav-link sponsor-link" href="https://github.com/sponsors/ashishsing112" rel="noopener" aria-label="Sponsor JSON Keyper on GitHub"><span class="sponsor-heart" aria-hidden="true">&hearts;</span> Sponsor</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><span aria-current="page">Run a cURL Command Online</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">How to Run a cURL Command Online and Extract JSON Keys</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published October 1, 2026 &middot; 9 min read</small></p>
+
+        <div class="article-body">
+
+            <p>API documentation speaks curl. Almost every reference page has a command you can copy, and the quickest way to learn what an endpoint really returns is to run it. But the raw response is the least useful view of it: a wall of JSON where the structure - which fields exist, how deep they sit, which are arrays - has to be worked out by eye.</p>
+
+            <p>This walkthrough runs three real, public, keyless APIs through JSON Keyper's <a href="/execute-curl">online cURL runner</a> and extracts the keys from each response. Each one turns out to have a shape worth knowing about before you write code against it, and in each case the key list shows it in seconds.</p>
+
+            <h2>The workflow</h2>
+            <ol>
+                <li>Open the <a href="/execute-curl">cURL runner</a> and paste the command. A preview shows the method, URL, headers, and body that will be sent.</li>
+                <li>Click <strong>Execute</strong>. A proxy makes the request - browsers cannot call most APIs directly - and returns the status, headers, and body.</li>
+                <li>Click <strong>Extract Keys</strong>. Every key path in the response appears in the output, and the <strong>Format</strong> menu switches it to typed paths, JSONPath, a tree, or a TypeScript type.</li>
+            </ol>
+            <p>The proxy only reaches public addresses, gives up after 5 seconds, and handles responses up to 2 MB. The <a href="/execute-curl">cURL runner page</a> lists every limit and exactly what the API receives; the examples below all fit comfortably.</p>
+
+            <h2>Example 1: a weather API that returns columns, not rows</h2>
+            <p>Open-Meteo is a free forecast API that needs no key. This asks for current conditions and an hourly forecast for Berlin:</p>
+            <pre><code>curl "https://api.open-meteo.com/v1/forecast?latitude=52.52&amp;longitude=13.41&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m&amp;forecast_days=1"</code></pre>
+            <p>It returns about 1 KB of JSON. Extracted as typed paths, with array indices collapsed, it comes to 23 lines:</p>
+            <pre><code>latitude                      number
+longitude                     number
+generationtime_ms             number
+utc_offset_seconds            number
+timezone                      string
+timezone_abbreviation         string
+elevation                     number
+current_units                 object
+current_units.time            string
+current_units.interval        string
+current_units.temperature_2m  string
+current_units.wind_speed_10m  string
+current                       object
+current.time                  string
+current.interval              number
+current.temperature_2m        number
+current.wind_speed_10m        number
+hourly_units                  object
+hourly_units.time             string
+hourly_units.temperature_2m   string
+hourly                        object
+hourly.time                   array
+hourly.temperature_2m         array</code></pre>
+            <p>Two design decisions jump out of that list that are easy to miss in the raw response:</p>
+            <ul>
+                <li><strong>The hourly forecast is columnar.</strong> There is no array of hour objects. <code>hourly.time</code> and <code>hourly.temperature_2m</code> are two parallel arrays of 24 values each, and the reading for an hour is the value at the same index in both. Code that expects <code>hourly[0].temperature</code> will not find it; you zip the arrays instead.</li>
+                <li><strong>Units live beside the data, not in it.</strong> Every object has a twin with <code>_units</code> on the end and the same keys. That explains a pair that otherwise looks like a mistake: <code>current.interval</code> is a number (<code>900</code>) while <code>current_units.interval</code> is a string - it is the word <code>"seconds"</code>.</li>
+            </ul>
+            <p>Switching the format to <em>TypeScript interface</em> turns the same response into a type you can paste into a client. For a deeper walk through reading structure this way, see <a href="/blog/understanding-nested-json">understanding nested JSON</a>.</p>
+
+            <h2>Example 2: sending JSON with a POST</h2>
+            <p>Reading is half of most integrations. JSONPlaceholder is a public test API that accepts writes, which makes it a safe place to try one. curl's <code>--json</code> option sends a JSON body and sets both the <code>Content-Type</code> and <code>Accept</code> headers in one go:</p>
+            <pre><code>curl --json '{"title": "Hello", "body": "First post", "userId": 1}' https://jsonplaceholder.typicode.com/posts</code></pre>
+            <p>The preview shows it becoming a <code>POST</code> with both headers set, before anything is sent. The response is <code>201 Created</code>:</p>
+            <pre><code>{
+  "title": "Hello",
+  "body": "First post",
+  "userId": 1,
+  "id": 101
+}</code></pre>
+            <p>The new field is <code>id</code> - the server assigned it, which is exactly what a client needs to read back after creating something. (JSONPlaceholder only pretends to save: the same request returns <code>101</code> every time.) The same pattern works with <code>-X POST</code>, <code>-H "Content-Type: application/json"</code>, and <code>-d '...'</code>, which is how older documentation writes it.</p>
+
+            <h2>Example 3: a search, and why one response is not enough</h2>
+            <p>Open Library's search API takes a query string. curl's <code>-G</code> option turns <code>-d</code> data into URL parameters, and <code>--data-urlencode</code> encodes the spaces in the query for you:</p>
+            <pre><code>curl -G https://openlibrary.org/search.json \
+  --data-urlencode 'q=the lord of the rings' \
+  -d limit=3 \
+  -d fields=key,title,author_name,first_publish_year,ratings_average,subject</code></pre>
+            <p>The preview shows the URL that will actually be requested, ending in <code>?q=the+lord+of+the+rings&amp;limit=3&amp;...</code> - exactly what curl itself sends. The response has 26 key paths, and two of them are worth a second look:</p>
+            <ul>
+                <li><strong>The total appears twice.</strong> The response has both <code>numFound</code> and <code>num_found</code>, holding the same number - over a thousand results, at the time of writing. When an API carries two spellings of one field, pick one and use it everywhere; mixing them is how two parts of one codebase end up disagreeing.</li>
+                <li><strong><code>offset</code> is <code>null</code>.</strong> Generate a TypeScript type from this response and you get <code>offset: null</code> - a field that can apparently never hold a value.</li>
+            </ul>
+            <p>That second point is the classic trap of building a type from one sample. So fetch the second page - the same command with <code>-d offset=3</code> added - and paste both responses into <a href="/json-diff">JSON Diff</a>. Its <strong>Structure</strong> view reports exactly one change:</p>
+            <pre><code>offset    No longer null    null &rarr; number</code></pre>
+            <p><code>offset</code> was only <code>null</code> because the first page had no offset. The <strong>Changes</strong> view also gets the rest right: <code>start</code> and <code>offset</code> changed, and three books left the page while three others arrived - matched by Open Library's own <code>key</code> field rather than by position, so no book is mistaken for a changed version of another.</p>
+            <p>The lesson generalises: a type generated from one response describes that response. Two responses with different content - a first and a later page, an empty and a full record - tell you far more. The <a href="/json-to-typescript">JSON to TypeScript</a> page covers how merging several records marks fields optional and nullable.</p>
+
+            <h2>Copying a command from your browser</h2>
+            <p>The best source of a curl command is often the site you are already using. In Chrome, Edge, or Firefox, open DevTools, go to the <strong>Network</strong> tab, right-click a request, and choose <strong>Copy</strong> &rarr; <strong>Copy as cURL</strong> (Firefox lists it under <strong>Copy Value</strong>). You get the exact request the page made, headers and all.</p>
+            <p>Read it before you paste it anywhere. A request copied from a signed-in session includes your cookies and any authorization header, which together are enough to act as you. Delete the <code>Cookie</code> header (or the <code>-b</code> option) and any token you do not want to share; most public endpoints work without them. Anything left in the command passes through the proxy on its way to the API.</p>
+
+            <h2>When a command fails</h2>
+            <p>Most failures fall into a few cases, and the message tells you which:</p>
+            <ul>
+                <li><strong>A <code>localhost</code>, private, or VPN-only address</strong> is refused by design - run curl locally instead.</li>
+                <li><strong>A slow endpoint</strong> times out after 5 seconds.</li>
+                <li><strong>An API that limits requests per IP address</strong> may already have been reached by other traffic through the proxy's shared address. Send your own token, if the API offers one.</li>
+                <li><strong>A command that reads files</strong> - <code>-F</code>, <code>-T</code>, <code>-d @file</code> - cannot work from a web page, and is refused with an explanation rather than sent in some other form.</li>
+            </ul>
+
+            <h2>Doing the same in a terminal</h2>
+            <p>If you have curl and jq installed, the same key list is one pipe away:</p>
+            <pre><code>curl -s "https://api.open-meteo.com/v1/forecast?latitude=52.52&amp;longitude=13.41&amp;current=temperature_2m,wind_speed_10m&amp;hourly=temperature_2m&amp;forecast_days=1" \
+  | jq -r 'paths | select(last | type == "string")
+           | map(if type == "number" then "[\(.)]" else "." + . end)
+           | join("") | ltrimstr(".")'</code></pre>
+            <p>On the weather response it prints the same 23 paths. That is the better choice in scripts and CI; the browser route wins when you want types, a TypeScript interface, or a comparison without writing any of it. <a href="/blog/how-to-extract-json-keys">How to extract all keys from a JSON object</a> compares the jq approach with JavaScript, Python, and Ruby, including two widely shared jq commands that quietly give the wrong answer.</p>
+
+            <h2>Further reading</h2>
+            <ul>
+                <li><a href="/execute-curl">Run a cURL command online</a> - supported options, what the API receives, and every limit</li>
+                <li><a href="/blog/how-to-extract-json-keys">How to extract all keys from a JSON object</a> - six methods, tested on awkward JSON</li>
+                <li><a href="/blog/cors-explained">Why your browser blocks API calls</a> - the reason a proxy is needed at all</li>
+                <li><a href="/blog/json-in-rest-apis">Common JSON structures in REST APIs</a> - envelopes, pagination, and errors</li>
+            </ul>
+
+        </div>
+
+        <div class="author-box">
+            <div class="author-avatar">AS</div>
+            <div>
+                <p class="author-name">Ashish Singh</p>
+                <p class="author-blurb">Back-end developer with more than four years of professional experience in
+                Java/Spring Boot, Python, and Node.js/TypeScript, and the sole builder of JSON Keyper. My work is
+                integrating third-party APIs, building REST services, and moving JSON through data pipelines, and
+                I write these guides from the problems that work turns up - payloads that do not match their
+                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact">get in touch</a>.</p>
+            </div>
+        </div>
+    </article>
+</div>
+
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener"><span aria-hidden="true">&hearts;</span> Sponsor on GitHub</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -98,6 +98,12 @@
     <h1 class="heading">Changelog</h1>
     <p>Every user-facing change to JSON Keyper, newest first. The full history, including every line of code, is in the <a href="https://github.com/ashishsing112/jsonkeyper.com/commits/main" rel="noopener">GitHub repository</a>. Found a bug? <a href="/contact">Tell me</a>.</p>
 
+    <h2 class="mt-4 mb-3 heading" id="d2026-10-01"><time datetime="2026-10-01">1 October 2026</time></h2>
+    <ul>
+        <li>New guide: <a href="/blog/run-curl-online-extract-json-keys">How to Run a cURL Command Online and Extract JSON Keys</a>, with three real APIs.</li>
+        <li>JSON Diff's structure view now reads "null &rarr; number" instead of "null | null &rarr; number" when a field was only ever <code>null</code>.</li>
+        <li>Revised <a href="/blog/how-to-extract-json-keys">How to Extract All Keys from a JSON Object</a>: every method is now run on the same awkward document. It corrects the guide's recursive JavaScript, which mishandled arrays of arrays, and two jq commands - one that always returned nothing, and one that silently dropped keys with <code>null</code> values.</li>
+    </ul>
     <h2 class="mt-4 mb-3 heading" id="d2026-09-30"><time datetime="2026-09-30">30 September 2026</time></h2>
     <ul>
         <li>New page: <a href="/execute-curl">Run a cURL Command Online</a>, covering which curl options work, what the API receives through the proxy, and every limit.</li>

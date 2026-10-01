@@ -271,6 +271,7 @@ company.name         string
 company.catchPhrase  string
 company.bs           string</code></pre>
             <p>One line is worth a second look: <code>address.geo.lat</code> is a <strong>string</strong>, not a number. The coordinates arrive as <code>"-37.3159"</code>, so any code that does arithmetic on them has to convert first. That is exactly the kind of detail that is easy to miss reading the raw response and obvious in a typed list. Switch the format to <em>TypeScript interface</em> and the same fact is written into the type as <code>lat: string;</code>, ready to paste into a client.</p>
+            <p>For three more worked examples - a weather API that returns columns rather than rows, a JSON <code>POST</code>, and a paginated search - see <a href="/blog/run-curl-online-extract-json-keys">how to run a cURL command online and extract JSON keys</a>.</p>
 
             <h2>Which curl options work</h2>
             <p>The command is parsed in your browser, and it is parsed the way curl parses it: every behaviour in the table below was checked by sending the same command with curl 8.5 and with this page to a local echo server, and comparing what arrived. The tests are in the <a href="https://github.com/ashishsing112/jsonkeyper.com/tree/main/tools/curl-tests" rel="noopener">site's repository</a>.</p>
@@ -373,6 +374,8 @@ company.bs           string</code></pre>
                 <li><a href="/json-to-typescript">JSON to TypeScript</a> - a type from a live response, with optional and nullable fields marked</li>
                 <li><a href="/json-diff">JSON Diff</a> - compare two responses by value or by structure</li>
                 <li><a href="/json-formatter">JSON Formatter</a> - pretty-print a response without changing a value</li>
+                <li><a href="/jsonpath-generator">JSONPath Generator</a> - a query path for every field in the response</li>
+                <li><a href="/json-flattener">JSON Flattener</a> - flatten nested JSON from the response to one path per field</li>
             </ul>
 
             <p class="page-maintainer">Written and maintained by <a href="/about">Ashish Singh</a> &middot; Last updated <time datetime="2026-09-30">September 30, 2026</time> &middot; <a href="/changelog">Changelog</a> &middot; Found a problem with this page? <a href="/contact">Tell me</a>.</p>
