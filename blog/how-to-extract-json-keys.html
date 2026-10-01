@@ -14,13 +14,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
-    <meta name="description" content="Learn how to extract all keys from a JSON object using JavaScript, Python, Ruby, jq, and free online tools - with a full comparison of when to use each method.">
-    <title>How to Extract All Keys from a JSON Object | JSON Keyper Blog</title>
+    <meta name="description" content="Extract all keys from a JSON object, nested ones included, in JavaScript, Python, Ruby, or jq - or online. Every method tested on awkward JSON, with the bugs found.">
+    <title>How to Extract All Keys from a JSON Object (JavaScript, Python, jq) | JSON Keyper Blog</title>
     <link rel="canonical" href="https://jsonkeyper.com/blog/how-to-extract-json-keys">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="JSON Keyper">
-    <meta property="og:title" content="How to Extract All Keys from a JSON Object">
-    <meta property="og:description" content="Learn how to extract all keys from a JSON object using JavaScript, Python, Ruby, jq, and free online tools - with a full comparison of when to use each method.">
+    <meta property="og:title" content="How to Extract All Keys from a JSON Object (JavaScript, Python, jq)">
+    <meta property="og:description" content="Extract all keys from a JSON object, nested ones included, in JavaScript, Python, Ruby, or jq - or online. Every method tested on awkward JSON, with the bugs found.">
     <meta property="og:url" content="https://jsonkeyper.com/blog/how-to-extract-json-keys">
     <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -28,11 +28,11 @@
     <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
     <meta property="og:locale" content="en_US">
     <meta property="article:published_time" content="2026-06-23">
-    <meta property="article:modified_time" content="2026-08-05">
+    <meta property="article:modified_time" content="2026-10-01">
     <meta property="article:author" content="Ashish Singh">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="How to Extract All Keys from a JSON Object">
-    <meta name="twitter:description" content="Learn how to extract all keys from a JSON object using JavaScript, Python, Ruby, jq, and free online tools - with a full comparison of when to use each method.">
+    <meta name="twitter:title" content="How to Extract All Keys from a JSON Object (JavaScript, Python, jq)">
+    <meta name="twitter:description" content="Extract all keys from a JSON object, nested ones included, in JavaScript, Python, Ruby, or jq - or online. Every method tested on awkward JSON, with the bugs found.">
     <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles.css">
@@ -49,9 +49,9 @@
     {
       "@context": "https://schema.org",
       "@type": "Article",
-      "headline": "How to Extract All Keys from a JSON Object",
+      "headline": "How to Extract All Keys from a JSON Object (JavaScript, Python, jq)",
       "datePublished": "2026-06-23",
-      "dateModified": "2026-08-05",
+      "dateModified": "2026-10-01",
       "author": {
         "@type": "Person",
         "@id": "https://jsonkeyper.com/about#ashish-singh",
@@ -69,7 +69,7 @@
           "url": "https://jsonkeyper.com/og-image.png"
         }
       },
-      "description": "Learn how to extract all keys from a JSON object using JavaScript, Python, Ruby, jq, and free online tools - with a full comparison of when to use each method.",
+      "description": "Extract all keys from a JSON object, nested ones included, in JavaScript, Python, Ruby, or jq - or online. Every method tested on awkward JSON, with the bugs found.",
       "image": {
         "@type": "ImageObject",
         "url": "https://jsonkeyper.com/og-image.png",
@@ -146,11 +146,11 @@
 
 <div class="container-shadow article-container">
     <article>
-        <h1 class="heading">How to Extract All Keys from a JSON Object</h1>
-        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated August 5, 2026 &middot; 9 min read</small></p>
+        <h1 class="heading">How to Extract All Keys from a JSON Object (JavaScript, Python, jq)</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published June 23, 2026 &middot; Updated October 1, 2026 &middot; 12 min read</small></p>
 
         <div class="article-body">
-            <p>Extracting all keys from a JSON object is one of the most common tasks when exploring unfamiliar API responses, building data transformation pipelines, or documenting schemas. This guide covers six different methods - from instant online tools to custom code implementations in JavaScript, Python, Ruby, and the command-line tool <code>jq</code>.</p>
+            <p>To extract all keys from a JSON object, you have to walk it recursively: a top-level key list misses everything nested inside objects and arrays, which is usually the part you need. This guide covers six ways to do it - a no-code online tool, recursive functions in JavaScript, Python, and Ruby, and the command-line tool <code>jq</code> - and then puts all of them through the same awkward document. That test found a bug in this guide's own JavaScript, a jq command that silently returns nothing, and one edge case that fools every method but one.</p>
 
             <h2>Why You Need to Extract JSON Keys</h2>
             <p>Before writing code to process a JSON response, you need a map of what fields are available. Key extraction tells you the full structure of a JSON document, including deeply nested fields that you might miss by reading the raw JSON. It is especially valuable when:</p>
@@ -164,7 +164,7 @@
             </ul>
 
             <h2>Method 1: JSON Keyper - Instant, No Code</h2>
-            <p>For quick one-off exploration, <a href="/">JSON Keyper</a> is the fastest approach. Paste your JSON and click Extract Keys - no code, no terminal, no dependencies:</p>
+            <p>For quick one-off exploration, the fastest way to <a href="/">extract all JSON keys</a> is to paste the document into JSON Keyper and click Extract Keys - no code, no terminal, no dependencies:</p>
             <ol>
                 <li>Copy your JSON from your API client (Postman, Insomnia, browser DevTools, etc.)</li>
                 <li>Paste it into the left input box on JSON Keyper</li>
@@ -172,8 +172,8 @@
                 <li>Every key path appears in the right box - <code>user.address.city</code>, <code>items[0].name</code>, etc.</li>
                 <li>Click <strong>Copy</strong> to copy all paths to your clipboard</li>
             </ol>
-            <p>This handles nested objects and arrays automatically, outputting paths in dot notation with bracket notation for array indices.</p>
-            <p>Two options are worth knowing about, because they turn the raw path dump into something more directly usable. <strong>Collapse array indices</strong> merges <code>items[0].sku</code> and <code>items[1].sku</code> into a single <code>items[].sku</code>, which is what you want when documenting a schema rather than inspecting one record. And the format selector switches the same extracted structure into value-annotated paths, JSONPath expressions, an indented tree, or a generated TypeScript interface - saving you from writing the code in the sections below at all, for the common cases.</p>
+            <p>This handles nested objects and arrays automatically, outputting paths in dot notation with bracket notation for array indices. If the JSON lives behind an API rather than on your clipboard, you can also <a href="/execute-curl">run a curl command online</a> and extract the keys from the live response in the same page.</p>
+            <p>Two options are worth knowing about, because they turn the raw path dump into something more directly usable. <strong>Collapse array indices</strong> merges <code>items[0].sku</code> and <code>items[1].sku</code> into a single <code>items[].sku</code>, which is what you want when documenting a schema rather than inspecting one record. And the format selector switches the same extracted structure into value-annotated paths, JSONPath expressions, an indented tree, or a generated TypeScript interface - saving you from writing the code in the sections below at all, for the common cases. Each also has its own page with worked examples: <a href="/json-flattener">flatten nested JSON</a> to dot-notation paths, <a href="/jsonpath-generator">generate JSONPath expressions</a>, or <a href="/json-to-typescript">generate TypeScript from JSON</a>.</p>
 
             <h2>Method 2: JavaScript - Object.keys()</h2>
             <p><code>Object.keys()</code> returns only the <strong>top-level</strong> keys of an object. It is useful for flat JSON but misses nested fields:</p>
@@ -189,41 +189,34 @@ console.log(Object.keys(data));
 // NOTE: does NOT include "address.city" or "address.zip"</code></pre>
 
             <h2>Method 3: Recursive JavaScript</h2>
-            <p>To extract every nested key path including arrays, you need a recursive function:</p>
-            <pre><code>function getAllKeys(obj, prefix = '') {
-    let keys = [];
-    for (const key in obj) {
-        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
-        const fullKey = prefix ? `${prefix}.${key}` : key;
-        keys.push(fullKey);
-        const value = obj[key];
-        if (Array.isArray(value)) {
-            value.forEach((item, index) => {
-                if (item !== null && typeof item === 'object') {
-                    keys = keys.concat(getAllKeys(item, `${fullKey}[${index}]`));
-                } else {
-                    keys.push(`${fullKey}[${index}]`);
-                }
-            });
-        } else if (value !== null && typeof value === 'object') {
-            keys = keys.concat(getAllKeys(value, fullKey));
+            <p>To extract every nested key path, including keys inside arrays of objects, you need a recursive function:</p>
+            <pre><code>function getAllKeys(value, prefix = '') {
+    const keys = [];
+    if (Array.isArray(value)) {
+        value.forEach((item, index) => {
+            keys.push(...getAllKeys(item, `${prefix}[${index}]`));
+        });
+    } else if (value !== null &amp;&amp; typeof value === 'object') {
+        for (const key of Object.keys(value)) {
+            const path = prefix ? `${prefix}.${key}` : key;
+            keys.push(path);
+            keys.push(...getAllKeys(value[key], path));
         }
     }
     return keys;
 }
 
-const json = JSON.parse(jsonString);
-const keys = getAllKeys(json);
+const keys = getAllKeys(JSON.parse(jsonString));
 console.log(keys.join('\n'));</code></pre>
-            <p>For the example above, this would output:</p>
+            <p>For the example above, this outputs:</p>
             <pre><code>name
 age
 address
 address.city
 address.zip
-tags
-tags[0]
-tags[1]</code></pre>
+tags</code></pre>
+            <p>Arrays are walked rather than listed, so <code>tags</code> appears once instead of as <code>tags[0]</code> and <code>tags[1]</code>, while keys inside arrays of objects come out as <code>items[0].sku</code>. On the test document below it produces exactly the same 13 paths as JSON Keyper, in the same order.</p>
+            <p><em>Correction, October 1, 2026:</em> the function previously shown here used <code>for...in</code> and handled arrays only one level deep, so an array of arrays came out as <code>matrix[0].0</code> instead of <code>matrix[0][0]</code>. The version above replaces it.</p>
 
             <h2>Method 4: Python</h2>
             <p>Python's approach is clean and readable using a recursive function with generator-style logic:</p>
@@ -261,13 +254,13 @@ def get_all_keys(obj, prefix = '')
   when Hash
     obj.each do |k, v|
       full_key = prefix.empty? ? k.to_s : "#{prefix}.#{k}"
-      keys << full_key
+      keys &lt;&lt; full_key
       keys.concat(get_all_keys(v, full_key))
     end
   when Array
     obj.each_with_index do |v, i|
       indexed_key = "#{prefix}[#{i}]"
-      keys << indexed_key
+      keys &lt;&lt; indexed_key
       keys.concat(get_all_keys(v, indexed_key))
     end
   end
@@ -278,31 +271,57 @@ data = JSON.parse(File.read('response.json'))
 puts get_all_keys(data).join("\n")</code></pre>
 
             <h2>Method 6: jq - Command Line</h2>
-            <p><code>jq</code> is a powerful command-line JSON processor available on Linux, macOS, and Windows. It can extract all keys from a JSON file in a single command:</p>
-            <pre><code># Get all top-level keys
+            <p><code>jq</code> is a command-line JSON processor available on Linux, macOS, and Windows. These commands were run with jq 1.7:</p>
+            <pre><code># Top-level keys, sorted alphabetically (keys_unsorted keeps document order)
 jq 'keys' data.json
 
-# Recursively get all paths (as arrays)
-jq '[path(..)] | map(join("."))' data.json
+# Every key path, in the same style as the functions above
+jq -r 'paths | select(last | type == "string")
+       | map(if type == "number" then "[\(.)]" else "." + . end)
+       | join("") | ltrimstr(".")' data.json
 
-# Get all string keys (excluding array indices)
-jq '[paths | select(type == "string")]' data.json
+# Every distinct key name, at any depth
+jq -c '[paths | last | strings] | unique' data.json
 
-# Extract specific nested value using a path
-jq '.user.address.city' data.json
+# One nested value by path
+jq '.user.address.city' data.json</code></pre>
+            <p>Two commands that circulate widely do not do what they appear to. <code>jq '[paths | select(type == "string")]'</code> - often given as "all string keys" - always returns <code>[]</code>, because <code>paths</code> produces arrays, never strings. And <code>jq 'paths(scalars)'</code> skips every key whose value is <code>null</code>, along with empty objects and arrays: <code>select</code> treats a <code>null</code> value as false, so those paths are dropped without a warning.</p>
+            <p>jq is the right choice for scripts and CI pipelines. It is not, however, a way around memory limits on large files: plain jq parses the whole document before your filter runs. The <a href="/blog/processing-large-json-files">large JSON files guide</a> measures this - about nine times the file size in memory - and shows how <code>--stream</code> avoids it.</p>
 
-# Extract all values matching a pattern
-jq '.. | .name? // empty' data.json</code></pre>
-            <p><code>jq</code> is particularly useful in CI/CD pipelines, shell scripts, and when working with large JSON files where loading everything into memory is impractical.</p>
-
-            <h2>Handling Edge Cases</h2>
-            <p>When extracting keys, be aware of these common edge cases:</p>
+            <h2>Tested: what each method does with awkward JSON</h2>
+            <p>Every method above handles a tidy nested object. To see where they differ, I ran each of them, exactly as printed, on one small document built from the cases that cause trouble in real data:</p>
+            <pre><code>{"user.name": "a key with a dot", "user": {"name": "Ada", "tags": ["a", "b"], "address": null},
+ "items": [{"sku": "A"}, {"sku": "B", "qty": 2}], "empty": {}, "list": [],
+ "matrix": [[1, 2], [3]], "0": "numeric-looking key"}</code></pre>
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Method</th><th>Paths</th><th>Array of arrays</th><th><code>null</code> and empty values</th><th>Key order</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>JSON Keyper</td><td>13</td><td><code>matrix</code> only</td><td>Kept</td><td><code>"0"</code> moved first</td></tr>
+                        <tr><td>Recursive JavaScript (above)</td><td>13</td><td><code>matrix</code> only</td><td>Kept</td><td><code>"0"</code> moved first</td></tr>
+                        <tr><td>Recursive JavaScript (previous version)</td><td>18</td><td><code>matrix[0].0</code> - wrong</td><td>Kept</td><td><code>"0"</code> moved first</td></tr>
+                        <tr><td>Python, Ruby</td><td>22</td><td><code>matrix[0][0]</code></td><td>Kept</td><td>Document order</td></tr>
+                        <tr><td>jq <code>paths</code> command (above)</td><td>13</td><td><code>matrix</code> only</td><td>Kept</td><td>Document order</td></tr>
+                        <tr><td>jq <code>paths(scalars)</code></td><td>11</td><td><code>matrix.0.0</code></td><td><strong>Dropped</strong></td><td>Document order</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Three things stand out:</p>
             <ul>
-                <li><strong>Empty objects</strong> - <code>{}</code> has no keys to extract</li>
-                <li><strong>Null values</strong> - the key exists but the value is <code>null</code>; still include the key path</li>
-                <li><strong>Keys with dots</strong> - if a key name contains a literal dot (e.g. <code>"user.name"</code>), dot-notation paths become ambiguous</li>
-                <li><strong>Numeric string keys</strong> - JSON object keys must be strings, but keys like <code>"0"</code> and <code>"1"</code> can look like array indices</li>
-                <li><strong>Very large JSON</strong> - recursive functions can hit stack limits on extremely deep or large structures; consider iterative alternatives</li>
+                <li><strong>Every method prints <code>user.name</code> twice</strong> - once for the top-level key literally called <code>"user.name"</code>, once for <code>name</code> inside <code>user</code> - and no dot-notation output can tell them apart. Only JSONPath can: JSON Keyper's <a href="/jsonpath-generator">JSONPath output</a> writes them as <code>$['user.name']</code> and <code>$.user.name</code>. If your data's keys might contain dots, use that format.</li>
+                <li><strong>JavaScript reorders keys.</strong> Any key that looks like a non-negative integer - <code>"0"</code> here - is listed before all the others, because that is how JavaScript orders object properties. Python, Ruby, and jq keep document order. This rarely matters for a key list, but it explains output that looks shuffled.</li>
+                <li><strong>Python and Ruby list every array position</strong> - <code>user.tags[0]</code>, <code>user.tags[1]</code>, <code>matrix[1][0]</code> - which is why they produce 22 paths. That is complete, but noisy for a document with long arrays; collapsing indices, as JSON Keyper's <strong>Collapse array indices</strong> option does, gives one line per distinct field instead.</li>
+            </ul>
+
+            <h2>Handling edge cases</h2>
+            <ul>
+                <li><strong>Keys with dots</strong> - dot-notation paths are ambiguous; use JSONPath, which quotes such keys.</li>
+                <li><strong><code>null</code> values</strong> - the key exists and should be listed. Watch for tools built on <code>paths(scalars)</code>, which drop it.</li>
+                <li><strong>Empty objects and arrays</strong> - <code>{}</code> and <code>[]</code> contain no keys, but the key that holds them still belongs in the list; otherwise a field that is merely empty in your sample disappears from your field mapping.</li>
+                <li><strong>Numeric-looking keys</strong> - <code>"0"</code> is a valid object key, not an array index. JavaScript lists such keys first.</li>
+                <li><strong>Very deep documents</strong> - recursive functions use the call stack, so pathological nesting can overflow it; an explicit stack avoids that.</li>
             </ul>
 
             <h2>Which Method Should You Use?</h2>
@@ -312,6 +331,8 @@ jq '.. | .name? // empty' data.json</code></pre>
                 </thead>
                 <tbody>
                     <tr><td>Quick one-off exploration</td><td>JSON Keyper</td></tr>
+                    <tr><td>JSON from a live API</td><td><a href="/execute-curl">Run the curl command online</a>, then extract</td></tr>
+                    <tr><td>Keys that may contain dots</td><td>JSONPath output</td></tr>
                     <tr><td>Shell scripts or CI pipelines</td><td>jq</td></tr>
                     <tr><td>Python data pipeline</td><td>Python recursive function</td></tr>
                     <tr><td>Node.js / browser application</td><td>JavaScript recursive function</td></tr>
@@ -321,9 +342,9 @@ jq '.. | .name? // empty' data.json</code></pre>
             </table>
 
             <div class="cta-box">
-                <h3>Extract JSON Keys Instantly - No Code Required</h3>
-                <p>Paste any JSON into JSON Keyper and get every nested key path in one click. Free, browser-based, no login required.</p>
-                <a href="/" class="btn btn-success btn-lg">Open JSON Keyper</a>
+                <h3>Extract All JSON Keys - No Code Required</h3>
+                <p>Paste any JSON and get every nested key path in one click, with types, JSONPath, or a TypeScript type. Free, in your browser, no login.</p>
+                <a href="/" class="btn btn-success btn-lg">Open the JSON Key Extractor</a>
             </div>
         </div>
 

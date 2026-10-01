@@ -215,6 +215,14 @@ test('structure diff classifies breaking and safe changes', () => {
     ]);
 });
 
+test('structure diff details read correctly when null was or becomes the only type', () => {
+    const detail = (x, y) => D.diffStructure(parse(x), parse(y)).map(s => s.change + ': ' + s.detail);
+    assert.deepStrictEqual(detail('{"offset":null}', '{"offset":3}'), ['No longer null: null \u2192 number']);
+    assert.deepStrictEqual(detail('{"a":"x"}', '{"a":null}'), ['Became nullable: string \u2192 null']);
+    assert.deepStrictEqual(detail('[{"a":"x"},{"a":"y"}]', '[{"a":"x"},{"a":null}]'), ['Became nullable: string \u2192 string | null']);
+    assert.deepStrictEqual(detail('[{"a":1},{"a":null}]', '[{"a":1},{"a":2}]'), ['No longer null: number | null \u2192 number']);
+});
+
 test('structure diff reports a removed object once, not every field inside it', () => {
     const got = D.diffStructure(parse('{"a":{"b":1,"c":{"d":2}}}'), parse('{}')).map(s => s.id + ': ' + s.change);
     assert.deepStrictEqual(got, ['a: Field removed']);

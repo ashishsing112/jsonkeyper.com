@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://jsonkeyper.com/</loc>
-        <lastmod>2026-09-30</lastmod>
+        <lastmod>2026-10-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
     </url>
@@ -20,7 +20,7 @@
     </url>
     <url>
         <loc>https://jsonkeyper.com/json-flattener</loc>
-        <lastmod>2026-09-30</lastmod>
+        <lastmod>2026-10-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -50,9 +50,15 @@
     </url>
     <url>
         <loc>https://jsonkeyper.com/blog/</loc>
-        <lastmod>2026-09-29</lastmod>
+        <lastmod>2026-10-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://jsonkeyper.com/blog/run-curl-online-extract-json-keys</loc>
+        <lastmod>2026-10-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
     </url>
     <url>
         <loc>https://jsonkeyper.com/blog/null-missing-unknown-fields</loc>
@@ -80,7 +86,7 @@
     </url>
     <url>
         <loc>https://jsonkeyper.com/blog/how-to-extract-json-keys</loc>
-        <lastmod>2026-08-05</lastmod>
+        <lastmod>2026-10-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -152,7 +158,7 @@
     </url>
     <url>
         <loc>https://jsonkeyper.com/changelog</loc>
-        <lastmod>2026-09-30</lastmod>
+        <lastmod>2026-10-01</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>

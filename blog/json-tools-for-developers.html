@@ -173,7 +173,7 @@
             <h3>JSON Keyper</h3>
             <p><em>Disclosure: JSON Keyper is this site's own tool, and I built it, so weigh this entry accordingly.</em></p>
             <p><a href="/">JSON Keyper</a> extracts every key path from a JSON document, including nested objects and array indices. The output is a flat list like <code>user.address.city</code> and <code>items[0].product.name</code> - perfect for understanding the full structure before writing any code. It works in your browser with no login or installation required.</p>
-            <p><strong>Best for:</strong> mapping a whole response at once - every path, with types, or as a TypeScript type - when you are pasting a sample by hand. <strong>Not for:</strong> scripts and pipelines (use jq), or files over a few megabytes, which it holds entirely in browser memory.</p>
+            <p><strong>Best for:</strong> mapping a whole response at once - every path, with types, as <a href="/jsonpath-generator">JSONPath expressions</a>, or as a TypeScript type (<a href="/json-to-typescript">generate TypeScript from JSON</a>) - when you are pasting a sample by hand. <strong>Not for:</strong> scripts and pipelines (use jq), or files over a few megabytes, which it holds entirely in browser memory.</p>
 
             <h3>jq (Command Line)</h3>
             <p><code>jq</code> is a Swiss Army knife for JSON on the command line. Extract all key paths with:</p>
@@ -191,7 +191,7 @@ jq '.user.address.city' data.json
 
 # Filter array elements
 jq '.orders[] | select(.status == "shipped")' data.json</code></pre>
-            <p><strong>Best for:</strong> shell scripts, CI/CD pipelines, transforming large JSON files, one-liners</p>
+            <p><strong>Best for:</strong> shell scripts, CI/CD pipelines, and one-liners. For very large files, use <code>jq --stream</code>: plain jq loads the whole document into memory first, as the <a href="/blog/processing-large-json-files">large JSON files guide</a> measures.</p>
 
             <h2>Category 3: JSON Validators</h2>
             <p>A JSON validator tells you whether a string is valid JSON and, if not, where the syntax error is.</p>

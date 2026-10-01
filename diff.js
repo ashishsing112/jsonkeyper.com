@@ -512,10 +512,12 @@ function diffStructure(a, b) {
         if (was !== now && was !== 'null' && now !== 'null') {
             changes.push({ id: id, change: 'Type changed', detail: was + ' → ' + now, breaking: true });
         }
+        // "string | null", or just "null" when null is the only type seen.
+        const withNull = types => (types === 'null' ? 'null' : types + ' | null');
         if (!s.types.has('null') && t.types.has('null')) {
-            changes.push({ id: id, change: 'Became nullable', detail: now + ' → ' + now + ' | null', breaking: true });
+            changes.push({ id: id, change: 'Became nullable', detail: was + ' → ' + withNull(now), breaking: true });
         } else if (s.types.has('null') && !t.types.has('null')) {
-            changes.push({ id: id, change: 'No longer null', detail: was + ' | null → ' + now, breaking: false });
+            changes.push({ id: id, change: 'No longer null', detail: withNull(was) + ' → ' + now, breaking: false });
         }
         if (!s.optional && t.optional) {
             changes.push({ id: id, change: 'Became optional', detail: 'missing from some elements', breaking: true });
