@@ -62,6 +62,46 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can I test a JSONPath expression against my JSON here?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not yet. This page generates an expression for every field; it does not evaluate expressions you write, such as filters. To run one, use a JSONPath library (for example jsonpath-plus in JavaScript or jsonpath-ng in Python), or the tool you are writing the expression for."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When does it use bracket notation instead of a dot?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A key is written after a dot only when it looks like an identifier - letters, digits, _ and $, not starting with a digit. Anything else, such as app.kubernetes.io/name, content-type, or 2fa, is written as ['key'] so the expression stays valid."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will the expressions work in kubectl or jq?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With small changes. kubectl wraps them in {...}, makes the leading $ optional, and escapes dots inside a key with a backslash. jq is not JSONPath at all: it uses .items[] rather than $.items[*]. The table above shows the same query in each."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The expressions are generated in your browser; the JSON you paste never leaves the tab."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -289,6 +329,24 @@ $.items[?(@.status.phase == 'Running')].metadata.name</code></pre>
 $.metadata.labels['app.kubernetes.io/name']   contains dots and a slash
 $.headers['content-type']                a hyphen
 $.scores['2fa']                          starts with a digit</code></pre>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>Can I test a JSONPath expression against my JSON here?</h3>
+                <p>Not yet. This page generates an expression for every field; it does not evaluate expressions you write, such as filters. To run one, use a JSONPath library (for example <code>jsonpath-plus</code> in JavaScript or <code>jsonpath-ng</code> in Python), or the tool you are writing the expression for.</p>
+            </div>
+            <div class="faq-item">
+                <h3>When does it use bracket notation instead of a dot?</h3>
+                <p>A key is written after a dot only when it looks like an identifier - letters, digits, <code>_</code> and <code>$</code>, not starting with a digit. Anything else, such as <code>app.kubernetes.io/name</code>, <code>content-type</code>, or <code>2fa</code>, is written as <code>['key']</code> so the expression stays valid.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Will the expressions work in kubectl or jq?</h3>
+                <p>With small changes. kubectl wraps them in <code>{...}</code>, makes the leading <code>$</code> optional, and escapes dots inside a key with a backslash. jq is not JSONPath at all: it uses <code>.items[]</code> rather than <code>$.items[*]</code>. The table above shows the same query in each.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my JSON uploaded anywhere?</h3>
+                <p>No. The expressions are generated in your browser; the JSON you paste never leaves the tab.</p>
+            </div>
 
             <h2>Other output formats</h2>
             <ul>

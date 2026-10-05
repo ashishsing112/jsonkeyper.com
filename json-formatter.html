@@ -62,6 +62,46 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Will formatting change any of my values?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Only whitespace changes. Large integers such as 1839274619283746817, decimals such as 12.50, key order, and duplicate keys come out exactly as you pasted them."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it validate JSON?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Invalid JSON is reported instead of formatted, with the line and column where the parser stopped. A trailing comma is located exactly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can it sort keys or fix invalid JSON?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It keeps key order on purpose, and it reports errors rather than guessing a fix. To compare documents regardless of key order, use JSON Diff, or jq -S . on the command line."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Formatting happens in your browser; the JSON you paste never leaves the tab."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -269,6 +309,24 @@
                 <li><strong>It does not repair invalid JSON.</strong> It tells you where the problem is, but guessing a fix - which quote was meant to close which string - is a good way to hide a real bug.</li>
                 <li><strong>It is not built for very large files.</strong> File uploads are capped at 5 MB, and a formatted document of that size can make the output box slow to scroll. For big files, <code>jq .</code> on the command line is the better tool.</li>
             </ul>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>Will formatting change any of my values?</h3>
+                <p>No. Only whitespace changes. Large integers such as <code>1839274619283746817</code>, decimals such as <code>12.50</code>, key order, and duplicate keys come out exactly as you pasted them.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does it validate JSON?</h3>
+                <p>Yes. Invalid JSON is reported instead of formatted, with the line and column where the parser stopped. A trailing comma is located exactly.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can it sort keys or fix invalid JSON?</h3>
+                <p>No. It keeps key order on purpose, and it reports errors rather than guessing a fix. To compare documents regardless of key order, use <a href="/json-diff">JSON Diff</a>, or <code>jq -S .</code> on the command line.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my JSON uploaded anywhere?</h3>
+                <p>No. Formatting happens in your browser; the JSON you paste never leaves the tab.</p>
+            </div>
 
             <h2>Other output formats</h2>
             <p>The same box can do more than reformat. Switch the format to see the structure instead of the text:</p>
