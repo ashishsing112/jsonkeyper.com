@@ -62,6 +62,46 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does it produce flattened JSON with values, like {\"user.name\": \"Ada\"}?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The flattener lists the key paths in a document - one line per field - which is what you need for an inventory, a field mapping, or a column list. It does not output a flat object with the values attached. For that, a short recursive function does the job; understanding nested JSON includes one."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does \"Collapse array indices\" change?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With it on, items[0].sku and items[1].sku merge into a single items[].sku, giving one line per distinct field - the schema view. With it off, every element of every array is listed at its literal index, which is useful when you need to know which record has which field."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are keys that contain a dot handled?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dot notation cannot tell {\"user.name\": 1} from {\"user\": {\"name\": 1}} - both flatten to user.name. If your keys might contain dots, use the JSONPath output, which writes the first as $['user.name']."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Flattening runs in JavaScript in your browser tab; the JSON you paste is never sent to a server."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -253,7 +293,7 @@ data.metadata.campaign</code></pre>
             </ul>
             <p>That first point is also why the flattener lists container keys like <code>data.refunds</code> and <code>data.customer</code> alongside the leaves. A leaf-only flatten loses empty arrays and empty objects without a trace. For comparison, the usual jq one-liner does exactly that:</p>
             <pre><code>jq -r 'paths(scalars) | map(tostring) | join(".")' event.json</code></pre>
-            <p>On this payload it prints 23 paths and <code>data.refunds</code> is not among them, because an empty array contains no scalars. It also writes array positions as <code>data.lines.0.sku</code>, which is ambiguous with an object key named <code>"0"</code>. Fine for a quick look; not what you want to base a table design on.</p>
+            <p>On this payload it prints 23 paths and <code>data.refunds</code> is not among them, because an empty array contains no scalars. For the same reason it also skips any key whose value is <code>null</code> or <code>false</code>. It also writes array positions as <code>data.lines.0.sku</code>, which is ambiguous with an object key named <code>"0"</code>. Fine for a quick look; not what you want to base a table design on.</p>
 
             <h2>From paths to column names</h2>
             <p>Dots are awkward in SQL identifiers and spreadsheet formulas, so most teams convert the path into a column name with a fixed rule. The one that stays readable and reversible is: drop the envelope prefix, then replace dots with underscores.</p>
@@ -272,6 +312,24 @@ data.lines[].discount.code         -&gt; (payment_lines) discount_code</code></p
 
             <h2>Keys containing dots</h2>
             <p>If a key name itself contains a dot, dot notation becomes ambiguous: <code>metadata.order.ref</code> could be a nested field or a single key literally called <code>"order.ref"</code>. Webhook <code>metadata</code> objects are a common place for this, because their keys are chosen by whoever integrated with the API. When it matters, switch the format to <a href="/jsonpath-generator">JSONPath</a>, which writes such a key as <code>$.data.metadata['order.ref']</code>.</p>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>Does it produce flattened JSON with values, like {"user.name": "Ada"}?</h3>
+                <p>No. The flattener lists the <em>key paths</em> in a document - one line per field - which is what you need for an inventory, a field mapping, or a column list. It does not output a flat object with the values attached. For that, a short recursive function does the job; <a href="/blog/understanding-nested-json">understanding nested JSON</a> includes one.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What does "Collapse array indices" change?</h3>
+                <p>With it on, <code>items[0].sku</code> and <code>items[1].sku</code> merge into a single <code>items[].sku</code>, giving one line per distinct field - the schema view. With it off, every element of every array is listed at its literal index, which is useful when you need to know which record has which field.</p>
+            </div>
+            <div class="faq-item">
+                <h3>How are keys that contain a dot handled?</h3>
+                <p>Dot notation cannot tell <code>{"user.name": 1}</code> from <code>{"user": {"name": 1}}</code> - both flatten to <code>user.name</code>. If your keys might contain dots, use the <a href="/jsonpath-generator">JSONPath output</a>, which writes the first as <code>$['user.name']</code>.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my JSON uploaded anywhere?</h3>
+                <p>No. Flattening runs in JavaScript in your browser tab; the JSON you paste is never sent to a server.</p>
+            </div>
 
             <h2>Other output formats</h2>
             <ul>

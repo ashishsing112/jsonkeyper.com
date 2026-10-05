@@ -62,6 +62,46 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does it decide between an optional field and a nullable one?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From your samples. A key that is missing from some records becomes optional (field?: T); a key that is present but null in some records becomes field: T | null. Paste an array of several different records - one sample cannot show either."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I name the generated type, or split it into separate interfaces?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The root is always called Root and nested objects are written inline. You can still get named types without editing: type Issue = Root[number] and type User = Issue['user'] pull each piece out of the generated type."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the generated type check my data at runtime?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. TypeScript types disappear when the code is compiled, so nothing checks a response against them. For data from a service you do not control, add a runtime check with a schema library such as Zod - null, missing, or unknown shows how Zod, Pydantic, and Jackson differ."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The type is generated in your browser; the JSON you paste is never sent to a server."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -294,6 +334,24 @@ type Milestone = NonNullable&lt;Issue['milestone']&gt;;</code></pre>
                 <li><strong>Strings are never narrowed to literal unions.</strong> Two records with <code>"state": "open"</code> and <code>"closed"</code> still give <code>string</code>, because the converter cannot know the list is complete.</li>
                 <li><strong>Keys that are not valid identifiers are quoted</strong>, so <code>"content-type"</code> becomes <code>"content-type": string</code>, which is valid TypeScript but needs bracket access in code.</li>
             </ul>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>How does it decide between an optional field and a nullable one?</h3>
+                <p>From your samples. A key that is missing from some records becomes optional (<code>field?: T</code>); a key that is present but <code>null</code> in some records becomes <code>field: T | null</code>. Paste an array of several different records - one sample cannot show either.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I name the generated type, or split it into separate interfaces?</h3>
+                <p>The root is always called <code>Root</code> and nested objects are written inline. You can still get named types without editing: <code>type Issue = Root[number]</code> and <code>type User = Issue['user']</code> pull each piece out of the generated type.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does the generated type check my data at runtime?</h3>
+                <p>No. TypeScript types disappear when the code is compiled, so nothing checks a response against them. For data from a service you do not control, add a runtime check with a schema library such as Zod - <a href="/blog/null-missing-unknown-fields">null, missing, or unknown</a> shows how Zod, Pydantic, and Jackson differ.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my JSON uploaded anywhere?</h3>
+                <p>No. The type is generated in your browser; the JSON you paste is never sent to a server.</p>
+            </div>
 
             <h2>Other output formats</h2>
             <ul>

@@ -62,6 +62,46 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can I expand and collapse nodes, or see the values?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. This tree is a structural outline: every key with its type, and no values, so its length grows with the variety of the data rather than its size. To read the values themselves, use the JSON formatter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does an array appear only once, however many elements it has?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Array positions are always merged, so fifty records produce one branch, not fifty. The branch lists every field seen in any element - it shows that a field can appear, not that it always does."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does a field show as null?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The type label describes the document you pasted. A field that happens to be null in your sample is labelled null, even if the API usually returns a string there."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my JSON uploaded anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The tree is built in your browser; the JSON you paste never leaves the tab."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -268,6 +308,24 @@ features  (array)
 
             <h2>Reading the type labels</h2>
             <p>Each line ends with the JSON type of that key's value: <code>object</code>, <code>array</code>, <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>null</code>. All numbers are <code>number</code>, because JSON does not distinguish integers from floats. And a key whose value is <code>null</code> in your sample is labelled <code>null</code>, even if the API usually sends a string there - the label describes the document you pasted, not the contract behind it.</p>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>Can I expand and collapse nodes, or see the values?</h3>
+                <p>No. This tree is a structural outline: every key with its type, and no values, so its length grows with the variety of the data rather than its size. To read the values themselves, use the <a href="/json-formatter">JSON formatter</a>.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why does an array appear only once, however many elements it has?</h3>
+                <p>Array positions are always merged, so fifty records produce one branch, not fifty. The branch lists every field seen in any element - it shows that a field <em>can</em> appear, not that it always does.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why does a field show as null?</h3>
+                <p>The type label describes the document you pasted. A field that happens to be <code>null</code> in your sample is labelled <code>null</code>, even if the API usually returns a string there.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my JSON uploaded anywhere?</h3>
+                <p>No. The tree is built in your browser; the JSON you paste never leaves the tab.</p>
+            </div>
 
             <h2>Other output formats</h2>
             <ul>

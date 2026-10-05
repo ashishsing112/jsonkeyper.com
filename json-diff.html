@@ -62,6 +62,46 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How are arrays compared?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If every element on both sides is an object with the same identifying field holding unique values - id, _id, uuid, guid, key, code, sku, slug, or name - items are matched by that field, and the summary says which one. Otherwise they are compared by position. You can force position matching with Match array items."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does key order matter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. JSON objects are unordered, so {\"a\":1,\"b\":2} and {\"b\":2,\"a\":1} are reported as identical."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What counts as a breaking change?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In the Structure view: a field removed, a type changed, a field that can newly be null, or a field newly missing from some records. Added fields are safe. The verdict is based on the samples you paste, so more records give a more reliable answer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my documents uploaded anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Both documents are parsed and compared in your browser; neither is sent to a server."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 <header class="d-flex custom-header">
@@ -286,6 +326,24 @@
                 <li><strong>No <code>move</code> operations in the patch.</strong> A reordered array produces <code>replace</code> operations, which are correct but longer than a patch with moves would be.</li>
                 <li><strong>Not built for very large files.</strong> Both documents are held in memory in your browser tab; file uploads are capped at 5 MB each.</li>
             </ul>
+
+            <h2>Frequently asked questions</h2>
+            <div class="faq-item">
+                <h3>How are arrays compared?</h3>
+                <p>If every element on both sides is an object with the same identifying field holding unique values - <code>id</code>, <code>_id</code>, <code>uuid</code>, <code>guid</code>, <code>key</code>, <code>code</code>, <code>sku</code>, <code>slug</code>, or <code>name</code> - items are matched by that field, and the summary says which one. Otherwise they are compared by position. You can force position matching with <strong>Match array items</strong>.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does key order matter?</h3>
+                <p>No. JSON objects are unordered, so <code>{"a":1,"b":2}</code> and <code>{"b":2,"a":1}</code> are reported as identical.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What counts as a breaking change?</h3>
+                <p>In the Structure view: a field removed, a type changed, a field that can newly be <code>null</code>, or a field newly missing from some records. Added fields are safe. The verdict is based on the samples you paste, so more records give a more reliable answer.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Are my documents uploaded anywhere?</h3>
+                <p>No. Both documents are parsed and compared in your browser; neither is sent to a server.</p>
+            </div>
 
             <h2>Other tools</h2>
             <ul>

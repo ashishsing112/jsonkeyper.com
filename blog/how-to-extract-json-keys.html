@@ -285,7 +285,7 @@ jq -c '[paths | last | strings] | unique' data.json
 
 # One nested value by path
 jq '.user.address.city' data.json</code></pre>
-            <p>Two commands that circulate widely do not do what they appear to. <code>jq '[paths | select(type == "string")]'</code> - often given as "all string keys" - always returns <code>[]</code>, because <code>paths</code> produces arrays, never strings. And <code>jq 'paths(scalars)'</code> skips every key whose value is <code>null</code>, along with empty objects and arrays: <code>select</code> treats a <code>null</code> value as false, so those paths are dropped without a warning.</p>
+            <p>Two commands that circulate widely do not do what they appear to. <code>jq '[paths | select(type == "string")]'</code> - often given as "all string keys" - always returns <code>[]</code>, because <code>paths</code> produces arrays, never strings. And <code>jq 'paths(scalars)'</code> skips every key whose value is <code>null</code> or <code>false</code>, along with empty objects and arrays: it is built on <code>select</code>, which treats both of those values as false, so the paths are dropped without a warning.</p>
             <p>jq is the right choice for scripts and CI pipelines. It is not, however, a way around memory limits on large files: plain jq parses the whole document before your filter runs. The <a href="/blog/processing-large-json-files">large JSON files guide</a> measures this - about nine times the file size in memory - and shows how <code>--stream</code> avoids it.</p>
 
             <h2>Tested: what each method does with awkward JSON</h2>
@@ -318,7 +318,7 @@ jq '.user.address.city' data.json</code></pre>
             <h2>Handling edge cases</h2>
             <ul>
                 <li><strong>Keys with dots</strong> - dot-notation paths are ambiguous; use JSONPath, which quotes such keys.</li>
-                <li><strong><code>null</code> values</strong> - the key exists and should be listed. Watch for tools built on <code>paths(scalars)</code>, which drop it.</li>
+                <li><strong><code>null</code> values</strong> - the key exists and should be listed. Watch for tools built on <code>paths(scalars)</code>, which drop it - and drop keys whose value is <code>false</code>, too.</li>
                 <li><strong>Empty objects and arrays</strong> - <code>{}</code> and <code>[]</code> contain no keys, but the key that holds them still belongs in the list; otherwise a field that is merely empty in your sample disappears from your field mapping.</li>
                 <li><strong>Numeric-looking keys</strong> - <code>"0"</code> is a valid object key, not an array index. JavaScript lists such keys first.</li>
                 <li><strong>Very deep documents</strong> - recursive functions use the call stack, so pathological nesting can overflow it; an explicit stack avoids that.</li>
