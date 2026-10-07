@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="JavaScript rounds JSON IDs above 2^53 without warning, and parsing turns 12.50 into 12.5. Why it happens, which languages it hits, and how to keep them exact.">
+    <title>Why JSON Loses Big Numbers (and How to Keep IDs and Decimals Exact) | JSON Keyper Blog</title>
+    <link rel="canonical" href="https://jsonkeyper.com/blog/json-big-numbers">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="Why JSON Loses Big Numbers (and How to Keep IDs and Decimals Exact)">
+    <meta property="og:description" content="JavaScript rounds JSON IDs above 2^53 without warning, and parsing turns 12.50 into 12.5. Why it happens, which languages it hits, and how to keep them exact.">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/json-big-numbers">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-10-07">
+    <meta property="article:modified_time" content="2026-10-07">
+    <meta property="article:author" content="Ashish Singh">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Why JSON Loses Big Numbers (and How to Keep IDs and Decimals Exact)">
+    <meta name="twitter:description" content="JavaScript rounds JSON IDs above 2^53 without warning, and parsing turns 12.50 into 12.5. Why it happens, which languages it hits, and how to keep them exact.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Why JSON Loses Big Numbers (and How to Keep IDs and Decimals Exact)",
+      "datePublished": "2026-10-07",
+      "dateModified": "2026-10-07",
+      "author": {
+        "@type": "Person",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
+        "name": "Ashish Singh",
+        "jobTitle": "Back-end developer",
+        "url": "https://jsonkeyper.com/about",
+        "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Keyper",
+        "url": "https://jsonkeyper.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jsonkeyper.com/og-image.png"
+        }
+      },
+      "description": "JavaScript rounds JSON IDs above 2^53 without warning, and parsing turns 12.50 into 12.5. Why it happens, which languages it hits, and how to keep them exact.",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://jsonkeyper.com/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jsonkeyper.com/blog/json-big-numbers"
+      },
+      "url": "https://jsonkeyper.com/blog/json-big-numbers",
+      "inLanguage": "en"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://jsonkeyper.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Why JSON Loses Big Numbers (and How to Keep IDs and Decimals Exact)",
+          "item": "https://jsonkeyper.com/blog/json-big-numbers"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#tools">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item nav-sponsor"><a class="nav-link sponsor-link" href="https://github.com/sponsors/ashishsing112" rel="noopener" aria-label="Sponsor JSON Keyper on GitHub"><span class="sponsor-heart" aria-hidden="true">&hearts;</span> Sponsor</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><span aria-current="page">Why JSON Loses Big Numbers</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">Why JSON Loses Big Numbers (and How to Keep IDs and Decimals Exact)</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published October 7, 2026 &middot; 6 min read</small></p>
+
+        <div class="article-body">
+
+            <h2>An ID that changes on its own</h2>
+
+            <p>An API returns an order with the ID <code>1839274619283746817</code>. Your JavaScript code parses it, and the ID is now <code>1839274619283746800</code>. No error, no warning. The last digits are simply gone, and the next request for that order returns a 404 or, worse, another order.</p>
+
+            <p>The same thing happens more quietly to prices. <code>12.50</code> comes back as <code>12.5</code>, and <code>1.0</code> as <code>1</code>. The numbers are equal, but the text has changed, which matters for signatures, checksums and diffs.</p>
+
+            <p>This guide shows why it happens, which languages are affected, and how to keep numbers exact. Every output below was produced by running the code with Node.js 22, Python 3.13, Java 21 with Jackson, and Go.</p>
+
+            <h2>Why it happens</h2>
+
+            <p>JSON itself puts no limit on numbers. <code>1839274619283746817</code> and <code>123456789012345678901234567890</code> are both valid JSON. The limit comes from the language that reads them.</p>
+
+            <p>JavaScript has one number type, a 64-bit floating point double. A double stores 53 bits of precision, so it can represent every integer exactly only up to 2^53 - 1, which is <code>9007199254740991</code> (<code>Number.MAX_SAFE_INTEGER</code>). Above that, representable numbers start to have gaps between them, and the gaps grow as the numbers do:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Range</th><th>Gap between representable integers</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Up to 2^53 (about 9.0 × 10^15)</td><td>1</td></tr>
+                        <tr><td>2^53 to 2^54</td><td>2</td></tr>
+                        <tr><td>2^60 to 2^61 (about 1.2 to 2.3 × 10^18)</td><td>256</td></tr>
+                        <tr><td>2^63 and above (beyond a signed 64-bit integer)</td><td>2,048 or more</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Our ID sits in the 2^60 range, so it gets rounded to the nearest multiple of 256: the stored value is <code>1839274619283746816</code>, which JavaScript prints in its shortest form, <code>1839274619283746800</code>.</p>
+
+            <p>The JSON standard knows this. <a href="https://www.rfc-editor.org/rfc/rfc8259#section-6" rel="noopener">RFC 8259, section 6</a> notes that most software uses doubles, and that integers inside the range of 2^53 are the ones every implementation will agree on. IDs from databases with 64-bit <code>BIGINT</code> keys, Java <code>long</code> values, and Snowflake-style IDs (used by X and Discord, among others) routinely exceed it.</p>
+
+            <h2>Seeing it in Node.js</h2>
+
+            <p>The results of each line are shown as comments:</p>
+
+            <pre><code>const text = '{"id": 1839274619283746817, "price": 12.50, "qty": 1.0, "big": 1e2}';
+const data = JSON.parse(text);
+
+data.id;                          // 1839274619283746800
+Number.isSafeInteger(data.id);    // false
+data.id + 1;                      // 1839274619283746800
+JSON.stringify(data);             // {"id":1839274619283746800,"price":12.5,"qty":1,"big":100}
+
+// Two different IDs become the same number
+JSON.parse('1839274619283746817') === JSON.parse('1839274619283746818');  // true
+JSON.parse('9007199254740993') === JSON.parse('9007199254740992');        // true</code></pre>
+
+            <p>Three things go wrong at once:</p>
+
+            <ul>
+                <li><strong>The value is wrong.</strong> Adding 1 does not even change it, because the next representable number is 256 away.</li>
+                <li><strong>Different IDs collide.</strong> Two records can map to the same key in a <code>Map</code> or a cache.</li>
+                <li><strong>The damage travels.</strong> <code>JSON.stringify</code> writes the rounded number back out, so every service downstream receives the wrong ID as if it were correct.</li>
+            </ul>
+
+            <p><code>Number.isSafeInteger()</code> is the cheap check. If an ID field ever fails it, that field cannot be a JavaScript number.</p>
+
+            <h2>Trailing zeros and number formatting</h2>
+
+            <p>Small numbers are safe from rounding, but not from rewriting. Parsing turns the text into a number and forgets how it was written, so serializing it again produces the language's own preferred form:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Original text</th><th>Node.js parse, then stringify</th><th>Python loads, then dumps</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>12.50</code></td><td><code>12.5</code></td><td><code>12.5</code></td></tr>
+                        <tr><td><code>1.0</code></td><td><code>1</code></td><td><code>1.0</code></td></tr>
+                        <tr><td><code>0.10</code></td><td><code>0.1</code></td><td><code>0.1</code></td></tr>
+                        <tr><td><code>1e2</code></td><td><code>100</code></td><td><code>100.0</code></td></tr>
+                        <tr><td><code>1.5E+3</code></td><td><code>1500</code></td><td><code>1500.0</code></td></tr>
+                        <tr><td><code>-0.0</code></td><td><code>0</code></td><td><code>-0.0</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>The values are mathematically the same, and the two languages do not even agree with each other. This matters whenever the exact text matters:</p>
+
+            <ul>
+                <li><strong>Signatures and checksums.</strong> A webhook signature is computed over the raw body. Parse and re-serialize the body before verifying, and <code>12.50</code> becoming <code>12.5</code> breaks the signature. Always verify against the bytes you received.</li>
+                <li><strong>Money.</strong> <code>12.5</code> displayed as a price looks wrong. Format for display explicitly, and store amounts as integer minor units (<code>1250</code> cents) or as strings.</li>
+                <li><strong>Diffs and reviews.</strong> Reformatting a config file through a parser produces a diff full of numbers nobody changed.</li>
+            </ul>
+
+            <h2>Other languages</h2>
+
+            <p>The same document, <code>{"id": 1839274619283746817, "price": 12.50}</code>, parsed with each language's standard or most common library:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Language and library</th><th>The 19-digit ID</th><th><code>12.50</code></th><th>Keeping both exact</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>JavaScript, <code>JSON.parse</code> (Node.js 22)</td><td>Rounded to <code>1839274619283746800</code></td><td><code>12.5</code></td><td>A reviver with source access (next section)</td></tr>
+                        <tr><td>Python 3.13, <code>json</code></td><td>Exact: Python integers have no size limit</td><td><code>12.5</code></td><td><code>json.loads(text, parse_float=Decimal)</code> gives <code>Decimal('12.50')</code></td></tr>
+                        <tr><td>Java 21, Jackson 2.16</td><td>Exact as a <code>Long</code>; larger values become <code>BigInteger</code></td><td><code>12.5</code> as a <code>Double</code></td><td>Enable <code>DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS</code></td></tr>
+                        <tr><td>Go 1.24, <code>encoding/json</code> into <code>map[string]any</code></td><td>Rounded: every number becomes a <code>float64</code></td><td><code>12.5</code></td><td><code>decoder.UseNumber()</code>, or decode into a struct with an <code>int64</code> field</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Two details from these tests:</p>
+
+            <ul>
+                <li>Python's standard <code>json.dumps</code> cannot write a <code>Decimal</code> back out: <code>TypeError: Object of type Decimal is not JSON serializable</code>. The <code>simplejson</code> package can, and round-trips <code>12.50</code> exactly with <code>use_decimal=True</code>.</li>
+                <li>With <code>USE_BIG_DECIMAL_FOR_FLOATS</code>, Jackson writes the document back as <code>{"id":1839274619283746817,"price":12.50}</code>, unchanged. Go's <code>UseNumber()</code> does the same.</li>
+            </ul>
+
+            <p>The pattern: typed backends are usually fine, and JavaScript is where IDs break. A Java or Python service can produce a perfectly correct response that its own web frontend corrupts on arrival.</p>
+
+            <h2>How to keep numbers exact</h2>
+
+            <h3>1. Send IDs as strings</h3>
+
+            <p>The most reliable fix is in the API itself. An ID is a label, not a quantity: nobody adds two order IDs. Send it as a string and no client can round it. <a href="https://docs.discord.com/developers/reference" rel="noopener">Discord's API</a> does exactly this, returning its 64-bit IDs as strings to avoid integer overflow in some languages.</p>
+
+            <p>In a Java service with Jackson, one annotation does it, and reading the string back into a <code>long</code> still works:</p>
+
+            <pre><code>public class Order {
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    public long id = 1839274619283746817L;
+}
+// Serializes as {"id":"1839274619283746817"}</code></pre>
+
+            <h3>2. Read the original text in JavaScript</h3>
+
+            <p>Modern JavaScript can see the number's source text before it is rounded. The reviver gets a third argument, <code>context</code>, whose <code>source</code> is the original text, and <code>JSON.rawJSON()</code> writes text back out unchanged:</p>
+
+            <pre><code>const data = JSON.parse(text, (key, value, context) =&gt;
+    key === 'id' ? BigInt(context.source) : value);
+// data.id === 1839274619283746817n
+
+JSON.stringify(data, (key, value) =&gt;
+    typeof value === 'bigint' ? JSON.rawJSON(value.toString()) : value);
+// {"id":1839274619283746817, ...}</code></pre>
+
+            <p>This works in Node.js 22. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/rawJSON" rel="noopener">MDN</a> lists <code>JSON.rawJSON()</code> as Baseline since March 2025, and <code>core-js</code> has a polyfill for older browsers. Plain <code>JSON.stringify</code> cannot write a <code>BigInt</code> at all: it throws <code>TypeError: Do not know how to serialize a BigInt</code>, which is why the replacer is needed.</p>
+
+            <h3>3. Use a lossless parser</h3>
+
+            <p>If you cannot rely on new browser features, a library can do the parsing. Tested on <code>{"id": 1839274619283746817, "price": 12.50}</code>:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Library</th><th>ID</th><th>Price after a round trip</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>json-bigint</code> 1.0.0</td><td>Exact</td><td><code>12.5</code></td></tr>
+                        <tr><td><code>lossless-json</code> 4.3.1</td><td>Exact</td><td><code>12.50</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><code>lossless-json</code> keeps the original text of every number, so it also preserves trailing zeros.</p>
+
+            <h3>4. Treat money as exact decimals</h3>
+
+            <p>For prices, never let a float near the value. Parse with <code>Decimal</code> in Python, <code>BigDecimal</code> in Java (<code>USE_BIG_DECIMAL_FOR_FLOATS</code>) or <code>UseNumber()</code> in Go. Better still, design the API to send integer minor units (<code>"amount": 1250</code> for 12.50) or a string (<code>"amount": "12.50"</code>).</p>
+
+            <h2>Formatting without changing a value</h2>
+
+            <p>The obvious way to format JSON is to parse it, then stringify it with indentation. That round trip is exactly where values change. Here is a one-line response pretty-printed both ways:</p>
+
+            <pre><code>Input:
+{"id":1839274619283746817,"price":12.50,"qty":1.0,"status":"paid","status":"refunded"}</code></pre>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th><code>JSON.stringify(JSON.parse(input), null, 2)</code></th><th>JSON Keyper's Formatter</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>"id": 1839274619283746800</code></td><td><code>"id": 1839274619283746817</code></td></tr>
+                        <tr><td><code>"price": 12.5</code></td><td><code>"price": 12.50</code></td></tr>
+                        <tr><td><code>"qty": 1</code></td><td><code>"qty": 1.0</code></td></tr>
+                        <tr><td>Only <code>"status": "refunded"</code>, the duplicate silently dropped</td><td>Both <code>status</code> keys, as sent</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>The <a href="/json-formatter">JSON Formatter</a> on JSON Keyper never re-serializes. It walks the original text and changes only the whitespace outside strings, so big IDs, trailing zeros, key order and even duplicate keys come out exactly as they went in. It still runs a real parse first, so invalid JSON is reported with its line and column instead of being guessed at. Everything happens in your browser, and the JSON is never uploaded.</p>
+
+            <p>That makes it safe to pretty-print a response before you read it, without the formatting step becoming the thing that changed the data.</p>
+
+            <div class="cta-box">
+                <h3>Pretty-Print JSON Without Changing a Value</h3>
+                <p>The formatter changes only whitespace, so big IDs, trailing zeros, key order and duplicate keys come out exactly as you pasted them. Free, in your browser, no login.</p>
+                <a href="/json-formatter" class="btn btn-success btn-lg">Open the JSON Formatter</a>
+            </div>
+
+        </div>
+
+        <div class="author-box">
+            <div class="author-avatar">AS</div>
+            <div>
+                <p class="author-name">Ashish Singh</p>
+                <p class="author-blurb">Back-end developer with more than four years of professional experience in
+                Java/Spring Boot, Python, and Node.js/TypeScript, and the sole builder of JSON Keyper. My work is
+                integrating third-party APIs, building REST services, and moving JSON through data pipelines, and
+                I write these guides from the problems that work turns up - payloads that do not match their
+                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact">get in touch</a>.</p>
+            </div>
+        </div>
+    </article>
+</div>
+
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener"><span aria-hidden="true">&hearts;</span> Sponsor on GitHub</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
