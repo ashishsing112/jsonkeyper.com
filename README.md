@@ -137,7 +137,7 @@ terms.html                Terms of service
 changelog.html            User-facing change history, newest first
 404.html                  Not-found page; GitHub Pages serves it automatically
 blog/index.html           Article listing
-blog/*.html               Thirteen long-form guides on working with JSON
+blog/*.html               Seventeen long-form guides on working with JSON
 
 og-image.png              1200x630 social card referenced by og:image on every page
 sitemap.xml               Kept in sync by hand when pages are added

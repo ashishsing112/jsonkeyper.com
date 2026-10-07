@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="The real Node.js and Python errors for trailing commas, quotes, comments, HTML bodies and hidden characters - where each one points, and how to fix it.">
+    <title>How to Fix Common JSON Parse Errors | JSON Keyper Blog</title>
+    <link rel="canonical" href="https://jsonkeyper.com/blog/fix-json-parse-errors">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="How to Fix Common JSON Parse Errors">
+    <meta property="og:description" content="The real Node.js and Python errors for trailing commas, quotes, comments, HTML bodies and hidden characters - where each one points, and how to fix it.">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/fix-json-parse-errors">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-10-07">
+    <meta property="article:modified_time" content="2026-10-07">
+    <meta property="article:author" content="Ashish Singh">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Fix Common JSON Parse Errors">
+    <meta name="twitter:description" content="The real Node.js and Python errors for trailing commas, quotes, comments, HTML bodies and hidden characters - where each one points, and how to fix it.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How to Fix Common JSON Parse Errors",
+      "datePublished": "2026-10-07",
+      "dateModified": "2026-10-07",
+      "author": {
+        "@type": "Person",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
+        "name": "Ashish Singh",
+        "jobTitle": "Back-end developer",
+        "url": "https://jsonkeyper.com/about",
+        "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Keyper",
+        "url": "https://jsonkeyper.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jsonkeyper.com/og-image.png"
+        }
+      },
+      "description": "The real Node.js and Python errors for trailing commas, quotes, comments, HTML bodies and hidden characters - where each one points, and how to fix it.",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://jsonkeyper.com/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jsonkeyper.com/blog/fix-json-parse-errors"
+      },
+      "url": "https://jsonkeyper.com/blog/fix-json-parse-errors",
+      "inLanguage": "en"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://jsonkeyper.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "How to Fix Common JSON Parse Errors",
+          "item": "https://jsonkeyper.com/blog/fix-json-parse-errors"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#tools">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item nav-sponsor"><a class="nav-link sponsor-link" href="https://github.com/sponsors/ashishsing112" rel="noopener" aria-label="Sponsor JSON Keyper on GitHub"><span class="sponsor-heart" aria-hidden="true">&hearts;</span> Sponsor</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><span aria-current="page">How to Fix Common JSON Parse Errors</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">How to Fix Common JSON Parse Errors</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published October 7, 2026 &middot; 9 min read</small></p>
+
+        <div class="article-body">
+
+            <h2>Start with where, not what</h2>
+
+            <p>A JSON parse error tells you two things: what the parser expected, and where it gave up. The "where" is the useful part. The message is often vague, but the position points at the exact character where the text stopped being valid JSON.</p>
+
+            <p>Nearly every parse error comes from one of a short list of causes: a trailing comma, the wrong kind of quote, a comment, an unescaped character inside a string, or a response that was never JSON at all. This guide takes each one in turn, with the real error from Node.js (V8, the engine Chrome also uses) and from Python, then the fix.</p>
+
+            <p>Every error message here was produced by running the snippet, not written from memory. Wording shifts between engines and versions, so match on the shape of the message rather than every word.</p>
+
+            <h2>Reading the error message</h2>
+
+            <p>Take this object with one stray comma:</p>
+
+            <pre><code>{
+  "name": "Ada",
+  "role": "admin",
+}</code></pre>
+
+            <p>The two runtimes report it like this:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Runtime</th><th>Error</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Node.js 22</td><td><code>SyntaxError: Expected double-quoted property name in JSON at position 38 (line 4 column 1)</code></td></tr>
+                        <tr><td>Python 3.13</td><td><code>JSONDecodeError: Illegal trailing comma before end of object: line 3 column 18 (char 36)</code></td></tr>
+                        <tr><td>Python 3.12</td><td><code>JSONDecodeError: Expecting property name enclosed in double quotes: line 3 column 18 (char 36)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Node points at the closing brace, because that is where it expected another key. Python points at the comma itself. Both are right: the parser reports where it noticed the problem, and the mistake is often just before that spot.</p>
+
+            <p>Three things to know when reading these:</p>
+
+            <ul>
+                <li><strong>Position</strong> (<code>position 38</code>, <code>char 36</code>) counts characters from 0. <strong>Line and column</strong> count from 1.</li>
+                <li>Recent Node.js versions and Chrome add the line and column for you. Older ones give only the position, and some errors (<code>Unexpected token ...</code>) give neither.</li>
+                <li>Python 3.13 names trailing commas outright. Python 3.12 and earlier report the same mistake as a missing property name.</li>
+            </ul>
+
+            <p>If you only have a position, this turns it into a line and column:</p>
+
+            <pre><code>function lineAndColumn(text, position) {
+    const before = text.slice(0, position);
+    return {
+        line: before.split('\n').length,
+        column: position - before.lastIndexOf('\n')
+    };
+}</code></pre>
+
+            <p>For the example above, <code>lineAndColumn(text, 38)</code> returns <code>{ line: 4, column: 1 }</code>, the same spot Node reports.</p>
+
+            <h2>Trailing commas</h2>
+
+            <p>The most common parse error is a comma after the last item. JavaScript object literals allow it, so it slips in when you hand-edit a file or copy from source code. JSON does not.</p>
+
+            <pre><code>{"roles": ["admin", "engineer",]}</code></pre>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Runtime</th><th>Error</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Node.js 22</td><td><code>SyntaxError: Unexpected token ']', ..."engineer",]}" is not valid JSON</code></td></tr>
+                        <tr><td>Python 3.13</td><td><code>JSONDecodeError: Illegal trailing comma before end of array: line 1 column 31 (char 30)</code></td></tr>
+                        <tr><td>Python 3.12</td><td><code>JSONDecodeError: Expecting value: line 1 column 31 (char 30)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Note that Node gives no position at all here, only an echo of the text. In a long document that echo is little help.</p>
+
+            <p><strong>Fix:</strong> delete the comma before the closing <code>]</code> or <code>}</code>. If your code builds JSON by joining strings, that is usually where the comma comes from. Build the object and serialize it instead, with <code>JSON.stringify(value, null, 2)</code> or <code>json.dumps(value, indent=2)</code>. Neither will ever write a trailing comma.</p>
+
+            <h2>Single quotes and unquoted keys</h2>
+
+            <p>JSON strings and keys take double quotes only. Both of these fail at the very first key:</p>
+
+            <pre><code>{'name': 'Ada'}
+{name: "Ada"}</code></pre>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Runtime</th><th>Error (same for both)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Node.js 22</td><td><code>SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)</code></td></tr>
+                        <tr><td>Python 3.13</td><td><code>JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Unquoted keys usually come from a JavaScript object pasted from source code or the browser console. Single quotes usually come from Python, where <code>str()</code> or <code>print()</code> of a dict writes its repr, not JSON:</p>
+
+            <pre><code>&gt;&gt;&gt; d = {"name": "Ada", "active": True, "manager": None}
+&gt;&gt;&gt; str(d)
+"{'name': 'Ada', 'active': True, 'manager': None}"
+&gt;&gt;&gt; json.dumps(d)
+'{"name": "Ada", "active": true, "manager": null}'</code></pre>
+
+            <p>The repr breaks JSON three ways at once: single quotes, <code>True</code> instead of <code>true</code>, and <code>None</code> instead of <code>null</code>. Fix it at the source by logging or returning <code>json.dumps(d)</code>. If all you have is repr text, <code>json.dumps(ast.literal_eval(text))</code> converts it safely, without running it as code.</p>
+
+            <h2>Comments, NaN and other JavaScript habits</h2>
+
+            <p>JSON looks like JavaScript, but it leaves out a lot of what JavaScript allows. Each of these is valid in a <code>.js</code> file and invalid in JSON:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Input</th><th>Node.js 22</th><th>Python 3.13</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A <code>// comment</code> line</td><td><code>Expected property name or '}' in JSON at position 4 (line 2 column 3)</code></td><td><code>Expecting property name enclosed in double quotes: line 2 column 3 (char 4)</code></td></tr>
+                        <tr><td><code>{"score": NaN}</code></td><td><code>Unexpected token 'N', "{"score": NaN}" is not valid JSON</code></td><td>Parses without error</td></tr>
+                        <tr><td><code>{"score": undefined}</code></td><td><code>Unexpected token 'u', "{"score": undefined}" is not valid JSON</code></td><td><code>Expecting value: line 1 column 11 (char 10)</code></td></tr>
+                        <tr><td><code>{"n": 0x1F}</code></td><td><code>Expected ',' or '}' after property value in JSON at position 7 (line 1 column 8)</code></td><td><code>Expecting ',' delimiter: line 1 column 8 (char 7)</code></td></tr>
+                        <tr><td><code>{"n": 007}</code></td><td><code>Unexpected number in JSON at position 7 (line 1 column 8)</code></td><td><code>Expecting ',' delimiter: line 1 column 8 (char 7)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Comments.</strong> Files like <code>tsconfig.json</code> and VS Code's <code>settings.json</code> allow comments because their tools read them as JSONC, a looser format. A strict parser rejects them. Remove the comments, or read the file with a JSONC parser such as Microsoft's <code>jsonc-parser</code> package.</p>
+
+            <p><strong>NaN is the trap.</strong> Python's <code>json</code> module accepts <code>NaN</code> and <code>Infinity</code> by default, and writes them too: <code>json.dumps({"score": float("nan")})</code> returns <code>{"score": NaN}</code>. A Python service can therefore send a response that every JavaScript client rejects. Pass <code>allow_nan=False</code> to make Python raise <code>ValueError: Out of range float values are not JSON compliant: nan</code> instead, and decide what the value should be (usually <code>null</code>).</p>
+
+            <p>Going the other way, JavaScript never writes these values. <code>JSON.stringify({a: NaN, b: undefined, c: Infinity})</code> returns <code>{"a":null,"c":null}</code>: <code>NaN</code> and <code>Infinity</code> become <code>null</code>, and the <code>undefined</code> key disappears without a warning.</p>
+
+            <h2>Unescaped characters inside strings</h2>
+
+            <p>A JSON string cannot contain a raw line break or tab, and every backslash must start a valid escape. These usually appear when text is pasted into a JSON file by hand, or when a string is built by concatenation.</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Input</th><th>Node.js 22</th><th>Python 3.13</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A real line break inside <code>"line one ... line two"</code></td><td><code>Bad control character in string literal in JSON at position 18 (line 1 column 19)</code></td><td><code>Invalid control character at: line 1 column 19 (char 18)</code></td></tr>
+                        <tr><td>A real tab inside a string</td><td><code>Bad control character in string literal in JSON at position 11 (line 1 column 12)</code></td><td><code>Invalid control character at: line 1 column 12 (char 11)</code></td></tr>
+                        <tr><td><code>{"path": "C:\Users\ada"}</code></td><td><code>Bad escaped character in JSON at position 13 (line 1 column 14)</code></td><td><code>Invalid \escape: line 1 column 13 (char 12)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Fix:</strong> write line breaks as <code>\n</code>, tabs as <code>\t</code>, and each backslash as <code>\\</code>. A Windows path becomes <code>"C:\\Users\\ada"</code>, or use forward slashes, which Windows also accepts.</p>
+
+            <p>The dangerous case is the one that does not fail. <code>{"path": "C:\new"}</code> parses without any error in both runtimes, because <code>\n</code> is a valid escape. The value comes back as <code>C:</code>, a line break, then <code>ew</code>: five characters, and a broken path. If a path or a regular expression comes out of JSON shorter than it went in, check its backslashes first.</p>
+
+            <h2>When the response was never JSON</h2>
+
+            <p>Some parse errors have nothing to do with syntax. The text you parsed is empty, cut off, an HTML page, or several documents in a row.</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>What you received</th><th>Node.js 22</th><th>Python 3.13</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>An empty body</td><td><code>Unexpected end of JSON input</code></td><td><code>Expecting value: line 1 column 1 (char 0)</code></td></tr>
+                        <tr><td>A body cut off mid-object</td><td><code>Expected ',' or '}' after property value in JSON at position 23 (line 1 column 24)</code></td><td><code>Expecting ',' delimiter: line 1 column 24 (char 23)</code></td></tr>
+                        <tr><td>An HTML error page</td><td><code>Unexpected token '&lt;', "&lt;!DOCTYPE "... is not valid JSON</code></td><td><code>Expecting value: line 1 column 1 (char 0)</code></td></tr>
+                        <tr><td>Two objects, one per line</td><td><code>Unexpected non-whitespace character after JSON at position 9 (line 2 column 1)</code></td><td><code>Extra data: line 2 column 1 (char 9)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Unexpected token '&lt;'</strong> is the classic. The server returned an HTML page, usually a 404, a 500, a login redirect or a proxy error, and your code parsed it as JSON. <code>fetch</code>'s <code>response.json()</code> throws exactly this error. Check the status and content type before parsing, and log the start of the body when they are wrong:</p>
+
+            <pre><code>const res = await fetch(url);
+const text = await res.text();
+const type = res.headers.get('content-type') || '';
+if (!res.ok || !type.includes('json')) {
+    throw new Error(`Expected JSON, got ${res.status} ${type}: ${text.slice(0, 200)}`);
+}
+const data = JSON.parse(text);</code></pre>
+
+            <p><strong>An empty body</strong> often means a <code>204 No Content</code> response, or a request that failed before any body arrived. Calling <code>response.json()</code> on it throws <code>Unexpected end of JSON input</code>.</p>
+
+            <p><strong>A cut-off body</strong> shows up as an error whose position equals the length of the text. The parser simply ran out of input. Look for a timeout, a size limit, or a log line truncated at a fixed length.</p>
+
+            <p><strong>One object per line</strong> is JSON Lines (NDJSON), common in logs and data exports. It is not one JSON document, so parse each non-empty line on its own:</p>
+
+            <pre><code>const records = text.split('\n').filter(Boolean).map(line =&gt; JSON.parse(line));</code></pre>
+
+            <h2>Invisible characters</h2>
+
+            <p>The hardest errors to spot are characters that look right on screen. The JSON reads perfectly, and the parser still rejects it.</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Character</th><th>Where it comes from</th><th>Node.js 22</th><th>Python 3.13</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Byte order mark (U+FEFF) at the start</td><td>Some Windows editors and export tools save UTF-8 with a BOM</td><td><code>Unexpected token '﻿', "﻿{"name": "Ada"}" is not valid JSON</code></td><td><code>Unexpected UTF-8 BOM (decode using utf-8-sig): line 1 column 1 (char 0)</code></td></tr>
+                        <tr><td>Curly quotes (U+201C, U+201D)</td><td>Text pasted from Word, Slack, Notion, or anything with smart punctuation</td><td><code>Expected property name or '}' in JSON at position 1 (line 1 column 2)</code></td><td><code>Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</code></td></tr>
+                        <tr><td>Non-breaking space (U+00A0)</td><td>Examples copied from web pages and documentation</td><td><code>Unexpected token ' ', "{"name": "Ada"}" is not valid JSON</code></td><td><code>Expecting value: line 1 column 9 (char 8)</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Node's BOM error shows an empty pair of quotes, and its non-breaking space error shows what looks like an ordinary space. When an error points at a character that seems fine, assume it is one of these.</p>
+
+            <p>This lists every character outside plain ASCII, with its position and code point:</p>
+
+            <pre><code>function findOddChars(text) {
+    for (const m of text.matchAll(/[^\x20-\x7E\n\r\t]/g)) {
+        console.log(m.index, 'U+' + m[0].codePointAt(0).toString(16).toUpperCase().padStart(4, '0'));
+    }
+}</code></pre>
+
+            <p>For <code>{“name”: “Ada”}</code> it prints positions 1, 6, 9 and 13 with <code>U+201C</code> and <code>U+201D</code>. Accented letters and emoji inside string values will show up too. Those are valid, so only the characters outside strings matter.</p>
+
+            <p><strong>Fixes:</strong></p>
+
+            <ul>
+                <li><strong>BOM:</strong> in Python, open the file with <code>encoding="utf-8-sig"</code>. In JavaScript, <code>text.replace(/^\uFEFF/, '')</code>.</li>
+                <li><strong>Curly quotes:</strong> replace <code>“</code> and <code>”</code> with <code>"</code>. Check first that none of your string values are meant to contain them.</li>
+                <li><strong>Non-breaking spaces:</strong> <code>text.replace(/\u00A0/g, ' ')</code>.</li>
+            </ul>
+
+            <h2>A checklist, in order of likelihood</h2>
+
+            <p>When a document will not parse, check these in order:</p>
+
+            <ol>
+                <li>A comma before a closing <code>}</code> or <code>]</code></li>
+                <li>Single quotes, unquoted keys, or Python's <code>True</code>, <code>False</code> and <code>None</code></li>
+                <li>Comments, <code>NaN</code>, <code>undefined</code>, hex numbers or leading zeros</li>
+                <li>Raw line breaks, tabs or lone backslashes inside strings</li>
+                <li>An empty, cut-off or HTML body: check the status code and content type</li>
+                <li>A byte order mark, curly quotes or non-breaking spaces</li>
+            </ol>
+
+            <p>The fastest way to find the spot is to paste the document into <a href="/">JSON Keyper</a> and click <strong>Extract Keys</strong>. It shows the line and column of the error, even in browsers whose own message gives only a character position. When the engine gives no position at all, as with the trailing comma in an array above, it finds the comma itself: <code>Trailing comma before "]" (line 1, column 31). JSON does not allow a comma after the last item.</code> The JSON you paste is checked in your browser and never uploaded.</p>
+
+            <p>Once the document parses, the next question is whether it has the right fields. That is a job for a schema, covered in <a href="/blog/json-schema-guide">JSON Schema: A Practical Guide to Validating JSON</a>.</p>
+
+            <div class="cta-box">
+                <h3>Find the Exact Line of a JSON Error</h3>
+                <p>Paste the document and get the line and column of any parse error, including trailing commas the browser cannot place. Free, in your browser, no login.</p>
+                <a href="/" class="btn btn-success btn-lg">Open the JSON Key Extractor</a>
+            </div>
+
+        </div>
+
+        <div class="author-box">
+            <div class="author-avatar">AS</div>
+            <div>
+                <p class="author-name">Ashish Singh</p>
+                <p class="author-blurb">Back-end developer with more than four years of professional experience in
+                Java/Spring Boot, Python, and Node.js/TypeScript, and the sole builder of JSON Keyper. My work is
+                integrating third-party APIs, building REST services, and moving JSON through data pipelines, and
+                I write these guides from the problems that work turns up - payloads that do not match their
+                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact">get in touch</a>.</p>
+            </div>
+        </div>
+    </article>
+</div>
+
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener"><span aria-hidden="true">&hearts;</span> Sponsor on GitHub</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>

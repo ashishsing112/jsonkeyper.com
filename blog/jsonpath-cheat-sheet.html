@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234CAF50'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='white'>J</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Old .html links still work, but show the clean address. No reload.
+        if (/\.html$/.test(location.pathname)) {
+            history.replaceState(null, '', location.pathname.replace(/(index)?\.html$/, '') + location.search + location.hash);
+        }
+    </script>
+    <link rel="preconnect" href="https://stackpath.bootstrapcdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    <meta name="description" content="JSONPath syntax under RFC 9535, every result produced by running it: wildcards, slices, filters, functions, bracket notation, and where libraries disagree.">
+    <title>JSONPath Cheat Sheet: Syntax and Tested Examples | JSON Keyper Blog</title>
+    <link rel="canonical" href="https://jsonkeyper.com/blog/jsonpath-cheat-sheet">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="JSON Keyper">
+    <meta property="og:title" content="JSONPath Cheat Sheet: Syntax and Tested Examples">
+    <meta property="og:description" content="JSONPath syntax under RFC 9535, every result produced by running it: wildcards, slices, filters, functions, bracket notation, and where libraries disagree.">
+    <meta property="og:url" content="https://jsonkeyper.com/blog/jsonpath-cheat-sheet">
+    <meta property="og:image" content="https://jsonkeyper.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="JSON Keyper - a JSON key extractor showing dot-notation key paths annotated with value types">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:published_time" content="2026-10-07">
+    <meta property="article:modified_time" content="2026-10-07">
+    <meta property="article:author" content="Ashish Singh">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JSONPath Cheat Sheet: Syntax and Tested Examples">
+    <meta name="twitter:description" content="JSONPath syntax under RFC 9535, every result produced by running it: wildcards, slices, filters, functions, bracket notation, and where libraries disagree.">
+    <meta name="twitter:image" content="https://jsonkeyper.com/og-image.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-93PGB9SJBN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-93PGB9SJBN');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1186627905951846" crossorigin="anonymous"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "JSONPath Cheat Sheet: Syntax and Tested Examples",
+      "datePublished": "2026-10-07",
+      "dateModified": "2026-10-07",
+      "author": {
+        "@type": "Person",
+        "@id": "https://jsonkeyper.com/about#ashish-singh",
+        "name": "Ashish Singh",
+        "jobTitle": "Back-end developer",
+        "url": "https://jsonkeyper.com/about",
+        "sameAs": ["https://github.com/ashishsing112", "https://www.linkedin.com/in/ashishsinghdeveloper/"]
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JSON Keyper",
+        "url": "https://jsonkeyper.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jsonkeyper.com/og-image.png"
+        }
+      },
+      "description": "JSONPath syntax under RFC 9535, every result produced by running it: wildcards, slices, filters, functions, bracket notation, and where libraries disagree.",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://jsonkeyper.com/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jsonkeyper.com/blog/jsonpath-cheat-sheet"
+      },
+      "url": "https://jsonkeyper.com/blog/jsonpath-cheat-sheet",
+      "inLanguage": "en"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jsonkeyper.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://jsonkeyper.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "JSONPath Cheat Sheet: Syntax and Tested Examples",
+          "item": "https://jsonkeyper.com/blog/jsonpath-cheat-sheet"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+<header class="d-flex custom-header">
+    <nav class="navbar navbar-expand-lg navbar-dark w-100">
+        <div class="container">
+            <a class="navbar-brand" href="/">JSON Keyper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#tools">Tools</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/blog/">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/privacy">Privacy Policy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item nav-sponsor"><a class="nav-link sponsor-link" href="https://github.com/sponsors/ashishsing112" rel="noopener" aria-label="Sponsor JSON Keyper on GitHub"><span class="sponsor-heart" aria-hidden="true">&hearts;</span> Sponsor</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main id="content">
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><span aria-current="page">JSONPath Cheat Sheet</span></li>
+    </ol>
+</nav>
+
+<div class="container-shadow article-container">
+    <article>
+        <h1 class="heading">JSONPath Cheat Sheet: Syntax and Tested Examples</h1>
+        <p class="text-muted article-meta"><small>By <a href="/about">Ashish Singh</a> &middot; Published October 7, 2026 &middot; 6 min read</small></p>
+
+        <div class="article-body">
+
+            <h2>What JSONPath is</h2>
+
+            <p>JSONPath is a query language for picking values out of a JSON document. <code>$.store.books[0].title</code> reads like a path in code, but JSONPath also has wildcards, slices and filters, so one expression can pull the same field out of every element of an array.</p>
+
+            <p>You meet it in Postman tests, <code>kubectl -o jsonpath</code>, AWS Step Functions, API gateways and many low-code integration tools. For years every implementation worked from Stefan Goessner's 2007 article and filled its gaps differently. In February 2024 the IETF published <a href="https://www.rfc-editor.org/rfc/rfc9535.html" rel="noopener">RFC 9535</a>, which standardized the syntax for the first time.</p>
+
+            <p>This cheat sheet uses RFC 9535 syntax. Every result shown was produced by running the expression against the sample document below, not written by hand.</p>
+
+            <h2>The sample document</h2>
+
+            <p>Every example runs against this order response. It has nested arrays, a field that only some orders have (<code>giftMessage</code>), an empty array, and two keys that break dot notation (<code>x-request-id</code> and <code>rate.limit</code>).</p>
+
+            <pre><code>{
+  "store": "Northwind Books",
+  "orders": [
+    {
+      "id": "ord_1001",
+      "status": "shipped",
+      "total": 249.99,
+      "items": [{ "sku": "KB-204", "qty": 1 }, { "sku": "MS-310", "qty": 2 }]
+    },
+    {
+      "id": "ord_1002",
+      "status": "pending",
+      "total": 15.5,
+      "giftMessage": "Happy birthday",
+      "items": [{ "sku": "CB-001", "qty": 3 }]
+    },
+    {
+      "id": "ord_1003",
+      "status": "shipped",
+      "total": 89,
+      "items": []
+    }
+  ],
+  "meta": { "page": 1, "x-request-id": "req_7f3a9c21", "rate.limit": 100 }
+}</code></pre>
+
+            <p>Results come from <code>jsonpath-rfc9535</code> 2.0.0, a Python implementation of the standard. Where the popular JavaScript library <code>jsonpath-plus</code> 10.4.0 gives a different answer, the section on disagreements says so.</p>
+
+            <h2>The cheat sheet</h2>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Expression</th><th>What it selects</th><th>Result</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$</code></td><td>The root: the whole document</td><td>The whole document</td></tr>
+                        <tr><td><code>$.store</code></td><td>A member by name</td><td><code>["Northwind Books"]</code></td></tr>
+                        <tr><td><code>$.orders[0].id</code></td><td>An element by index, counting from 0</td><td><code>["ord_1001"]</code></td></tr>
+                        <tr><td><code>$.orders[-1].id</code></td><td>An index counted from the end</td><td><code>["ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[0:2].id</code></td><td>A slice: from 0 up to, but not including, 2</td><td><code>["ord_1001", "ord_1002"]</code></td></tr>
+                        <tr><td><code>$.orders[::-1].id</code></td><td>A slice with step -1: every element, reversed</td><td><code>["ord_1003", "ord_1002", "ord_1001"]</code></td></tr>
+                        <tr><td><code>$.orders[0,2].id</code></td><td>Several indexes at once</td><td><code>["ord_1001", "ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[*].id</code></td><td>Wildcard: every element of an array</td><td><code>["ord_1001", "ord_1002", "ord_1003"]</code></td></tr>
+                        <tr><td><code>$.meta.*</code></td><td>Wildcard on an object: every value</td><td><code>[1, "req_7f3a9c21", 100]</code></td></tr>
+                        <tr><td><code>$..sku</code></td><td>Descendants: <code>sku</code> at any depth</td><td><code>["KB-204", "MS-310", "CB-001"]</code></td></tr>
+                        <tr><td><code>$.orders[*].items[*].sku</code></td><td>The same three, by an explicit route</td><td><code>["KB-204", "MS-310", "CB-001"]</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Two rules explain most surprises:</p>
+
+            <ul>
+                <li><strong>A query always returns a list.</strong> One match is a list of one. No match is an empty list, not an error, so a typo in a field name fails silently.</li>
+                <li><strong>Object order is not promised.</strong> The standard does not fix the order of <code>$.meta.*</code> results. Arrays keep their order.</li>
+            </ul>
+
+            <h2>Filters</h2>
+
+            <p>A filter keeps the elements for which a condition is true. Inside it, <code>@</code> is the element being tested.</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Expression</th><th>Keeps</th><th>Result</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$.orders[?@.status == 'shipped'].id</code></td><td>Orders whose status equals a value</td><td><code>["ord_1001", "ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[?@.total &gt; 50].id</code></td><td>Orders above a number</td><td><code>["ord_1001", "ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[?@.giftMessage].id</code></td><td>Orders that have the field at all</td><td><code>["ord_1002"]</code></td></tr>
+                        <tr><td><code>$.orders[?!@.giftMessage].id</code></td><td>Orders that do not have it</td><td><code>["ord_1001", "ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[?@.status == 'shipped' &amp;&amp; @.total &lt; 100].id</code></td><td>Both conditions</td><td><code>["ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[?@.status == 'pending' || @.total &gt; 200].id</code></td><td>Either condition</td><td><code>["ord_1001", "ord_1002"]</code></td></tr>
+                        <tr><td><code>$..items[?@.qty &gt; 1].sku</code></td><td>Matching elements at any depth</td><td><code>["MS-310", "CB-001"]</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>RFC 9535 also defines five functions for use in filters:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Expression</th><th>Keeps</th><th>Result</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$.orders[?length(@.items) == 0].id</code></td><td>Orders with an empty <code>items</code> array</td><td><code>["ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[?count(@.items[*]) &gt;= 2].id</code></td><td>Orders with two or more items</td><td><code>["ord_1001"]</code></td></tr>
+                        <tr><td><code>$.orders[?match(@.id, 'ord_100[12]')].id</code></td><td>IDs matching a regular expression in full</td><td><code>["ord_1001", "ord_1002"]</code></td></tr>
+                        <tr><td><code>$.orders[?search(@.giftMessage, 'birthday')].id</code></td><td>Strings containing a match anywhere</td><td><code>["ord_1002"]</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>The fifth, <code>value()</code>, turns a single-node result into a plain value for comparisons.</p>
+
+            <p>Three details catch people out:</p>
+
+            <ul>
+                <li>Equality is <code>==</code>. A single <code>=</code> is a syntax error: <code>unexpected '=', did you mean '=='?</code></li>
+                <li><code>?@.giftMessage</code> tests that the field <strong>exists</strong>, not that it is truthy. Under the standard, a field whose value is <code>null</code>, <code>false</code> or <code>0</code> still passes. To find real nulls, write <code>?@.giftMessage == null</code>.</li>
+                <li><code>match()</code> must match the whole string, while <code>search()</code> finds a match anywhere. <code>match(@.id, 'ord')</code> would match nothing here; <code>search(@.id, 'ord')</code> matches all three.</li>
+            </ul>
+
+            <h2>Bracket notation for awkward keys</h2>
+
+            <p>Dot notation is shorthand for names made of letters, digits and underscores. Any other key needs brackets and quotes, single or double:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Expression</th><th>Result</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$['meta']['x-request-id']</code></td><td><code>["req_7f3a9c21"]</code></td></tr>
+                        <tr><td><code>$.meta["x-request-id"]</code></td><td><code>["req_7f3a9c21"]</code></td></tr>
+                        <tr><td><code>$.meta['rate.limit']</code></td><td><code>[100]</code></td></tr>
+                        <tr><td><code>$.meta.rate.limit</code></td><td><code>[]</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>The last row is the dangerous one. It looks for a <code>limit</code> key inside a <code>rate</code> object, finds nothing, and returns an empty list without any error. Whenever a key contains a dot, a space or a hyphen, use brackets.</p>
+
+            <p>Some libraries, including both tested here, also accept <code>$.meta.x-request-id</code>. The standard's grammar does not allow a hyphen in dot notation, so another tool may reject it. Brackets work everywhere.</p>
+
+            <p>Brackets are also the canonical form. RFC 9535 defines a <strong>normalized path</strong> for every match, written entirely in brackets. Asking the Python library where <code>$..sku</code> matched returns:</p>
+
+            <pre><code>$['orders'][0]['items'][0]['sku']
+$['orders'][0]['items'][1]['sku']
+$['orders'][1]['items'][0]['sku']</code></pre>
+
+            <h2>JSONPath, jq and JSON Pointer side by side</h2>
+
+            <p>Three notations address values inside JSON, and each tool you use picks one of them. Here are the same tasks in all three, tested with jq 1.7:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Task</th><th>JSONPath</th><th>jq</th><th>JSON Pointer</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>First order's ID</td><td><code>$.orders[0].id</code></td><td><code>.orders[0].id</code></td><td><code>/orders/0/id</code></td></tr>
+                        <tr><td>Every order ID</td><td><code>$.orders[*].id</code></td><td><code>[.orders[].id]</code></td><td>Not possible</td></tr>
+                        <tr><td>Shipped order IDs</td><td><code>$.orders[?@.status == 'shipped'].id</code></td><td><code>[.orders[] | select(.status == "shipped") | .id]</code></td><td>Not possible</td></tr>
+                        <tr><td>Every <code>sku</code>, at any depth</td><td><code>$..sku</code></td><td><code>[.. | .sku? // empty]</code></td><td>Not possible</td></tr>
+                        <tr><td>A key with a hyphen</td><td><code>$.meta['x-request-id']</code></td><td><code>.meta["x-request-id"]</code></td><td><code>/meta/x-request-id</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Which to use depends on the job:</p>
+
+            <ul>
+                <li><strong>JSONPath</strong> selects values. It is what Postman, <code>kubectl</code>, API gateways and integration platforms expect.</li>
+                <li><strong>jq</strong> selects and also reshapes. <code>{shipped: [.orders[] | select(.status == "shipped") | .id], revenue: ([.orders[].total] | add)}</code> builds a new object, <code>{"shipped":["ord_1001","ord_1003"],"revenue":354.49}</code>, which JSONPath cannot do.</li>
+                <li><strong>JSON Pointer</strong> (<a href="https://www.rfc-editor.org/rfc/rfc6901" rel="noopener">RFC 6901</a>) points at exactly one value, with no wildcards or filters. JSON Patch documents, JSON Schema <code>$ref</code> and OpenAPI references all use it. In a key, <code>/</code> is written <code>~1</code> and <code>~</code> is written <code>~0</code>.</li>
+            </ul>
+
+            <h2>Where implementations disagree</h2>
+
+            <p>The standard is new, and many libraries predate it. Running the same expressions through <code>jsonpath-rfc9535</code> and <code>jsonpath-plus</code> turned up these differences:</p>
+
+            <div class="table-wrap">
+                <table class="reference-table">
+                    <thead>
+                        <tr><th>Expression</th><th>RFC 9535</th><th>jsonpath-plus 10.4.0</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>$.orders[?@.status == 'shipped'].id</code></td><td><code>["ord_1001", "ord_1003"]</code></td><td><code>[]</code></td></tr>
+                        <tr><td><code>$.orders[?(@.total &gt; 50)].id</code></td><td><code>["ord_1001", "ord_1003"]</code></td><td><code>["ord_1001", "ord_1003"]</code></td></tr>
+                        <tr><td><code>$.orders[-1].id</code></td><td><code>["ord_1003"]</code></td><td><code>[]</code> (use <code>[-1:]</code>)</td></tr>
+                        <tr><td><code>$.orders[::-1].id</code></td><td>Reversed list</td><td><code>[]</code></td></tr>
+                        <tr><td><code>$.orders.length</code></td><td><code>[]</code></td><td><code>[3]</code></td></tr>
+                        <tr><td><code>$.orders[?(@.items.length == 0)].id</code></td><td><code>[]</code></td><td><code>["ord_1003"]</code></td></tr>
+                        <tr><td><code>$[?@.a]</code> on <code>[{"a": null}, {"a": false}, {"a": 0}, {}]</code></td><td>The first three</td><td><code>[]</code></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Notice that none of these is an error. Every disagreement shows up as an empty or different list, which is easy to miss.</p>
+
+            <p>The patterns behind them:</p>
+
+            <ul>
+                <li><strong>Filter syntax.</strong> Older libraries need the filter wrapped in parentheses, <code>?(...)</code>. The standard does not, but it accepts them, so the parenthesized form is the more portable one.</li>
+                <li><strong>JavaScript leaking through.</strong> <code>jsonpath-plus</code> evaluates filters as JavaScript, so <code>.length</code> works and existence tests follow JavaScript truthiness. The standard has <code>length()</code> instead, and tests whether a field exists, whatever its value.</li>
+                <li><strong>Indexes and slices.</strong> Negative indexes and negative steps are standard, but not universal.</li>
+            </ul>
+
+            <p>Tools also wrap JSONPath in their own syntax. <code>kubectl</code>, for example, drops the <code>$</code> and uses braces: <code>kubectl get pods -o jsonpath='{.items[*].metadata.name}'</code>.</p>
+
+            <p>The rule that follows: test an expression on the engine you will actually run it on, with a document where you know the right answer.</p>
+
+            <h2>Generating expressions instead of writing them</h2>
+
+            <p>Writing the first expression is the slow part, because you need to know the document's shape. The <a href="/jsonpath-generator">JSONPath Generator</a> on JSON Keyper starts from the document instead. Paste it, tick <strong>Collapse array indices</strong>, and you get an expression for every field. For the sample above:</p>
+
+            <pre><code>$.store
+$.orders
+$.orders[*].id
+$.orders[*].status
+$.orders[*].total
+$.orders[*].items
+$.orders[*].items[*].sku
+$.orders[*].items[*].qty
+$.orders[*].giftMessage
+$.meta
+$.meta.page
+$.meta['x-request-id']
+$.meta['rate.limit']</code></pre>
+
+            <p>Keys like <code>x-request-id</code> and <code>rate.limit</code> come out in brackets, so the paths work in strict engines too. Pick the path you need, then add a filter by hand where you want one. The document is processed in your browser and never uploaded.</p>
+
+            <div class="cta-box">
+                <h3>Generate JSONPath for Every Field</h3>
+                <p>Paste a JSON document and get a JSONPath expression for every field, with awkward keys already in bracket notation. Free, in your browser, no login.</p>
+                <a href="/jsonpath-generator" class="btn btn-success btn-lg">Open the JSONPath Generator</a>
+            </div>
+
+        </div>
+
+        <div class="author-box">
+            <div class="author-avatar">AS</div>
+            <div>
+                <p class="author-name">Ashish Singh</p>
+                <p class="author-blurb">Back-end developer with more than four years of professional experience in
+                Java/Spring Boot, Python, and Node.js/TypeScript, and the sole builder of JSON Keyper. My work is
+                integrating third-party APIs, building REST services, and moving JSON through data pipelines, and
+                I write these guides from the problems that work turns up - payloads that do not match their
+                documentation, keys that only appear on some records, and structures too deep to eyeball. <a href="/about">More about me and the project</a>,
+                code on <a href="https://github.com/ashishsing112" rel="noopener">GitHub</a>, or <a href="/contact">get in touch</a>.</p>
+            </div>
+        </div>
+    </article>
+</div>
+
+</main>
+
+<footer>
+    <p style="margin-bottom: 4px;">&copy; 2026 jsonkeyper.com. All rights reserved.</p>
+    <nav class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/about">About</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/sponsors/ashishsing112" class="footer-sponsor" rel="noopener"><span aria-hidden="true">&hearts;</span> Sponsor on GitHub</a>
+    </nav>
+</footer>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
